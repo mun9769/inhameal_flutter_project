@@ -20,14 +20,14 @@ class DayMeal {
   }
 }
 
-Future<DayMeal> fetchDayMeal() async {
-  final response = await http.get(Uri.parse('https://xiipj5vqt1.execute-api.ap-northeast-2.amazonaws.com/items/20230824'));
+Future<DayMeal> fetchDayMeal(
+    { String reqUrl = "https://xiipj5vqt1.execute-api.ap-northeast-2.amazonaws.com/items/20230824" } ) async {
+  final response = await http.get(Uri.parse(reqUrl));
+
 
   if (response.statusCode == 200) {
     return DayMeal.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
   } else {
-    print('Get request failed with Status Code: ${response.statusCode}');
-
     throw Exception('Failed to load DayMeal');
   }
 }
@@ -41,8 +41,10 @@ void main() async {
     print('-----------------------------------------------------------------------------------------------------------');
   });
 
-  test('throws an exception if the http call completes with an error', () {
-
+  test('return throws error if the paramDay is wrong', () async {
+    print('------------------------ return throw error if the http call failed to load ------------------------');
+    expect(fetchDayMeal(reqUrl: 'https://xiipj5vqt1.execute-api.ap-northeast-2.amazonaws.com/items/20230833'), throwsA(const TypeMatcher<Exception>()));
+    print('-----------------------------------------------------------------------------------------------------------');
   });
 
 }
