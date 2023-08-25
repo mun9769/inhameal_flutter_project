@@ -41,8 +41,10 @@ void main() async {
     print('-----------------------------------------------------------------------------------------------------------');
   });
 
-  test('throws an exception if the http call completes with an error', () {
-
+  test('return throws error if the paramDay is wrong', () async {
+    print('------------------------ return throw error if the http call failed to load ------------------------');
+    expect(fetchDayMeal(reqUrl: 'https://xiipj5vqt1.execute-api.ap-northeast-2.amazonaws.com/items/20230833'), throwsA(const TypeMatcher<Exception>()));
+    print('-----------------------------------------------------------------------------------------------------------');
   });
 
 }
