@@ -28,8 +28,6 @@ Future<DayMeal> fetchDayMeal(
   if (response.statusCode == 200) {
     return DayMeal.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
   } else {
-    print('Get request failed with Status Code: ${response.statusCode}');
-
     throw Exception('Failed to load DayMeal');
   }
 }
