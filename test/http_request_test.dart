@@ -20,8 +20,10 @@ class DayMeal {
   }
 }
 
-Future<DayMeal> fetchDayMeal() async {
-  final response = await http.get(Uri.parse('https://xiipj5vqt1.execute-api.ap-northeast-2.amazonaws.com/items/20230824'));
+Future<DayMeal> fetchDayMeal(
+    { String reqUrl = "https://xiipj5vqt1.execute-api.ap-northeast-2.amazonaws.com/items/20230824" } ) async {
+  final response = await http.get(Uri.parse(reqUrl));
+
 
   if (response.statusCode == 200) {
     return DayMeal.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
