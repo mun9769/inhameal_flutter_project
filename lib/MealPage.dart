@@ -42,7 +42,6 @@ class MealPage extends StatelessWidget {
 }
 
 class RoundRectangleWidget extends StatelessWidget {
-
   Meal meal;
 
   RoundRectangleWidget({Key? key, required this.meal}) : super(key: key);
@@ -72,7 +71,7 @@ class RoundRectangleWidget extends StatelessWidget {
               ),
               for (String menu in meal.menus!)
                 Padding(
-                  padding: const EdgeInsets.only(top:8.0),
+                  padding: const EdgeInsets.only(top: 8.0),
                   child: Text(menu),
                 ),
             ],
