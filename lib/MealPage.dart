@@ -21,7 +21,7 @@ class MealPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('학생식당'),
+        title: Text(_cafe!.name!),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
