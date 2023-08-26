@@ -1,25 +1,53 @@
 
 class DayMeal {
   final String id;
-  final Meal brunch;
-  final Meal lunch;
-  final Meal dinner;
 
-  const DayMeal({required this.id, required this.brunch, required this.lunch, required this.dinner});
+  final Cafeteria dorm_1Cafe;
+  final Cafeteria dorm_2Cafe;
+  final Cafeteria studentCafe;
+  final Cafeteria staffCafe;
+
+  const DayMeal(
+      {required this.id,
+        required this.dorm_1Cafe,
+        required this.dorm_2Cafe,
+        required this.studentCafe,
+        required this.staffCafe});
 
   factory DayMeal.fromJson(Map<String, dynamic> json) {
     return DayMeal(
-        id: json['id'],
-        brunch: Meal(openTime: Meal.name2time["brunch"], name: "brunch", meal: json['brunch']),
-        lunch: Meal(openTime: Meal.name2time["lunch"], name: "lunch", meal: json['lunch']),
-        dinner: Meal(openTime: Meal.name2time["dinner"], name: "dinner", meal: json['dinner']),
+      id: json['id'],
+      dorm_1Cafe: Cafeteria.fromJson(json['dorm_1Cafe']),
+      dorm_2Cafe: Cafeteria.fromJson(json['dorm_2Cafe']),
+      studentCafe: Cafeteria.fromJson(json['studentCafe']),
+      staffCafe: Cafeteria.fromJson(json['staffCafe']),
+    );
+  }
+}
+
+class Cafeteria {
+  final String? name;
+  final List<Meal>? meals;
+
+  const Cafeteria({required this.name, required this.meals});
+
+  factory Cafeteria.fromJson(Map<String, dynamic> json) {
+    List<Meal> mealListDto = [];
+
+    json['meals']?.forEach((ele) {
+      mealListDto.add(Meal.fromJson(ele));
+    });
+
+    return Cafeteria(
+      name: json['name'],
+      meals: mealListDto,
     );
   }
 }
 
 class Meal {
-  final String name;
-  final List<dynamic> meal;
+  final String? name;
+  final List<dynamic>? menus;
   String? openTime;
 
   static const Map<String, String> name2time = {
@@ -28,7 +56,13 @@ class Meal {
     "dinner": "17:30 ~ 19:00",
   };
 
-  Meal({required this.openTime, required this.name, required this.meal});
+  Meal({required this.openTime, required this.name, required this.menus});
+
+  factory Meal.fromJson(Map<String, dynamic> json) {
+    return Meal(
+      openTime: Meal.name2time[json['name']],
+      name: json['name'],
+      menus: json['menus'],
+    );
+  }
 }
-
-
