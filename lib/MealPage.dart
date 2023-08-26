@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:inhameal_flutter_project/Model/DayMeal.dart';
 
 class MealPage extends StatelessWidget {
+  DayMeal? _dayMeal;
+
+  MealPage({Key? key}) : super(key: key) {
+    Map<String, dynamic> json = {
+      "id": "dummyId",
+      "brunch": ["아침", "된장찌개", "김치찌개", "피자"],
+      "lunch": ["점심", "된장찌개", "김치찌개", "피자"],
+      "dinner": ["저녁", "된장찌개", "김치찌개", "피자"]
+    };
+    _dayMeal = DayMeal.fromJson(json);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,14 +26,13 @@ class MealPage extends StatelessWidget {
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            RoundRectangleWidget(),
-            RoundRectangleWidget(),
-            RoundRectangleWidget(),
-            RoundRectangleWidget(),
-            RoundRectangleWidget(),
-            RoundRectangleWidget(),
-            RoundRectangleWidget(),
-            RoundRectangleWidget(),
+            Padding(
+              padding: const EdgeInsets.only(top: 18.0),
+              child: Text('08월 27일'),
+            ),
+            RoundRectangleWidget(meal: _dayMeal!.brunch),
+            RoundRectangleWidget(meal: _dayMeal!.lunch),
+            RoundRectangleWidget(meal: _dayMeal!.dinner),
           ],
         ),
       ),
@@ -29,9 +41,10 @@ class MealPage extends StatelessWidget {
 }
 
 class RoundRectangleWidget extends StatelessWidget {
-  RoundRectangleWidget({Key? key}) : super(key: key);
 
-  List<String> meals = ["된장찌개", "김치찌개", "피자"];
+  Meal meal;
+
+  RoundRectangleWidget({Key? key, required this.meal}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
