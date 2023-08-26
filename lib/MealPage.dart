@@ -3,16 +3,18 @@ import 'package:flutter/widgets.dart';
 import 'package:inhameal_flutter_project/Model/DayMeal.dart';
 
 class MealPage extends StatelessWidget {
-  DayMeal? _dayMeal;
+  Cafeteria? _cafe;
 
   MealPage({Key? key}) : super(key: key) {
     Map<String, dynamic> json = {
-      "id": "dummyId",
-      "brunch": ["아침", "된장찌개", "김치찌개", "피자"],
-      "lunch": ["점심", "된장찌개", "김치찌개", "피자"],
-      "dinner": ["저녁", "된장찌개", "김치찌개", "피자"]
+      "name": "학생식당",
+      "meals": [
+        { "name": "조식", "menus": ["아침", "된장찌개"] },
+        { "name": "점심", "menus": ["점심", "된장찌개"] },
+        { "name": "저녁", "menus": ["저녁", "된장찌개"] },
+      ],
     };
-    _dayMeal = DayMeal.fromJson(json);
+    _cafe = Cafeteria.fromJson(json);
   }
 
   @override
@@ -30,9 +32,8 @@ class MealPage extends StatelessWidget {
               padding: const EdgeInsets.only(top: 18.0),
               child: Text('08월 27일'),
             ),
-            RoundRectangleWidget(meal: _dayMeal!.brunch),
-            RoundRectangleWidget(meal: _dayMeal!.lunch),
-            RoundRectangleWidget(meal: _dayMeal!.dinner),
+            for(Meal meal in _cafe!.meals!)
+              RoundRectangleWidget(meal: meal)
           ],
         ),
       ),
@@ -64,12 +65,12 @@ class RoundRectangleWidget extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(meal.name, style: TextStyle(fontSize: 20)),
+                  Text(meal.name!, style: TextStyle(fontSize: 20)),
                   Spacer(),
                   Text(meal.openTime ?? "")
                 ],
               ),
-              for (String menu in meal.meal)
+              for (String menu in meal.menus!)
                 Padding(
                   padding: const EdgeInsets.only(top:8.0),
                   child: Text(menu),
