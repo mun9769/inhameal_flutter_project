@@ -3,25 +3,15 @@ import 'package:flutter/widgets.dart';
 import 'package:inhameal_flutter_project/Model/DayMeal.dart';
 
 class MealPage extends StatelessWidget {
-  Cafeteria? _cafe;
+  Cafeteria cafe;
 
-  MealPage({Key? key}) : super(key: key) {
-    Map<String, dynamic> json = {
-      "name": "학생식당",
-      "meals": [
-        { "name": "조식", "menus": ["아침", "된장찌개"] },
-        { "name": "점심", "menus": ["점심", "된장찌개"] },
-        { "name": "저녁", "menus": ["저녁", "된장찌개"] },
-      ],
-    };
-    _cafe = Cafeteria.fromJson(json);
-  }
+  MealPage({Key? key, required this.cafe}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_cafe!.name!),
+        title: Text(cafe.name!),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -32,7 +22,7 @@ class MealPage extends StatelessWidget {
               padding: const EdgeInsets.only(top: 18.0),
               child: Text('08월 27일'),
             ),
-            for(Meal meal in _cafe!.meals!)
+            for(Meal meal in cafe.meals!)
               RoundRectangleWidget(meal: meal)
           ],
         ),
