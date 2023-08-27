@@ -11,7 +11,7 @@ class MealPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(cafe.name!),
+        title: Text(cafe.name ?? ""),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -22,7 +22,7 @@ class MealPage extends StatelessWidget {
               padding: const EdgeInsets.only(top: 18.0),
               child: Text('08월 27일'),
             ),
-            for(Meal meal in cafe.meals!)
+            for(Meal meal in cafe.meals ?? [])
               RoundRectangleWidget(meal: meal)
           ],
         ),
@@ -54,12 +54,12 @@ class RoundRectangleWidget extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(meal.name!, style: TextStyle(fontSize: 20)),
+                  Text(meal.name ?? "", style: TextStyle(fontSize: 20)),
                   Spacer(),
                   Text(meal.openTime ?? "")
                 ],
               ),
-              for (String menu in meal.menus!)
+              for (String menu in meal.menus ?? [])
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Text(menu),
