@@ -64,34 +64,35 @@ class _PageViewExampleState extends State<PageViewExample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      children: [
-        Expanded(
-          child: PageView(
-            controller: _pageController,
-            onPageChanged: (page) {
-              setState(() {
-                selectedPage = page;
-              });
-            },
-            children: List.generate(4, (index) {
-              return _pages[index];
-            }),
+      body: Column(
+        children: [
+          Expanded(
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: (page) {
+                setState(() {
+                  selectedPage = page;
+                });
+              },
+              children: List.generate(4, (index) {
+                return _pages[index];
+              }),
+            ),
           ),
-        ),
-        Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: PageViewDotIndicator(
-              currentItem: selectedPage,
-              count: 4,
-              unselectedColor: Colors.black26,
-              selectedColor: Colors.blue,
-              duration: const Duration(milliseconds: 200),
-              boxShape: BoxShape.rectangle,
-            )),
-        const SizedBox(height: 26),
-      ],
-    ));
+          Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: PageViewDotIndicator(
+                currentItem: selectedPage,
+                count: 4,
+                unselectedColor: Colors.black26,
+                selectedColor: Colors.blue,
+                duration: const Duration(milliseconds: 200),
+                boxShape: BoxShape.rectangle,
+              )),
+          const SizedBox(height: 26),
+        ],
+      ),
+    );
   }
 }
 
