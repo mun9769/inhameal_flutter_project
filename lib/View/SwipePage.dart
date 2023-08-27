@@ -6,7 +6,9 @@ import '../Model/DayMeal.dart';
 import 'MealPage.dart';
 
 class SwipePage extends StatefulWidget {
-  SwipePage({Key? key}) : super(key: key);
+  final DayMeal dayMeal;
+
+  SwipePage({Key? key, required this.dayMeal}) : super(key: key);
 
   @override
   State<SwipePage> createState() => _SwipePageState();
@@ -22,6 +24,13 @@ class _SwipePageState extends State<SwipePage> {
   @override
   void initState() {
     super.initState();
+
+    _pages = [
+      MealPage(cafe: widget.dayMeal.dorm_1Cafe),
+      MealPage(cafe: widget.dayMeal.dorm_2Cafe),
+      MealPage(cafe: widget.dayMeal.studentCafe),
+      MealPage(cafe: widget.dayMeal.staffCafe),
+    ];
   }
 
   @override
