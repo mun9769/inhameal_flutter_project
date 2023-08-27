@@ -5,7 +5,6 @@ import 'package:page_view_dot_indicator/page_view_dot_indicator.dart';
 import '../Model/DayMeal.dart';
 import 'MealPage.dart';
 
-
 class SwipePage extends StatefulWidget {
   SwipePage({Key? key}) : super(key: key);
 
@@ -16,33 +15,13 @@ class SwipePage extends StatefulWidget {
 class _SwipePageState extends State<SwipePage> {
   final PageController _pageController = PageController(initialPage: 0);
 
-  late int selectedPage;
-  late final DayMeal dayMeal;
+  late int selectedPage = 0;
 
-  final List<Widget> _pages = [
-    MealPage(
-        cafe: Cafeteria(name: "기숙사식당1", meals: [
-          Meal(name: "아침", menus: ["아"], openTime: 'test')
-        ])),
-    MealPage(
-        cafe: Cafeteria(name: "기숙사식당2", meals: [
-          Meal(name: "아침", menus: ["아"], openTime: 'test')
-        ])),
-    MealPage(
-        cafe: Cafeteria(name: "학생식당   ", meals: [
-          Meal(name: "아침", menus: ["아"], openTime: 'test')
-        ])),
-    MealPage(
-        cafe: Cafeteria(name: "교직원식당", meals: [
-          Meal(name: "아침", menus: ["아"], openTime: 'test')
-        ])),
-  ];
+  late final List<Widget> _pages;
 
   @override
   void initState() {
-    selectedPage = 0;
     super.initState();
-    dayMeal = DayMeal.fromJson(myjson);
   }
 
   @override
