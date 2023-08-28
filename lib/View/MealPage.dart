@@ -58,6 +58,13 @@ class RoundRectangleWidget extends StatelessWidget {
                   Text(meal.openTime ?? "")
                 ],
               ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Spacer(),
+                  Text("5000원")
+                ],
+              ),
               if (meal.menus != null) ...[
                 for (String menu in meal.menus ?? [])
                   Padding(
