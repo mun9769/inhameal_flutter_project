@@ -26,8 +26,7 @@ class _SwipePageState extends State<SwipePage> {
     super.initState();
 
     _pages = [
-      MealPage(cafe: widget.dayMeal.dorm_1Cafe),
-      MealPage(cafe: widget.dayMeal.dorm_2Cafe),
+      MealPage(cafe: widget.dayMeal.dormCafe),
       MealPage(cafe: widget.dayMeal.studentCafe),
       MealPage(cafe: widget.dayMeal.staffCafe),
     ];
@@ -46,7 +45,7 @@ class _SwipePageState extends State<SwipePage> {
                   selectedPage = page;
                 });
               },
-              children: List.generate(4, (index) {
+              children: List.generate(_pages.length, (index) {
                 return _pages[index];
               }),
             ),
@@ -55,7 +54,7 @@ class _SwipePageState extends State<SwipePage> {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: PageViewDotIndicator(
                 currentItem: selectedPage,
-                count: 4,
+                count: _pages.length,
                 unselectedColor: Colors.black26,
                 selectedColor: Colors.blue,
                 duration: const Duration(milliseconds: 200),
