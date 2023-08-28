@@ -15,7 +15,7 @@ class LoadPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<DayMeal>(
-          future: _dataController.fetchDayMeal(),
+          future: _dataController.loadData(),
           builder: (context, snapshot) {
             if(snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());

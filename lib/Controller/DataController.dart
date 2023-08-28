@@ -30,14 +30,26 @@ class DataController {
     prefs.setString(id, json.encode(mockJson));
   }
 
-  void readData(String id) async {
+  Future<DayMeal?> readData(String id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? storedMapString = prefs.getString(id);
 
-    String? storedMapJson = prefs.getString(id);
+    if(storedMapString == null) return null;
 
-    Map<String, dynamic> storedMap = json.decode(storedMapJson!);
-    print(storedMap);
+    Map<String, dynamic> storedMap = json.decode(storedMapString);
 
+    return DayMeal.fromJson(storedMap);
+  }
+
+  Future<DayMeal> loadData() async {
+    DayMeal? data = await readData("20230829");
+    data ??= await fetchDayMeal();
+
+    if(data == null) {
+      throw Exception('${20230829}가 없습니다');
+    }
+
+    return data;
   }
 
 }
