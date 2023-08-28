@@ -9,7 +9,7 @@ import '../Model/DayMeal.dart';
 
 class LoadPage extends StatelessWidget {
 
-  DataController _dataController = DataController();
+  final DataController _dataController = DataController();
 
   @override
   Widget build(BuildContext context) {

@@ -22,8 +22,7 @@ class MealPage extends StatelessWidget {
               padding: const EdgeInsets.only(top: 18.0),
               child: Text('08월 27일'),
             ),
-            for(Meal meal in cafe.meals ?? [])
-              RoundRectangleWidget(meal: meal)
+            for (Meal meal in cafe.meals ?? []) RoundRectangleWidget(meal: meal)
           ],
         ),
       ),
@@ -70,4 +69,5 @@ class RoundRectangleWidget extends StatelessWidget {
       ),
     );
   }
+
 }

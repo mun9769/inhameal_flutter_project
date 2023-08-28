@@ -51,9 +51,10 @@ class Meal {
   String? openTime;
 
   static const Map<String, String> name2time = {
-    "brunch": "07:30 ~ 09:30",
-    "lunch": "11:30 ~ 13:30",
-    "dinner": "17:30 ~ 19:00",
+    "조식": "07:30 ~ 09:30",
+    "중식": "11:30 ~ 13:30",
+    "석식": "17:30 ~ 19:00",
+    "간단식": "07:30 ~ 09:30",
   };
 
   Meal({required this.openTime, required this.name, required this.menus});
