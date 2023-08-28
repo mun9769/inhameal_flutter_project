@@ -5,9 +5,10 @@ import 'package:page_view_dot_indicator/page_view_dot_indicator.dart';
 import '../Model/DayMeal.dart';
 import 'MealPage.dart';
 
-
 class SwipePage extends StatefulWidget {
-  SwipePage({Key? key}) : super(key: key);
+  final DayMeal dayMeal;
+
+  SwipePage({Key? key, required this.dayMeal}) : super(key: key);
 
   @override
   State<SwipePage> createState() => _SwipePageState();
@@ -16,33 +17,20 @@ class SwipePage extends StatefulWidget {
 class _SwipePageState extends State<SwipePage> {
   final PageController _pageController = PageController(initialPage: 0);
 
-  late int selectedPage;
-  late final DayMeal dayMeal;
+  late int selectedPage = 0;
 
-  final List<Widget> _pages = [
-    MealPage(
-        cafe: Cafeteria(name: "기숙사식당1", meals: [
-          Meal(name: "아침", menus: ["아"], openTime: 'test')
-        ])),
-    MealPage(
-        cafe: Cafeteria(name: "기숙사식당2", meals: [
-          Meal(name: "아침", menus: ["아"], openTime: 'test')
-        ])),
-    MealPage(
-        cafe: Cafeteria(name: "학생식당   ", meals: [
-          Meal(name: "아침", menus: ["아"], openTime: 'test')
-        ])),
-    MealPage(
-        cafe: Cafeteria(name: "교직원식당", meals: [
-          Meal(name: "아침", menus: ["아"], openTime: 'test')
-        ])),
-  ];
+  late final List<Widget> _pages;
 
   @override
   void initState() {
-    selectedPage = 0;
     super.initState();
-    dayMeal = DayMeal.fromJson(myjson);
+
+    _pages = [
+      MealPage(cafe: widget.dayMeal.dorm_1Cafe),
+      MealPage(cafe: widget.dayMeal.dorm_2Cafe),
+      MealPage(cafe: widget.dayMeal.studentCafe),
+      MealPage(cafe: widget.dayMeal.staffCafe),
+    ];
   }
 
   @override
@@ -80,74 +68,3 @@ class _SwipePageState extends State<SwipePage> {
   }
 }
 
-Map<String, dynamic> myjson = {
-  "id": "20230123",
-  "dorm_1Cafe": {
-    "name": "1기숙사식당",
-    "meals": [
-      {
-        "name": "조식",
-        "menus": ["아침", "된장찌개"]
-      },
-      {
-        "name": "점심",
-        "menus": ["점심", "된장찌개"]
-      },
-      {
-        "name": "저녁",
-        "menus": ["저녁", "된장찌개"]
-      },
-    ],
-  },
-  "dorm_2Cafe": {
-    "name": "2기숙사식당",
-    "meals": [
-      {
-        "name": "조식",
-        "menus": ["아침", "된장찌개"]
-      },
-      {
-        "name": "점심",
-        "menus": ["점심", "된장찌개"]
-      },
-      {
-        "name": "저녁",
-        "menus": ["저녁", "된장찌개"]
-      },
-    ],
-  },
-  "studentCafe": {
-    "name": "학생식당",
-    "meals": [
-      {
-        "name": "조식",
-        "menus": ["아침", "된장찌개"]
-      },
-      {
-        "name": "점심",
-        "menus": ["점심", "된장찌개"]
-      },
-      {
-        "name": "저녁",
-        "menus": ["저녁", "된장찌개"]
-      },
-    ],
-  },
-  "staffCafe": {
-    "name": "교직원식당",
-    "meals": [
-      {
-        "name": "조식",
-        "menus": ["아침", "된장찌개"]
-      },
-      {
-        "name": "점심",
-        "menus": ["점심", "된장찌개"]
-      },
-      {
-        "name": "저녁",
-        "menus": ["저녁", "된장찌개"]
-      },
-    ],
-  },
-};

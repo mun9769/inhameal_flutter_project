@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'View/SwipePage.dart';
+import 'View/LoadPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MaterialApp',
-      home: SwipePage(),
+      home: LoadPage(),
     );
   }
 }
