@@ -41,6 +41,11 @@ class DataController {
     return DayMeal.fromJson(storedMap);
   }
 
+  void deleteData(String id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove(id);
+  }
+
   Future<DayMeal> loadData() async {
     DayMeal? data = await readData("20230829");
     data ??= await fetchDayMeal();
