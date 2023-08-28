@@ -58,11 +58,16 @@ class RoundRectangleWidget extends StatelessWidget {
                   Text(meal.openTime ?? "")
                 ],
               ),
-              for (String menu in meal.menus ?? [])
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Text(menu),
-                ),
+              if (meal.menus != null) ...[
+                for (String menu in meal.menus ?? [])
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(menu),
+                  ),
+                ]
+              else
+                const Text("학식이 없습니다")
+
             ],
           ),
         ),
