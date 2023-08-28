@@ -20,7 +20,7 @@ class DataController {
       saveData(endpoint, dayMealJson);
       return DayMeal.fromJson(dayMealJson);
     } else {
-      throw Exception('Failed to load DayMeal, ${response.statusCode}');
+      throw Exception('http요청에 실패했습니다, ${response.statusCode}');
     }
   }
 
