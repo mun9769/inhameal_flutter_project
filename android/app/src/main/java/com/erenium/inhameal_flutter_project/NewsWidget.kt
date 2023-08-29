@@ -23,8 +23,6 @@ class NewsWidget : AppWidgetProvider() {
                 val title = widgetData.getString("headline_title", null)
                 setTextViewText(R.id.headline_title, title ?: "No title set")
 
-                val description = widgetData.getString("headline_description", null)
-                setTextViewText(R.id.headline_description, description ?: "No description set")
             }
 
             appWidgetManager.updateAppWidget(appWidgetId, views)
