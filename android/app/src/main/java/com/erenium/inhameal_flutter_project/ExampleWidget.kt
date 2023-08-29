@@ -22,6 +22,8 @@ class ExampleWidget : AppWidgetProvider() {
             val widgetData = HomeWidgetPlugin.getData(context)
             val views = RemoteViews(context.packageName, R.layout.example_widget).apply {
 
+                val cafeName = widgetData.getString("cafe_name", null)
+                setTextViewText(R.id.cafe_name, cafeName ?: "No title set")
             }
 
             appWidgetManager.updateAppWidget(appWidgetId, views)

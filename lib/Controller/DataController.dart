@@ -57,4 +57,28 @@ class DataController {
     return data;
   }
 
+  void updateWidgetInfo(Map<String, dynamic> dayMealMap) {
+    List<String> dormJson = dayMealMap['dormCafe']["meals"][0]["menus"];
+
+    HomeWidget.saveWidgetData<String>('cafe_name', "dormCafe"); // 나중에 String말고 Map<String, dynamic>으로 저장할수있는지 테스트하기
+    HomeWidget.saveWidgetData<String>('meals', json.encode(dormJson));
+  }
+}
+// "dormCafe": {
+//   "name": "기숙사식당",
+//   "meals": [
+//   {
+//   "name": "조식",
+//   "menus": ["아침", "된장찌개"]
+//   },
+//   {
+//   "name": "점심",
+//   "menus": ["점심", "된장찌개"]
+//   },
+//   {
+//   "name": "저녁",
+//   "menus": ["저녁", "된장찌개"]
+//   },
+//   ],
+// },
 }
