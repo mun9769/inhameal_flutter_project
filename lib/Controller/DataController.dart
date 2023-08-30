@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'package:home_widget/home_widget.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Model/DayMeal.dart';
+import '../Model/news_data.dart';
 
 class DataController {
   final String baseUrl = "https://xiipj5vqt1.execute-api.ap-northeast-2.amazonaws.com/items";
@@ -24,10 +26,10 @@ class DataController {
     }
   }
 
-  void saveData(String id, Map<String,dynamic> mockJson) async {
+  void saveData(String id, Map<String,dynamic> dayMealMap) async {
     //given
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(id, json.encode(mockJson));
+    prefs.setString(id, json.encode(dayMealMap));
   }
 
   Future<DayMeal?> readData(String id) async {
@@ -62,6 +64,10 @@ class DataController {
 
     HomeWidget.saveWidgetData<String>('cafe_name', "dormCafe"); // 나중에 String말고 Map<String, dynamic>으로 저장할수있는지 테스트하기
     HomeWidget.saveWidgetData<String>('meals', json.encode(dormJson));
+
+    dormJson.asMap().forEach((idx, menu) {
+      HomeWidget.saveWidgetData<String>('lunchMenu${idx+1}', menu);
+    }); // forEach말고 한번에 payload 보내는 방법 알아보기
   }
 }
 // "dormCafe": {
@@ -81,4 +87,18 @@ class DataController {
 //   },
 //   ],
 // },
+// New: Add these constants
+// TO DO: Replace with your App Group ID
+const String appGroupId = '<YOUR APP GROUP>';
+const String iOSWidgetName = 'NewsWidgets';
+const String androidWidgetName = 'NewsWidget';
+
+void updateHeadline(NewsArticle newHeadline) {
+  // Save the headline data to the widget
+  HomeWidget.saveWidgetData<String>('headline_title', newHeadline.title);
+  HomeWidget.saveWidgetData<String>('headline_description', newHeadline.description);
+  HomeWidget.updateWidget(
+    iOSName: iOSWidgetName,
+    androidName: androidWidgetName,
+  );
 }

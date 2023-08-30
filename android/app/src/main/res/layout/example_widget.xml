@@ -56,26 +56,37 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/lunchMenu1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="사골우거지국" />
 
                     <TextView
+                        android:id="@+id/lunchMenu2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="고등어카레튀김" />
 
                     <TextView
+                        android:id="@+id/lunchMenu3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="마파두부" />
 
                     <TextView
+                        android:id="@+id/lunchMenu4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="물다시마채무침" />
 
                     <TextView
+                        android:id="@+id/lunchMenu5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="김치볶음밥" />
+
+                    <TextView
+                        android:id="@+id/lunchMenu6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="김치볶음밥" />
@@ -116,26 +127,37 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/dinnerMenu1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="사골우거지국" />
 
                     <TextView
+                        android:id="@+id/dinnerMenu2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="고등어카레튀김" />
 
                     <TextView
+                        android:id="@+id/dinnerMenu3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="마파두부" />
 
                     <TextView
+                        android:id="@+id/dinnerMenu4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="물다시마채무침" />
 
                     <TextView
+                        android:id="@+id/dinnerMenu5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="김치볶음밥" />
+
+                    <TextView
+                        android:id="@+id/dinnerMenu6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="김치볶음밥" />
