@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Model/DayMeal.dart';
-import '../Model/news_data.dart';
 
 class DataController {
   final String baseUrl = "https://xiipj5vqt1.execute-api.ap-northeast-2.amazonaws.com/items";
@@ -91,21 +90,7 @@ class DataController {
 //   },
 //   ],
 // },
-// New: Add these constants
-// TO DO: Replace with your App Group ID
-const String appGroupId = '<YOUR APP GROUP>';
-const String iOSWidgetName = 'NewsWidgets';
-const String androidWidgetName = 'NewsWidget';
 
-void updateHeadline(NewsArticle newHeadline) {
-  // Save the headline data to the widget
-  HomeWidget.saveWidgetData<String>('headline_title', newHeadline.title);
-  HomeWidget.saveWidgetData<String>('headline_description', newHeadline.description);
-  HomeWidget.updateWidget(
-    iOSName: iOSWidgetName,
-    androidName: androidWidgetName,
-  );
-}
 const Map<String, dynamic> myjson = {
   "id": "20230123",
   "dormCafe": {
