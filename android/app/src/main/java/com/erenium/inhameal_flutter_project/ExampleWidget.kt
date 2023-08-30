@@ -8,11 +8,18 @@ import android.widget.RemoteViews
 import es.antonborri.home_widget.HomeWidgetPlugin
 import org.json.JSONArray
 import org.json.JSONObject
-import kotlinx.android.synthetic.main.*
+import java.util.Calendar
+import android.content.Intent
+import android.os.Build
+import android.app.AlarmManager
+import android.app.PendingIntent
+
+
 /**
  * Implementation of App Widget functionality.
  */
 class ExampleWidget : AppWidgetProvider() {
+    private val ACTION_SCHEDULED_UPDATE = "com.erenium.inhameal_flutter_project.SCHEDULED_UPDATE"
     @SuppressLint("RemoteViewLayout")
     override fun onUpdate(
         context: Context,
@@ -37,7 +44,33 @@ class ExampleWidget : AppWidgetProvider() {
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }
 
+        scheduleNextUpdate(context)
         // create TextView
+    }
+    private fun scheduleNextUpdate(context: Context) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        // Substitute AppWidget for whatever you named your AppWidgetProvider subclass
+        val intent = Intent(context, AppWidgetProvider::class.java) // , AppWidget::class.java)
+        intent.action = ACTION_SCHEDULED_UPDATE
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        // Get a calendar instance for midnight tomorrow.
+        val midnight = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 1)
+            set(Calendar.MILLISECOND, 0)
+            add(Calendar.DAY_OF_YEAR, 1)
+        }
+
+        // For API 19 and later, set may fire the intent a little later to save battery,
+        // setExact ensures the intent goes off exactly at midnight.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, midnight.timeInMillis, pendingIntent)
+        } else {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, midnight.timeInMillis, pendingIntent)
+        }
     }
 
     fun JSONObject.toMap(): Map<String, *> = keys().asSequence().associateWith {
