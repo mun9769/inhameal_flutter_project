@@ -38,7 +38,19 @@ class ExampleWidget : AppWidgetProvider() {
 //                val jsonObj = JSONObject(meals)
 //                val mymap = jsonObj.toMap()
 
-                setTextViewText(R.id.cafe_name, meals ?: "No title set")
+                val lunchMenu1 = widgetData.getString("lunchMenu1", null)
+                setTextViewText(R.id.lunchMenu1, lunchMenu1 ?: "오늘은 쉬는날")
+                val lunchMenu2 = widgetData.getString("lunchMenu2", null)
+                setTextViewText(R.id.lunchMenu2, lunchMenu2 ?: "")
+                val lunchMenu3 = widgetData.getString("lunchMenu3", null)
+                setTextViewText(R.id.lunchMenu3, lunchMenu3 ?: "")
+                val lunchMenu4 = widgetData.getString("lunchMenu4", null)
+                setTextViewText(R.id.lunchMenu4, lunchMenu4 ?: "")
+                val lunchMenu5 = widgetData.getString("lunchMenu5", null)
+                setTextViewText(R.id.lunchMenu5, lunchMenu5 ?: "")
+                val lunchMenu6 = widgetData.getString("lunchMenu6", null)
+                setTextViewText(R.id.lunchMenu6, lunchMenu6 ?: "")
+
             }
 
             appWidgetManager.updateAppWidget(appWidgetId, views)

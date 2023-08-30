@@ -65,6 +65,10 @@ class DataController {
     HomeWidget.saveWidgetData<String>('cafe_name', "dormCafe"); // 나중에 String말고 Map<String, dynamic>으로 저장할수있는지 테스트하기
     HomeWidget.saveWidgetData<String>('meals', json.encode(dormJson));
 
+    HomeWidget.saveWidgetData<String>('lunchMenu4', '');
+    HomeWidget.saveWidgetData<String>('lunchMenu5', '');
+    HomeWidget.saveWidgetData<String>('lunchMenu6', '');
+
     dormJson.asMap().forEach((idx, menu) {
       HomeWidget.saveWidgetData<String>('lunchMenu${idx+1}', menu);
     }); // forEach말고 한번에 payload 보내는 방법 알아보기
@@ -102,3 +106,57 @@ void updateHeadline(NewsArticle newHeadline) {
     androidName: androidWidgetName,
   );
 }
+const Map<String, dynamic> myjson = {
+  "id": "20230123",
+  "dormCafe": {
+    "name": "기숙사식당",
+    "meals": [
+      {
+        "name": "조식",
+        "menus": ["아아아침", "된장찌개"]
+      },
+      {
+        "name": "점심",
+        "menus": ["점심", "된장찌개"]
+      },
+      {
+        "name": "저녁",
+        "menus": ["저녁", "된장찌개"]
+      },
+    ],
+  },
+  "studentCafe": {
+    "name": "학생식당",
+    "meals": [
+      {
+        "name": "조식",
+        "menus": ["아침", "된장찌개"]
+      },
+      {
+        "name": "점심",
+        "menus": ["점심", "된장찌개"]
+      },
+      {
+        "name": "저녁",
+        "menus": ["저녁", "된장찌개"]
+      },
+    ],
+  },
+  "staffCafe": {
+    "name": "교직원식당",
+    "meals": [
+      {
+        "name": "조식",
+        "menus": ["아침", "된장찌개"]
+      },
+      {
+        "name": "점심",
+        "menus": ["점심", "된장찌개"]
+      },
+      {
+        "name": "저녁",
+        "menus": ["저녁", "된장찌개"]
+      },
+    ],
+  },
+};

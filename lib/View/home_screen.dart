@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 // New: Add this import
 import 'package:home_widget/home_widget.dart';
+import 'package:inhameal_flutter_project/Controller/DataController.dart';
 
 import 'article_screen.dart';
 import '../Model/news_data.dart';
@@ -29,6 +30,7 @@ void updateHeadline(NewsArticle newHeadline) {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final DataController _dataController = DataController();
   // New: Add initState
   @override
   void initState() {
@@ -38,8 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // HomeWidget.setAppGroupId(appGroupId);
 
     // Mock read in some data and update the headline
-    final newHeadline = getNewsStories();
-    updateHeadline(newHeadline);
+    _dataController.updateWidgetInfo(myjson);
   }
   NewsArticle getNewsStories() {
     return NewsArticle(title: "hawing", description: "descHawing");

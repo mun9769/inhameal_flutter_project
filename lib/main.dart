@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inhameal_flutter_project/View/home_screen.dart';
 import 'View/LoadPage.dart';
 
 void main() {
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MaterialApp',
-      home: LoadPage(),
+      home: MyHomePage(),
     );
   }
 }
