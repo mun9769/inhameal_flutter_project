@@ -8,11 +8,11 @@ import '../Model/DayMeal.dart';
 class DataController {
   final String baseUrl = "https://xiipj5vqt1.execute-api.ap-northeast-2.amazonaws.com/items";
 
-  Future<DayMeal> fetchDayMeal() async {
+  Future<DayMeal> fetchDayMeal(String id) async {
     DateTime now = DateTime.now();
     String endpoint = DateFormat('yyyyMMdd').format(now);
 
-    endpoint = "20230829";
+    endpoint = id;
 
     final response = await http.get(Uri.parse("$baseUrl/$endpoint"));
 
@@ -42,14 +42,16 @@ class DataController {
     return DayMeal.fromJson(storedMap);
   }
 
-  void deleteData(String id) async {
+  Future<void> deleteData(String id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove(id);
   }
 
   Future<DayMeal> loadData() async {
-    DayMeal? data = await readData("20230829");
-    data ??= await fetchDayMeal();
+    String id = "19990101";
+    await deleteData(id);
+    DayMeal? data = await readData(id);
+    data ??= await fetchDayMeal(id);
 
     if(data == null) {
       throw Exception('${20230829}가 없습니다');
