@@ -48,10 +48,9 @@ class RoundRectangleWidget extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(meal.name ?? "", style: TextStyle(fontSize: 20)),
                   Spacer(),
@@ -62,14 +61,18 @@ class RoundRectangleWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Spacer(),
-                  Text("5000원")
+                  Text(meal.price ?? "")
                 ],
               ),
               if (meal.menus != null) ...[
                 for (String menu in meal.menus ?? [])
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(menu),
+                    child: Row(
+                      children: [
+                        Text(menu),
+                      ],
+                    ),
                   ),
                 ]
               else

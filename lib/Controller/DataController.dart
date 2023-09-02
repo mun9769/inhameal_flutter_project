@@ -8,7 +8,8 @@ import '../Model/DayMeal.dart';
 class DataController {
   final String baseUrl = "https://xiipj5vqt1.execute-api.ap-northeast-2.amazonaws.com/items";
 
-  Future<DayMeal> fetchDayMeal(String id) async {
+
+  Future<Map<String, dynamic>> fetchJson(String id) async {
     DateTime now = DateTime.now();
     String endpoint = DateFormat('yyyyMMdd').format(now);
 
@@ -18,20 +19,19 @@ class DataController {
 
     if (response.statusCode == 200) {
       Map<String, dynamic> dayMealJson = jsonDecode(utf8.decode(response.bodyBytes));
-      saveData(endpoint, dayMealJson);
-      return DayMeal.fromJson(dayMealJson);
+      return dayMealJson;
     } else {
       throw Exception('http요청에 실패했습니다, ${response.statusCode}');
     }
   }
 
-  void saveData(String id, Map<String,dynamic> dayMealMap) async {
+  void saveJsonToLocal(String id, Map<String,dynamic> dayMealMap) async {
     //given
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(id, json.encode(dayMealMap));
   }
 
-  Future<DayMeal?> readData(String id) async {
+  Future<Map<String, dynamic>?> readJsonFromLocal(String id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? storedMapString = prefs.getString(id);
 
@@ -39,7 +39,7 @@ class DataController {
 
     Map<String, dynamic> storedMap = json.decode(storedMapString);
 
-    return DayMeal.fromJson(storedMap);
+    return storedMap;
   }
 
   Future<void> deleteData(String id) async {
@@ -49,21 +49,24 @@ class DataController {
 
   Future<DayMeal> loadData() async {
     String id = "19990101";
+
     await deleteData(id);
-    DayMeal? data = await readData(id);
-    data ??= await fetchDayMeal(id);
-
-    if(data == null) {
-      throw Exception('${20230829}가 없습니다');
+    Map<String, dynamic>? dayJson = await readJsonFromLocal(id);
+    dayJson ??= await fetchJson(id);
+    saveJsonToLocal(id, dayJson);
+    
+    if(dayJson == null) {
+      throw Exception('${id}가 없습니다');
     }
+    updateWidgetInfo(dayJson);
 
-    return data;
+    return DayMeal.fromJson(dayJson);
   }
 
   void updateWidgetInfo(Map<String, dynamic> dayMealMap) {
-    List<String> dormJson = dayMealMap['dormCafe']["meals"][0]["menus"];
+    final List<String> dormJson = dayMealMap['dormCafe']["meals"][0]["menus"]?.cast<String>(); // 여기서 인덱스를 못찾아도 괜찮게 하는 방법 없나?
 
-    HomeWidget.saveWidgetData<String>('cafe_name', "dormCafe"); // 나중에 String말고 Map<String, dynamic>으로 저장할수있는지 테스트하기
+    HomeWidget.saveWidgetData<String>('cafe_name', "기숙사식당"); // 나중에 String말고 Map<String, dynamic>으로 저장할수있는지 테스트하기
     HomeWidget.saveWidgetData<String>('meals', json.encode(dormJson));
 
     HomeWidget.saveWidgetData<String>('lunchMenu4', '');
@@ -75,23 +78,6 @@ class DataController {
     }); // forEach말고 한번에 payload 보내는 방법 알아보기
   }
 }
-// "dormCafe": {
-//   "name": "기숙사식당",
-//   "meals": [
-//   {
-//   "name": "조식",
-//   "menus": ["아침", "된장찌개"]
-//   },
-//   {
-//   "name": "점심",
-//   "menus": ["점심", "된장찌개"]
-//   },
-//   {
-//   "name": "저녁",
-//   "menus": ["저녁", "된장찌개"]
-//   },
-//   ],
-// },
 
 const Map<String, dynamic> myjson = {
   "id": "20230123",

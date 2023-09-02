@@ -46,21 +46,17 @@ class Meal {
   final String? name;
   final List<dynamic>? menus;
   String? openTime;
+  String? price;
 
-  static const Map<String, String> name2time = {
-    "조식": "07:30 ~ 09:30",
-    "중식": "11:30 ~ 13:30",
-    "석식": "17:30 ~ 19:00",
-    "간단식": "07:30 ~ 09:30",
-  };
 
-  Meal({required this.openTime, required this.name, required this.menus});
+  Meal({required this.openTime, required this.name, required this.menus, required this.price});
 
   factory Meal.fromJson(Map<String, dynamic> json) {
     return Meal(
-      openTime: Meal.name2time[json['name']],
+      openTime: json['opentime'],
       name: json['name'],
       menus: json['menus'],
+      price: json['price'],
     );
   }
 }
