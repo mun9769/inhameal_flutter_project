@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:inhameal_flutter_project/Model/DayMeal.dart';
+import 'package:inhameal_flutter_project/View/SettingPage.dart';
 
 class MealPage extends StatelessWidget {
   Cafeteria cafe;
@@ -13,6 +14,15 @@ class MealPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(cafe.name ?? ""),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SettingPage()));
+            },
+          )
+        ],
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -48,10 +58,9 @@ class RoundRectangleWidget extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(meal.name ?? "", style: TextStyle(fontSize: 20)),
                   Spacer(),
@@ -60,26 +69,24 @@ class RoundRectangleWidget extends StatelessWidget {
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Spacer(),
-                  Text("5000원")
-                ],
+                children: [Spacer(), Text(meal.price ?? "")],
               ),
               if (meal.menus != null) ...[
                 for (String menu in meal.menus ?? [])
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(menu),
+                    child: Row(
+                      children: [
+                        Text(menu),
+                      ],
+                    ),
                   ),
-                ]
-              else
+              ] else
                 const Text("학식이 없습니다")
-
             ],
           ),
         ),
       ),
     );
   }
-
 }
