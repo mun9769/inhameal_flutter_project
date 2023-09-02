@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:inhameal_flutter_project/Model/DayMeal.dart';
+import 'package:inhameal_flutter_project/View/SettingPage.dart';
 
 class MealPage extends StatelessWidget {
   Cafeteria cafe;
@@ -13,6 +14,15 @@ class MealPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(cafe.name ?? ""),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SettingPage()));
+            },
+          )
+        ],
       ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,

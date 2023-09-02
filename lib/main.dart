@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inhameal_flutter_project/View/favorite_screen.dart';
 import 'View/LoadPage.dart';
+import 'View/SettingPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +16,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MaterialApp',
-      home: SafeArea(child: FavScreen()),
+      home: LoadPage(),
+      // home: SettingPage(),
     );
   }
 }

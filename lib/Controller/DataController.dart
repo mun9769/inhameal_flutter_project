@@ -6,7 +6,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Model/DayMeal.dart';
 
 class DataController {
+  static final DataController instance = DataController._internal();
+  factory DataController() => instance;
+  DataController._internal();
+
   final String baseUrl = "https://xiipj5vqt1.execute-api.ap-northeast-2.amazonaws.com/items";
+
+  late List<String> cafeList;
 
 
   Future<Map<String, dynamic>> fetchJson(String id) async {
@@ -60,6 +66,8 @@ class DataController {
     }
     updateWidgetInfo(dayJson);
 
+    cafeList = await getCafePriority();
+
     return DayMeal.fromJson(dayJson);
   }
 
@@ -76,6 +84,17 @@ class DataController {
     dormJson.asMap().forEach((idx, menu) {
       HomeWidget.saveWidgetData<String>('lunchMenu${idx+1}', menu);
     }); // forEach말고 한번에 payload 보내는 방법 알아보기
+  }
+
+  void updateCafePriority(List<String> items) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    cafeList = items;
+    prefs.setStringList("cafePriority", items);
+  }
+
+  Future<List<String>> getCafePriority() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getStringList("cafePriority") ?? ["student", "dorm", "staff"];
   }
 }
 

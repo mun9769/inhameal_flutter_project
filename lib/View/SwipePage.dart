@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:page_view_dot_indicator/page_view_dot_indicator.dart';
 
+import '../Controller/DataController.dart';
 import '../Model/DayMeal.dart';
 import 'MealPage.dart';
 
@@ -16,6 +17,7 @@ class SwipePage extends StatefulWidget {
 
 class _SwipePageState extends State<SwipePage> {
   final PageController _pageController = PageController(initialPage: 0);
+  final DataController _dataController = DataController();
 
   late int selectedPage = 0;
 
@@ -24,12 +26,22 @@ class _SwipePageState extends State<SwipePage> {
   @override
   void initState() {
     super.initState();
+    initPages();
+  }
 
-    _pages = [
-      MealPage(cafe: widget.dayMeal.dormCafe),
-      MealPage(cafe: widget.dayMeal.studentCafe),
-      MealPage(cafe: widget.dayMeal.staffCafe),
-    ];
+
+  void initPages(){
+    final Map<String, Widget> cafepages = {
+      "dorm": MealPage(cafe: widget.dayMeal.dormCafe),
+      "student": MealPage(cafe: widget.dayMeal.studentCafe),
+      "staff": MealPage(cafe: widget.dayMeal.staffCafe),
+    };
+
+    List<Widget> tmp = [];
+    _dataController.cafeList.forEach((name) {
+      tmp.add(cafepages[name]!); // !를 빼는 방법이 없을까?
+    });
+    _pages = tmp;
   }
 
   @override
