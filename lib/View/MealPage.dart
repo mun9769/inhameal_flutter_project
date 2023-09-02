@@ -69,10 +69,7 @@ class RoundRectangleWidget extends StatelessWidget {
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Spacer(),
-                  Text(meal.price ?? "")
-                ],
+                children: [Spacer(), Text(meal.price ?? "")],
               ),
               if (meal.menus != null) ...[
                 for (String menu in meal.menus ?? [])
@@ -84,15 +81,12 @@ class RoundRectangleWidget extends StatelessWidget {
                       ],
                     ),
                   ),
-                ]
-              else
+              ] else
                 const Text("학식이 없습니다")
-
             ],
           ),
         ),
       ),
     );
   }
-
 }
