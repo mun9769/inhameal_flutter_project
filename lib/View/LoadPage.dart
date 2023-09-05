@@ -19,7 +19,7 @@ class LoadPage extends StatelessWidget {
           builder: (context, snapshot) {
             if(snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) { // 내가 만든 throw가 이 haserror와 동일한가?
+            } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else {
               return SwipePage(dayMeal: snapshot.data!);

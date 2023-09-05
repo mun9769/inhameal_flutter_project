@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:inhameal_flutter_project/View/favorite_screen.dart';
+import 'package:inhameal_flutter_project/View/component/MenuBoardView.dart';
+import 'package:inhameal_flutter_project/View/component/favorite_screen.dart';
 import 'View/LoadPage.dart';
 import 'View/SettingPage.dart';
+import 'View/component/test.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,8 +18,20 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MaterialApp',
-      home: LoadPage(),
-      // home: SettingPage(),
+      // home: LoadPage(),
+      // home: LoadPage(),
+      home: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              MenuBoardView(),
+              MenuBoardView(),
+              MenuBoardView(),
+              MenuBoardView(),
+            ]
+          ),
+        ),
+      ),
     );
   }
 }
