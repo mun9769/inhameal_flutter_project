@@ -3,15 +3,24 @@ import 'package:flutter/material.dart';
 
 import '../../Model/DayMeal.dart';
 
-class MenuBoardView extends StatelessWidget{
+class MenuBoardView extends StatelessWidget {
+  late List<List<String>> lunch;
+  List<String> menus = [
+    "피자토핑치즈오븐토마토스파게티",
+    "얼갈이된장국",
+    "고추장오리불고기",
+    "어묵계란전",
+    "숙주나물",
+    "깍두기",
+    "아이스홍시"
+  ];
 
-  List<String> menus = ["순살치킨카츠&어니언크리미소스순살치킨카츠&어니언크리미소스순살치킨카츠&어니언크리미소스순살치킨카츠&어니언크리미소스","얼갈이된장국", "고추장오리불고기", "어묵계란전", "숙주나물", "깍두기", "아이스홍시"];
-
-  MenuBoardView({super.key});
+  MenuBoardView({super.key}) {
+    lunch = [menus, menus, menus];
+  }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Padding(
       padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
       child: Container(
@@ -21,35 +30,37 @@ class MenuBoardView extends StatelessWidget{
         ),
         width: double.infinity,
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: const [
-                  Text("중식"),//,style: TextStyle(backgroundColor: Colors.blue)),
+                  Text("중식", style: TextStyle(fontSize: 24)),
                   Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text("11:00 ~ 13:30"),
-                  ),  //,style: TextStyle(backgroundColor: Colors.red)),
-
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child:
+                        Text("11:00 ~ 13:30", style: TextStyle(fontSize: 16)),
+                  ),
                 ],
               ),
-              SizedBox(height: 20),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  for(String menu in menus)
-                    LayoutBuilder(builder: (context, size) {
-                      if (hasTextOverflow(menu, TextStyle(fontSize: 36), size.maxWidth) == false)
-                        return Text(menu);
-                      else
-                        return Text("haiwng");
-                    }
-                  ),
-                ]
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: lunch.length,
+                itemBuilder: (_, index) {
+                  return LayoutBuilder(
+                    builder: (_, size) {
+                      return makeMenus(size.maxWidth / 2);
+                    },
+                  );
+                },
+                separatorBuilder: (_, __) {
+                  return Divider(thickness: 1);
+                },
               ),
+              SizedBox(height: 16),
             ],
           ),
         ),
@@ -57,13 +68,65 @@ class MenuBoardView extends StatelessWidget{
     );
   }
 
-  bool hasTextOverflow(
-      String text,
-      TextStyle style,
-      double maxWidth,
-      {double minWidth = 0,
-        int maxLines = 1
-      }) {
+  Widget makeMenus(double maxWidth) {
+    int idx = 0;
+
+    List<Row> rows = [];
+    while (idx < menus.length) {
+      Row row;
+      List<String> s = [menus[idx++]];
+
+      if (idx < menus.length &&
+          !hasTextOverflow(menus[idx], TextStyle(), maxWidth)) {
+        s.add(menus[idx++]);
+      }
+
+      row = Row (
+        children: [
+          for(String menu in s)
+            Expanded(
+              flex: 1,
+              child: Text(menu)
+            )
+        ]
+      );
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+      if (idx == menus.length - 1) {
+        row = Row(children: [Text(menus[idx++])]);
+      } else if (!hasTextOverflow(menus[idx], TextStyle(), maxWidth) &&
+          !hasTextOverflow(menus[idx + 1], TextStyle(), maxWidth)) {
+        row = Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Text(menus[idx++]),
+            ),
+            Expanded(
+              flex: 1,
+              child: Text(menus[idx++]),
+            ),
+          ],
+        );
+      } else {
+        row = Row(
+          children: [Text(menus[idx++])],
+        );
+      }
+      //////////////////////////////////////////////////////////////////////////////////////////
+      rows.add(row);
+    }
+    rows.add(Row(children: [Spacer(), Text("7000원")]));
+    Column ret = Column(
+      children: [
+        for (Row row in rows) row,
+      ],
+    );
+    return ret;
+  }
+
+  bool hasTextOverflow(String text, TextStyle style, double maxWidth,
+      {double minWidth = 0, int maxLines = 1}) {
     final TextPainter textPainter = TextPainter(
       text: TextSpan(text: text, style: style),
       maxLines: maxLines,
@@ -74,53 +137,3 @@ class MenuBoardView extends StatelessWidget{
   }
 }
 
-class RoundRectangleWidget extends StatelessWidget {
-  Meal meal;
-
-  RoundRectangleWidget({Key? key, required this.meal}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Colors.grey,
-        ),
-        width: double.infinity,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                children: [
-                  Text(meal.name ?? "", style: TextStyle(fontSize: 20)),
-                  Spacer(),
-                  Text(meal.openTime ?? "")
-                ],
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [Spacer(), Text(meal.price ?? "")],
-              ),
-              if (meal.menus != null) ...[
-                for (String menu in meal.menus ?? [])
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Row(
-                      children: [
-                        Text(menu),
-                      ],
-                    ),
-                  ),
-              ] else
-                const Text("학식이 없습니다")
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}

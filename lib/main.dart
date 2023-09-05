@@ -3,7 +3,6 @@ import 'package:inhameal_flutter_project/View/component/MenuBoardView.dart';
 import 'package:inhameal_flutter_project/View/component/favorite_screen.dart';
 import 'View/LoadPage.dart';
 import 'View/SettingPage.dart';
-import 'View/component/test.dart';
 
 void main() {
   runApp(const MyApp());
