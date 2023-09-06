@@ -46,6 +46,7 @@ class MenuBoardView extends StatelessWidget {
                 ],
               ),
               ListView.separated(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: lunch.length,
@@ -74,46 +75,21 @@ class MenuBoardView extends StatelessWidget {
     List<Row> rows = [];
     while (idx < menus.length) {
       Row row;
-      List<String> s = [menus[idx++]];
+      List<String> s = [];
 
-      if (idx < menus.length &&
-          !hasTextOverflow(menus[idx], TextStyle(), maxWidth)) {
+      if (idx + 1 < menus.length &&
+          !hasTextOverflow(menus[idx], TextStyle(), maxWidth) &&
+          !hasTextOverflow(menus[idx + 1], TextStyle(), maxWidth)) {
+        s.add(menus[idx++]);
+        s.add(menus[idx++]);
+      } else {
         s.add(menus[idx++]);
       }
 
-      row = Row (
-        children: [
-          for(String menu in s)
-            Expanded(
-              flex: 1,
-              child: Text(menu)
-            )
-        ]
-      );
+      row = Row(children: [
+        for (String menu in s) Expanded(flex: 1, child: Text(menu))
+      ]);
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-      if (idx == menus.length - 1) {
-        row = Row(children: [Text(menus[idx++])]);
-      } else if (!hasTextOverflow(menus[idx], TextStyle(), maxWidth) &&
-          !hasTextOverflow(menus[idx + 1], TextStyle(), maxWidth)) {
-        row = Row(
-          children: [
-            Expanded(
-              flex: 1,
-              child: Text(menus[idx++]),
-            ),
-            Expanded(
-              flex: 1,
-              child: Text(menus[idx++]),
-            ),
-          ],
-        );
-      } else {
-        row = Row(
-          children: [Text(menus[idx++])],
-        );
-      }
-      //////////////////////////////////////////////////////////////////////////////////////////
       rows.add(row);
     }
     rows.add(Row(children: [Spacer(), Text("7000원")]));
@@ -136,4 +112,3 @@ class MenuBoardView extends StatelessWidget {
     return textPainter.didExceedMaxLines;
   }
 }
-
