@@ -32,7 +32,6 @@ class MenuBoardView extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -61,7 +60,6 @@ class MenuBoardView extends StatelessWidget {
                   return Divider(thickness: 1);
                 },
               ),
-              SizedBox(height: 16),
             ],
           ),
         ),
