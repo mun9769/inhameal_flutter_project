@@ -4,7 +4,7 @@ import 'package:inhameal_flutter_project/Model/DayMeal.dart';
 import 'package:inhameal_flutter_project/View/SettingPage.dart';
 import 'package:inhameal_flutter_project/View/component/MenuBoardView.dart';
 
-class MealPage extends StatelessWidget {
+class MealPage extends StatefulWidget {
   Cafeteria cafe;
 
   Map<String, List<Meal>> category = {
@@ -20,20 +20,33 @@ class MealPage extends StatelessWidget {
   }
 
   @override
+  State<MealPage> createState() => _MealPageState();
+}
+
+class _MealPageState extends State<MealPage> {
+
+  @override
   Widget build(BuildContext context) {
     return NotificationListener<OverscrollIndicatorNotification>(
       onNotification: (overScroll) {
         overScroll.disallowIndicator();
         return true;
       },
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            for (var item in category.entries)
-                MenuBoardView(name: item.key, meals: item.value),
-            SizedBox(height: 40),
-          ],
+      child: RefreshIndicator(
+        onRefresh: () async {
+          return Future<void>.delayed(const Duration(seconds: 1));
+        },
+
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              for (var item in widget.category.entries)
+                  MenuBoardView(name: item.key, meals: item.value),
+              SizedBox(height: 40),
+            ],
+          ),
         ),
       ),
     );

@@ -23,7 +23,7 @@ class _SwipePageState extends State<SwipePage> {
   late int selectedPage = 0;
 
   late final List<Widget> _pages;
-  List<String> cafes = ['기숙사식당', '학생식당', '교직원식당'];
+  late List<String> cafeList;
 
   @override
   void initState() {
@@ -33,6 +33,8 @@ class _SwipePageState extends State<SwipePage> {
 
 
   void initPages(){
+    cafeList = _dataController.cafeList;
+
     final Map<String, Widget> cafepages = {
       "dorm": MealPage(cafe: widget.dayMeal.dormCafe),
       "student": MealPage(cafe: widget.dayMeal.studentCafe),
@@ -40,7 +42,7 @@ class _SwipePageState extends State<SwipePage> {
     };
 
     List<Widget> tmp = [];
-    _dataController.cafeList.forEach((name) {
+    cafeList.forEach((name) {
       tmp.add(cafepages[name]!); // !를 빼는 방법이 없을까?
     });
     _pages = tmp;
@@ -80,7 +82,7 @@ class _SwipePageState extends State<SwipePage> {
                         color: selectedPage == i ? Colors.blue : Colors.white,
                       ),
                       child: Text(
-                        cafes[i],
+                        cafeList[i],
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 14.0,
