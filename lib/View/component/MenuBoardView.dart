@@ -4,20 +4,7 @@ import 'package:flutter/material.dart';
 import '../../Model/DayMeal.dart';
 
 class MenuBoardView extends StatelessWidget {
-  late List<List<String>> lunch;
-  List<String> menus = [
-    "피자토핑치즈오븐토마토스파게티",
-    "얼갈이된장국",
-    "고추장오리불고기",
-    "어묵계란전",
-    "숙주나물",
-    "깍두기",
-    "아이스홍시"
-  ];
 
-  MenuBoardView({super.key}) {
-    lunch = [menus, menus, menus];
-  }
 
   @override
   Widget build(BuildContext context) {
