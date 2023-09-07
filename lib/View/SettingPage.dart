@@ -70,7 +70,7 @@ class _CafePriorityListWidgetState extends State<CafePriorityListWidget> {
         for (int index = 0; index < _items.length; index += 1)
           ListTile(
             key: Key('$index'),
-            title: Text(translateName[_items[index]] ?? "식당"),
+            title: Text(AppVar.translateName[_items[index]] ?? "식당"),
             trailing: ReorderableDragStartListener(
                 index: index, child: const Icon(Icons.drag_handle)),
           ),

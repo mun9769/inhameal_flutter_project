@@ -63,15 +63,11 @@ class _SwipePageState extends State<SwipePage> {
       _pages = tmp;
     });
   }
-  final Map<String, String> days ={
-    'Mon': '월', 'Tue': '화', 'Wed': '수',
-    'Thu': '목', 'Fri': '금', 'Sat': '토', 'Sun': '일',
-  };
   String getToday() {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('MM월 dd일 ').format(now);
     String? day = DateFormat('E').format(now);
-    day = days[day];
+    day = AppVar.weeks[day];
     return formattedDate + (day ?? "");
   }
 
@@ -111,7 +107,7 @@ class _SwipePageState extends State<SwipePage> {
                         color: selectedPage == i ? AppColors.orange[700] : Colors.white,
                       ),
                       child: Text(
-                        translateName[cafeList[i]] ?? "식당",
+                        AppVar.translateName[cafeList[i]] ?? "식당",
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 14.0,
