@@ -3,22 +3,29 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:inhameal_flutter_project/Controller/DataController.dart';
-import 'package:inhameal_flutter_project/View/SwipePage.dart';
 
-import '../Model/static_variable.dart';
+import '../constants/colors.dart';
+import '../constants/static_variable.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({super.key, required this.parentSetState});
+
   final VoidCallback parentSetState;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('설정')),
+      appBar: AppBar(
+        title: const Text('설정'),
+        backgroundColor: AppColors.orange[300],
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             SizedBox(height: 12),
-            CafePriorityListWidget(parentSetState: parentSetState,),
+            CafePriorityListWidget(
+              parentSetState: parentSetState,
+            ),
             Container(
               height: 20,
               color: Colors.black12,
@@ -36,7 +43,7 @@ class CafePriorityListWidget extends StatefulWidget {
   final VoidCallback parentSetState;
 
   @override
-  State<CafePriorityListWidget> createState() =>_CafePriorityListWidgetState ();
+  State<CafePriorityListWidget> createState() => _CafePriorityListWidgetState();
 }
 
 class _CafePriorityListWidgetState extends State<CafePriorityListWidget> {
@@ -56,7 +63,8 @@ class _CafePriorityListWidgetState extends State<CafePriorityListWidget> {
     return ReorderableListView(
       shrinkWrap: true,
       primary: false,
-      header: Text("식당 순서 설정",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
+      header: Text("식당 순서 설정",
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
       padding: const EdgeInsets.symmetric(horizontal: 20),
       children: <Widget>[
         for (int index = 0; index < _items.length; index += 1)

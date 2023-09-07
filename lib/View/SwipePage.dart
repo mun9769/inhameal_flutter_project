@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:inhameal_flutter_project/View/SettingPage.dart';
+import 'package:inhameal_flutter_project/constants/colors.dart';
 import '../Controller/DataController.dart';
 import '../Model/DayMeal.dart';
-import '../Model/static_variable.dart';
+import '../constants/static_variable.dart';
 import 'MealPage.dart';
 
 class SwipePage extends StatefulWidget {
@@ -67,6 +68,7 @@ class _SwipePageState extends State<SwipePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("8월 27일"),
+        backgroundColor: AppColors.orange[300],
         centerTitle: true,
         actions: [
           IconButton(
@@ -79,11 +81,12 @@ class _SwipePageState extends State<SwipePage> {
         ],
       ),
       body: Container(
-        color: Colors.lightBlue[50],
+        color: AppColors.orange[50],
         child: Column(
           children: [
             Container(
-              color: Colors.lightBlue[100],
+              // color: Colors.lightBlue[100],
+              color: AppColors.orange[100],
               padding: EdgeInsets.symmetric(vertical: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -93,13 +96,14 @@ class _SwipePageState extends State<SwipePage> {
                       padding: EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
-                        color: selectedPage == i ? Colors.blue : Colors.white,
+                        color: selectedPage == i ? AppColors.orange[700] : Colors.white,
                       ),
                       child: Text(
                         translateName[cafeList[i]] ?? "식당",
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 14.0,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     )
