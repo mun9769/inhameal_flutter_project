@@ -48,16 +48,10 @@ class _LoadPageState extends State<LoadPage> {
         centerTitle: true,
       ),
       body: Container(
-          color: AppColors.orange[50],
-          child: Center(
-            child: Column(
-              children: [
-                Spacer(),
-                button,
-                Spacer(),
-              ],
-            ),
-          ),
+        color: AppColors.orange[50],
+        child: Center(
+          child: button,
+        ),
       ),
     );
   }
