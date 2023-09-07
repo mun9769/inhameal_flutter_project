@@ -43,11 +43,11 @@ class Cafeteria {
 }
 
 class Meal {
-  final String name;
-  final List<dynamic> menus;
-  String openTime;
-  String price;
-  String category;
+  final String? name;
+  final List<dynamic>? menus;
+  String? openTime;
+  String? price;
+  String? category;
 
 
   Meal({required this.openTime, required this.name, required this.menus, required this.price, required this.category});

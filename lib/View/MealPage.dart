@@ -11,6 +11,8 @@ class MealPage extends StatefulWidget {
     'brunch': [],
     'lunch': [],
     'dinner': [],
+    'category': [],
+    'self_ramen': [],
   };
 
   MealPage({Key? key, required this.cafe}) : super(key: key) {
@@ -38,12 +40,18 @@ class _MealPageState extends State<MealPage> {
         },
 
         child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
           scrollDirection: Axis.vertical,
+          physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             children: [
-              for (var item in widget.category.entries)
+              for (var item in widget.category.entries) ...[
+                if(item.value.isNotEmpty) ...[
                   MenuBoardView(name: item.key, meals: item.value),
+                ]
+                else if(item.key =='brunch' || item.key == 'lunch' || item.key == 'dinner') ...[
+                  MenuBoardView(name: item.key, meals: item.value),
+                ]
+              ],
               SizedBox(height: 40),
             ],
           ),
@@ -51,4 +59,5 @@ class _MealPageState extends State<MealPage> {
       ),
     );
   }
+
 }

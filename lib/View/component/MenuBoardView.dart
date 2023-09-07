@@ -13,6 +13,8 @@ class MenuBoardView extends StatelessWidget {
     'brunch': '아침',
     'lunch': '점심',
     'dinner': '저녁',
+    'self_ramen': '셀프라면',
+    'snack' : '스낵(조식/석식)'
   };
 
   @override
@@ -46,7 +48,7 @@ class MenuBoardView extends StatelessWidget {
                   Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8.0),
                       child: meals.isNotEmpty
-                          ? Text(meals[0].openTime,
+                          ? Text(meals[0].openTime ?? "",
                               style: TextStyle(fontSize: 16))
                           : Text("")),
                 ],
@@ -77,7 +79,11 @@ class MenuBoardView extends StatelessWidget {
 
   Widget makeMenus(Meal meal, double maxWidth) {
     int idx = 0;
-    List<String> menus = meal.menus.cast<String>();
+    List<String>? menus = meal.menus?.cast<String>();
+
+    if(menus == null) {
+      return SizedBox(height: 20);
+    }
 
     List<Row> rows = [];
     while (idx < menus.length) {
@@ -99,7 +105,7 @@ class MenuBoardView extends StatelessWidget {
 
       rows.add(row);
     }
-    rows.add(Row(children: [Spacer(), Text(meal.price)]));
+    rows.add(Row(children: [Spacer(), Text(meal.price ?? "")]));
     Column ret = Column(
       children: [
         for (Row row in rows) row,
