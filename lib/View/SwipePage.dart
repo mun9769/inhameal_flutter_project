@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:inhameal_flutter_project/View/SettingPage.dart';
-import 'package:page_view_dot_indicator/page_view_dot_indicator.dart';
-
 import '../Controller/DataController.dart';
 import '../Model/DayMeal.dart';
 import '../Model/static_variable.dart';
