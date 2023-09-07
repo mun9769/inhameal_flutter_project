@@ -3,22 +3,26 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:inhameal_flutter_project/Controller/DataController.dart';
+import 'package:inhameal_flutter_project/View/SwipePage.dart';
+
+import '../Model/static_variable.dart';
 
 class SettingPage extends StatelessWidget {
-  const SettingPage({super.key});
-
+  const SettingPage({super.key, required this.parentSetState});
+  final VoidCallback parentSetState;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('ReorderableListView Sample')),
+      appBar: AppBar(title: const Text('설정')),
       body: SingleChildScrollView(
         child: Column(
           children: [
+            SizedBox(height: 12),
+            CafePriorityListWidget(parentSetState: parentSetState,),
             Container(
-              height: 150,
+              height: 20,
               color: Colors.black12,
             ),
-            CafePriorityListWidget(),
           ],
         ),
       ),
@@ -27,7 +31,9 @@ class SettingPage extends StatelessWidget {
 }
 
 class CafePriorityListWidget extends StatefulWidget {
-  const CafePriorityListWidget({super.key});
+  const CafePriorityListWidget({super.key, required this.parentSetState});
+
+  final VoidCallback parentSetState;
 
   @override
   State<CafePriorityListWidget> createState() =>_CafePriorityListWidgetState ();
@@ -39,28 +45,24 @@ class _CafePriorityListWidgetState extends State<CafePriorityListWidget> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _items = _dataController.cafeList;
-    print("hawing");
   }
 
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    // final Color oddItemColor = colorScheme.primary.withOpacity(0.05);
-    // final Color evenItemColor = colorScheme.primary.withOpacity(0.15);
 
     return ReorderableListView(
       shrinkWrap: true,
       primary: false,
-      header: Text("식당 순서 설정"),
+      header: Text("식당 순서 설정",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold)),
       padding: const EdgeInsets.symmetric(horizontal: 20),
       children: <Widget>[
         for (int index = 0; index < _items.length; index += 1)
           ListTile(
             key: Key('$index'),
-            title: Text(_items[index]),
+            title: Text(translateName[_items[index]] ?? "식당"),
             trailing: ReorderableDragStartListener(
                 index: index, child: const Icon(Icons.drag_handle)),
           ),
@@ -72,8 +74,9 @@ class _CafePriorityListWidgetState extends State<CafePriorityListWidget> {
           }
           final String item = _items.removeAt(oldIndex);
           _items.insert(newIndex, item);
-          _dataController.updateCafePriority(_items);
         });
+        _dataController.updateCafePriority(_items);
+        widget.parentSetState();
       },
     );
   }

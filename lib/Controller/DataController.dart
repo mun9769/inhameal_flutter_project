@@ -56,7 +56,7 @@ class DataController {
   Future<DayMeal> loadData() async {
     String id = "19990101";
 
-    await deleteData(id);
+    // await deleteData(id);
     Map<String, dynamic>? dayJson = await readJsonFromLocal(id);
     dayJson ??= await fetchJson(id);
     saveJsonToLocal(id, dayJson);

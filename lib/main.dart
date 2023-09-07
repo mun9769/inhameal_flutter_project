@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:inhameal_flutter_project/View/SwipePage.dart';
 import 'package:inhameal_flutter_project/View/component/MenuBoardView.dart';
-import 'package:inhameal_flutter_project/View/component/favorite_screen.dart';
 import 'View/LoadPage.dart';
 import 'View/SettingPage.dart';
 
@@ -17,20 +17,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MaterialApp',
-      // home: LoadPage(),
-      // home: LoadPage(),
-      home: Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              MenuBoardView(),
-              MenuBoardView(),
-              MenuBoardView(),
-              MenuBoardView(),
-            ]
-          ),
-        ),
-      ),
+      home: LoadPage(),
+      // home: SwipePage(),
     );
   }
 }

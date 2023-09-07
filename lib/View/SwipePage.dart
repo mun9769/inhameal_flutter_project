@@ -5,6 +5,7 @@ import 'package:page_view_dot_indicator/page_view_dot_indicator.dart';
 
 import '../Controller/DataController.dart';
 import '../Model/DayMeal.dart';
+import '../Model/static_variable.dart';
 import 'MealPage.dart';
 
 class SwipePage extends StatefulWidget {
@@ -19,10 +20,9 @@ class SwipePage extends StatefulWidget {
 class _SwipePageState extends State<SwipePage> {
   final PageController _pageController = PageController(initialPage: 0, viewportFraction: 0.9);
   final DataController _dataController = DataController();
-
   late int selectedPage = 0;
 
-  late final List<Widget> _pages;
+  late List<Widget> _pages;
   late List<String> cafeList;
 
   @override
@@ -43,9 +43,25 @@ class _SwipePageState extends State<SwipePage> {
 
     List<Widget> tmp = [];
     cafeList.forEach((name) {
-      tmp.add(cafepages[name]!); // !를 빼는 방법이 없을까?
+      tmp.add(cafepages[name]!);
     });
     _pages = tmp;
+  }
+  void my_setState() {
+    final Map<String, Widget> cafepages = {
+      "dorm": MealPage(cafe: widget.dayMeal.dormCafe),
+      "student": MealPage(cafe: widget.dayMeal.studentCafe),
+      "staff": MealPage(cafe: widget.dayMeal.staffCafe),
+    };
+
+    setState(() {
+      cafeList = _dataController.cafeList;
+      List<Widget> tmp = [];
+      cafeList.forEach((name) {
+        tmp.add(cafepages[name]!);
+      });
+      _pages = tmp;
+    });
   }
 
   @override
@@ -59,7 +75,7 @@ class _SwipePageState extends State<SwipePage> {
             icon: Icon(Icons.settings),
             onPressed: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SettingPage()));
+                  MaterialPageRoute(builder: (context) => SettingPage(parentSetState: my_setState,)));
             },
           )
         ],
@@ -82,7 +98,7 @@ class _SwipePageState extends State<SwipePage> {
                         color: selectedPage == i ? Colors.blue : Colors.white,
                       ),
                       child: Text(
-                        cafeList[i],
+                        translateName[cafeList[i]] ?? "식당",
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 14.0,
