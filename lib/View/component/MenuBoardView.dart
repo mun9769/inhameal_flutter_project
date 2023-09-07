@@ -29,9 +29,9 @@ class MenuBoardView extends StatelessWidget {
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.7),
-              blurRadius: 5.0,
+              blurRadius: 2.0,
               spreadRadius: 0.0,
-              offset: const Offset(0, 7),
+              offset: const Offset(0, 2),
             )
           ],
         ),
@@ -54,7 +54,9 @@ class MenuBoardView extends StatelessWidget {
                 ],
               ),
               ListView.separated(
-                padding: EdgeInsets.symmetric(vertical: 16.0),
+                padding: meals.isEmpty ?
+                        EdgeInsets.zero :
+                        EdgeInsets.symmetric(vertical: 16.0),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: meals.length,
@@ -69,7 +71,13 @@ class MenuBoardView extends StatelessWidget {
                   return Divider(thickness: 1);
                 },
               ),
-              if (meals.length == 0) Text("미운영")
+              if (meals.length == 0)
+                Column(
+                  children: [
+                    Text("미운영"),
+                    SizedBox(height:20),
+                  ],
+                )
             ],
           ),
         ),

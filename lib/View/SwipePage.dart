@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:inhameal_flutter_project/View/SettingPage.dart';
 import 'package:inhameal_flutter_project/constants/colors.dart';
+import 'package:intl/intl.dart';
 import '../Controller/DataController.dart';
 import '../Model/DayMeal.dart';
 import '../constants/static_variable.dart';
@@ -62,12 +63,23 @@ class _SwipePageState extends State<SwipePage> {
       _pages = tmp;
     });
   }
+  final Map<String, String> days ={
+    'Mon': '월', 'Tue': '화', 'Wed': '수',
+    'Thu': '목', 'Fri': '금', 'Sat': '토', 'Sun': '일',
+  };
+  String getToday() {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('MM월 dd일 ').format(now);
+    String? day = DateFormat('E').format(now);
+    day = days[day];
+    return formattedDate + (day ?? "");
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("8월 27일"),
+        title: Text(getToday()),
         backgroundColor: AppColors.orange[300],
         centerTitle: true,
         actions: [

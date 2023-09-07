@@ -64,14 +64,14 @@ class DataController {
   Future<DayMeal> loadData() async {
     String id = getDateNow();
 
-    await deleteData(id);
+    // await deleteData(id);
     Map<String, dynamic>? dayJson = await readJsonFromLocal(id);
     dayJson ??= await fetchJson(id);
-    saveJsonToLocal(id, dayJson);
-    
+
     if(dayJson == null) {
       throw Exception('${id}가 없습니다');
     }
+    saveJsonToLocal(id, dayJson);
     updateWidgetInfo(dayJson);
 
     cafeList = await getCafePriority();
