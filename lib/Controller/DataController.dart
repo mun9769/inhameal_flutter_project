@@ -53,10 +53,18 @@ class DataController {
     prefs.remove(id);
   }
 
-  Future<DayMeal> loadData() async {
-    String id = "19990101";
+  String getDateNow() {
+    // given
+    DateTime now = DateTime.now();
+    // when
+    String formattedDate = DateFormat('yyyyMMdd').format(now);
+    return formattedDate;
+  }
 
-    // await deleteData(id);
+  Future<DayMeal> loadData() async {
+    String id = getDateNow();
+
+    await deleteData(id);
     Map<String, dynamic>? dayJson = await readJsonFromLocal(id);
     dayJson ??= await fetchJson(id);
     saveJsonToLocal(id, dayJson);
