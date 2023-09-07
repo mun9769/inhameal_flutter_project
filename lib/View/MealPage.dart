@@ -34,27 +34,21 @@ class _MealPageState extends State<MealPage> {
         overScroll.disallowIndicator();
         return true;
       },
-      child: RefreshIndicator(
-        onRefresh: () async {
-          return Future<void>.delayed(const Duration(seconds: 1));
-        },
-
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: Column(
-            children: [
-              for (var item in widget.category.entries) ...[
-                if(item.value.isNotEmpty) ...[
-                  MenuBoardView(name: item.key, meals: item.value),
-                ]
-                else if(item.key =='brunch' || item.key == 'lunch' || item.key == 'dinner') ...[
-                  MenuBoardView(name: item.key, meals: item.value),
-                ]
-              ],
-              SizedBox(height: 40),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Column(
+          children: [
+            for (var item in widget.category.entries) ...[
+              if(item.value.isNotEmpty) ...[
+                MenuBoardView(name: item.key, meals: item.value),
+              ]
+              else if(item.key =='brunch' || item.key == 'lunch' || item.key == 'dinner') ...[
+                MenuBoardView(name: item.key, meals: item.value),
+              ]
             ],
-          ),
+            SizedBox(height: 40),
+          ],
         ),
       ),
     );
