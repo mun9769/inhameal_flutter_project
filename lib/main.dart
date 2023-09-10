@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:inhameal_flutter_project/View/SwipePage.dart';
-import 'package:inhameal_flutter_project/View/component/MenuBoardView.dart';
 import 'package:inhameal_flutter_project/constants/colors.dart';
-import 'View/LoadPage.dart';
-import 'View/SettingPage.dart';
+import 'View/load_screen.dart';
 
 void main() {
   runApp(const MyApp());

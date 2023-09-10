@@ -86,8 +86,8 @@ void main() async {
 
   test('return an DayMeal if the http call completes successfully', () async {
     print('------------------------ return an DayMeal if the http call completes successfully ------------------------');
-    final DayMeal Meal0829 = await fetchDayMeal();
-    expect(Meal0829, isA<DayMeal>());
+    final DayMeal meal = await fetchDayMeal();
+    expect(meal, isA<DayMeal>());
     print('-----------------------------------------------------------------------------------------------------------');
   });
 

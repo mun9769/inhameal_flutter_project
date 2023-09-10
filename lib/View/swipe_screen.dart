@@ -1,12 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:inhameal_flutter_project/View/SettingPage.dart';
+import 'package:inhameal_flutter_project/View/setting_screen.dart';
 import 'package:inhameal_flutter_project/constants/colors.dart';
 import 'package:intl/intl.dart';
-import '../Controller/DataController.dart';
-import '../Model/DayMeal.dart';
+import '../Controller/data_controller.dart';
+import '../Model/day_meal.dart';
 import '../constants/static_variable.dart';
-import 'MealPage.dart';
+import 'meal_screen.dart';
 
 class SwipePage extends StatefulWidget {
   final DayMeal dayMeal;
@@ -42,12 +41,12 @@ class _SwipePageState extends State<SwipePage> {
     };
 
     List<Widget> tmp = [];
-    cafeList.forEach((name) {
+    for (var name in cafeList) {
       tmp.add(cafepages[name]!);
-    });
+    }
     _pages = tmp;
   }
-  void my_setState() {
+  void screenSetState() {
     final Map<String, Widget> cafepages = {
       "dorm": MealPage(cafe: widget.dayMeal.dormCafe),
       "student": MealPage(cafe: widget.dayMeal.studentCafe),
@@ -57,9 +56,9 @@ class _SwipePageState extends State<SwipePage> {
     setState(() {
       cafeList = _dataController.cafeList;
       List<Widget> tmp = [];
-      cafeList.forEach((name) {
+      for (var name in cafeList) {
         tmp.add(cafepages[name]!);
-      });
+      }
       _pages = tmp;
     });
   }
@@ -83,7 +82,7 @@ class _SwipePageState extends State<SwipePage> {
             icon: Icon(Icons.settings),
             onPressed: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SettingPage(parentSetState: my_setState,)));
+                  MaterialPageRoute(builder: (context) => SettingPage(parentSetState: screenSetState,)));
             },
           )
         ],
@@ -107,7 +106,7 @@ class _SwipePageState extends State<SwipePage> {
                         color: selectedPage == i ? AppColors.orange[700] : Colors.white,
                       ),
                       child: Text(
-                        AppVar.translateName[cafeList[i]] ?? "식당",
+                        AppVar.cafeKorean[cafeList[i]] ?? "식당",
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: 14.0,
