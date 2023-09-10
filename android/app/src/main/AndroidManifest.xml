@@ -5,7 +5,7 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="inhameal_flutter_project">
+        android:label="인하학식">
 
         <activity
             android:name=".MainActivity"
