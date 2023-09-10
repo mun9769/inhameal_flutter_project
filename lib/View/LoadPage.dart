@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:inhameal_flutter_project/View/FailPage.dart';
 import 'package:inhameal_flutter_project/View/SwipePage.dart';
 import 'package:intl/intl.dart';
 
