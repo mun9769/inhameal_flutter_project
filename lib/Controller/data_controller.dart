@@ -3,7 +3,7 @@ import 'package:home_widget/home_widget.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../Model/DayMeal.dart';
+import '../Model/day_meal.dart';
 
 class DataController {
   static final DataController instance = DataController._internal();
@@ -15,7 +15,7 @@ class DataController {
   late List<String> cafeList;
 
 
-  Future<Map<String, dynamic>> fetchJson(String id) async {
+  Future<Map<String, dynamic>?> fetchJson(String id) async {
     DateTime now = DateTime.now();
     String endpoint = DateFormat('yyyyMMdd').format(now);
 
@@ -69,10 +69,10 @@ class DataController {
     dayJson ??= await fetchJson(id);
 
     if(dayJson == null) {
-      throw Exception('${id}가 없습니다');
+      throw Exception('$id가 없습니다');
     }
     saveJsonToLocal(id, dayJson);
-    updateWidgetInfo(dayJson);
+    // updateWidgetInfo(dayJson);
 
     cafeList = await getCafePriority();
 

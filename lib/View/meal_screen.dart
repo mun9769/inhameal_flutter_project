@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:inhameal_flutter_project/Model/DayMeal.dart';
-import 'package:inhameal_flutter_project/View/SettingPage.dart';
-import 'package:inhameal_flutter_project/View/component/MenuBoardView.dart';
+import 'package:inhameal_flutter_project/Model/day_meal.dart';
+import 'package:inhameal_flutter_project/View/component/menu_board_view.dart';
 
 class MealPage extends StatefulWidget {
-  Cafeteria cafe;
+  final Cafeteria cafe;
 
-  Map<String, List<Meal>> category = {
+  final Map<String, List<Meal>> category = {
     'brunch': [],
     'lunch': [],
     'dinner': [],

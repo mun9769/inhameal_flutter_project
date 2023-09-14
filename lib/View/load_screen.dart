@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:inhameal_flutter_project/View/FailPage.dart';
-import 'package:inhameal_flutter_project/View/SwipePage.dart';
+import 'package:inhameal_flutter_project/View/swipe_screen.dart';
 import 'package:intl/intl.dart';
 
-import '../Controller/DataController.dart';
+import '../Controller/data_controller.dart';
 
-import '../Model/DayMeal.dart';
+import '../Model/day_meal.dart';
 import '../constants/colors.dart';
 import '../constants/static_variable.dart';
 
 class LoadPage extends StatefulWidget {
+  const LoadPage({super.key});
+
   @override
   State<LoadPage> createState() => _LoadPageState();
 }

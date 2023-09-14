@@ -1,15 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../Model/DayMeal.dart';
+import '../../Model/day_meal.dart';
 
 class MenuBoardView extends StatelessWidget {
-  String name;
-  List<Meal> meals;
+  final String name;
+  final List<Meal> meals;
 
-  MenuBoardView({super.key, required this.name, required this.meals}) {}
+  MenuBoardView({super.key, required this.name, required this.meals});
 
-  Map<String, String> translateName = {
+  final Map<String, String> categoryKorean = {
     'brunch': '아침',
     'lunch': '점심',
     'dinner': '저녁',
@@ -43,7 +42,7 @@ class MenuBoardView extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(translateName[name] ?? "식사",
+                  Text(categoryKorean[name] ?? "식사",
                       style: TextStyle(fontSize: 24)),
                   Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -71,9 +70,9 @@ class MenuBoardView extends StatelessWidget {
                   return Divider(thickness: 1);
                 },
               ),
-              if (meals.length == 0)
+              if (meals.isEmpty)
                 Column(
-                  children: [
+                  children: const [
                     Text("미운영"),
                     SizedBox(height:20),
                   ],

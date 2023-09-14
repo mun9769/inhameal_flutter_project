@@ -1,8 +1,5 @@
-import 'dart:ui';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:inhameal_flutter_project/Controller/DataController.dart';
+import 'package:inhameal_flutter_project/Controller/data_controller.dart';
 
 import '../constants/colors.dart';
 import '../constants/static_variable.dart';
@@ -58,7 +55,6 @@ class _CafePriorityListWidgetState extends State<CafePriorityListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return ReorderableListView(
       shrinkWrap: true,
@@ -70,7 +66,7 @@ class _CafePriorityListWidgetState extends State<CafePriorityListWidget> {
         for (int index = 0; index < _items.length; index += 1)
           ListTile(
             key: Key('$index'),
-            title: Text(AppVar.translateName[_items[index]] ?? "식당"),
+            title: Text(AppVar.cafeKorean[_items[index]] ?? "식당"),
             trailing: ReorderableDragStartListener(
                 index: index, child: const Icon(Icons.drag_handle)),
           ),

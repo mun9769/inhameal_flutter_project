@@ -2,7 +2,7 @@
 class AppVar {
   AppVar._(); // this basically makes it so you can't instantiate this class
 
-  static const Map<String, String> translateName = {
+  static const Map<String, String> cafeKorean = {
     'dorm': '기숙사식당',
     'staff': '교직원식당',
     'student': '학생식당',
