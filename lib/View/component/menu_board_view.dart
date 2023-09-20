@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../Model/day_meal.dart';
+import '../../constants/colors.dart';
 
 class MenuBoardView extends StatelessWidget {
   final String name;
@@ -13,13 +14,13 @@ class MenuBoardView extends StatelessWidget {
     'lunch': '점심',
     'dinner': '저녁',
     'self_ramen': '셀프라면',
-    'snack' : '스낵(조식/석식)'
+    'snack': '스낵(조식/석식)'
   };
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 15, right: 15, top: 20),
+      padding: EdgeInsets.only(left: 15, right: 15, bottom: 20),
       // margin: const EdgeInsets.only(left: 15, right: 15, top: 20),
       child: Container(
         decoration: BoxDecoration(
@@ -40,22 +41,41 @@ class MenuBoardView extends StatelessWidget {
           child: Column(
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(categoryKorean[name] ?? "식사",
-                      style: TextStyle(fontSize: 24)),
-                  Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: meals.isNotEmpty
-                          ? Text(meals[0].openTime ?? "",
-                              style: TextStyle(fontSize: 16))
-                          : Text("")),
+                  Text(
+                    categoryKorean[name] ?? "식사",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  Spacer(),
+                  // Padding(
+                  //     padding: EdgeInsets.only(left: 8),
+                  //     child: meals.isNotEmpty
+                  //         ? Text(meals[0].openTime ?? "",
+                  //             style: TextStyle(fontSize: 12))
+                  //         : Text("")),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 6),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(22.0),
+                      color: AppColors.lightGray,
+                    ),
+                    child: Text(
+                      meals[0].openTime ?? "",
+                      style: TextStyle(
+                        color: AppColors.deepGray,
+                        fontSize: 12.0,
+                      ),
+                    ),
+                  )
                 ],
               ),
               ListView.separated(
-                padding: meals.isEmpty ?
-                        EdgeInsets.zero :
-                        EdgeInsets.symmetric(vertical: 16.0),
+                padding: meals.isEmpty
+                    ? EdgeInsets.zero
+                    : EdgeInsets.symmetric(vertical: 16.0),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: meals.length,
@@ -74,7 +94,7 @@ class MenuBoardView extends StatelessWidget {
                 Column(
                   children: const [
                     Text("미운영"),
-                    SizedBox(height:20),
+                    SizedBox(height: 20),
                   ],
                 )
             ],
@@ -88,7 +108,7 @@ class MenuBoardView extends StatelessWidget {
     int idx = 0;
     List<String>? menus = meal.menus?.cast<String>();
 
-    if(menus == null) {
+    if (menus == null) {
       return SizedBox(height: 20);
     }
 
