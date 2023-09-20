@@ -30,8 +30,7 @@ class _SwipePageState extends State<SwipePage> {
     initPages();
   }
 
-
-  void initPages(){
+  void initPages() {
     cafeList = _dataController.cafeList;
 
     final Map<String, Widget> cafepages = {
@@ -46,6 +45,7 @@ class _SwipePageState extends State<SwipePage> {
     }
     _pages = tmp;
   }
+
   void screenSetState() {
     final Map<String, Widget> cafepages = {
       "dorm": MealPage(cafe: widget.dayMeal.dormCafe),
@@ -62,6 +62,7 @@ class _SwipePageState extends State<SwipePage> {
       _pages = tmp;
     });
   }
+
   String getToday() {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('MM월 dd일 ').format(now);
@@ -88,7 +89,7 @@ class _SwipePageState extends State<SwipePage> {
         ],
       ),
       body: Container(
-        color: AppColors.orange[50],
+        color: AppColors.lightGray,
         child: Column(
           children: [
             Container(

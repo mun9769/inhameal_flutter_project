@@ -14,7 +14,6 @@ class SettingPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('설정'),
-        backgroundColor: AppColors.orange[300],
       ),
       body: SingleChildScrollView(
         child: Column(

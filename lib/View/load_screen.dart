@@ -44,11 +44,11 @@ class _LoadPageState extends State<LoadPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(getToday()),
-        backgroundColor: AppColors.orange[300],
+        backgroundColor: Colors.white,
         centerTitle: true,
       ),
       body: Container(
-        color: AppColors.orange[50],
+        color: AppColors.lightGray,
         child: Center(
           child: button,
         ),

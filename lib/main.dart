@@ -16,7 +16,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MaterialApp',
-      theme: ThemeData(primaryColor: AppColors.orange[300]),
+      // theme: ThemeData(primaryColor: AppColors.orange[300]),
+      theme: ThemeData(backgroundColor: Colors.white),
       home: LoadPage(),
       // home: SwipePage(),
     );
