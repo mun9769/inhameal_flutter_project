@@ -17,7 +17,8 @@ class SwipePage extends StatefulWidget {
 }
 
 class _SwipePageState extends State<SwipePage> {
-  final PageController _pageController = PageController(initialPage: 0, viewportFraction: 0.9);
+  final PageController _pageController =
+      PageController(initialPage: 0, viewportFraction: 0.9);
   final DataController _dataController = DataController();
   late int selectedPage = 0;
 
@@ -65,53 +66,80 @@ class _SwipePageState extends State<SwipePage> {
 
   String getToday() {
     DateTime now = DateTime.now();
-    String formattedDate = DateFormat('MM월 dd일 ').format(now);
+    String formattedDate = DateFormat('yyyy-MM-dd').format(now);
     String? day = DateFormat('E').format(now);
     day = AppVar.weeks[day];
-    return formattedDate + (day ?? "");
+    if (day == null) return formattedDate;
+    day = "($day)";
+    return formattedDate + day;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(getToday()),
-        backgroundColor: AppColors.orange[300],
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            // Image(image: AssetImage('assets/calendar.png')),
+            Image.asset('assets/calendar.png', height: 21, width: 20),
+            SizedBox(width: 6),
+            Text(
+              getToday(),
+              style: TextStyle(
+                  color: AppColors.skyBlue, fontWeight: FontWeight.w700),
+            ),
+          ],
+        ),
+        backgroundColor: Colors.white,
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SettingPage(parentSetState: screenSetState,)));
-            },
-          )
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: Icon(Icons.settings),
+        //     onPressed: () {
+        //       Navigator.push(
+        //           context,
+        //           MaterialPageRoute(
+        //               builder: (context) => SettingPage(
+        //                     parentSetState: screenSetState,
+        //                   )));
+        //     },
+        //   )
+        // ],
       ),
       body: Container(
         color: AppColors.lightGray,
         child: Column(
           children: [
             Container(
-              // color: Colors.lightBlue[100],
-              color: AppColors.orange[100],
-              padding: EdgeInsets.symmetric(vertical: 12),
+              padding: EdgeInsets.only(top: 19, bottom: 14),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   for (int i = 0; i < _pages.length; i++)
-                    Container(
-                      padding: EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: selectedPage == i ? AppColors.orange[700] : Colors.white,
-                      ),
-                      child: Text(
-                        AppVar.cafeKorean[cafeList[i]] ?? "식당",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w500,
+                    GestureDetector(
+                      onTap: () {
+                        _pageController.animateToPage(i, duration: Duration(milliseconds: 500), curve: Curves.ease);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(
+                            left: 26, right: 26, top: 11, bottom: 11),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(22.0),
+                          color: selectedPage == i
+                              ? AppColors.deepBlue
+                              : AppColors.gray,
+                        ),
+                        child: Text(
+                          AppVar.cafeKorean[cafeList[i]] ?? "식당",
+                          style: TextStyle(
+                            color: selectedPage == i
+                                ? AppColors.textWhite
+                                : AppColors.deepGray,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
                       ),
                     )
@@ -121,6 +149,7 @@ class _SwipePageState extends State<SwipePage> {
             Expanded(
               child: PageView(
                 controller: _pageController,
+                physics: NeverScrollableScrollPhysics(),
                 onPageChanged: (page) {
                   setState(() {
                     selectedPage = page;
@@ -137,4 +166,3 @@ class _SwipePageState extends State<SwipePage> {
     );
   }
 }
-
