@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../Model/day_meal.dart';
@@ -15,6 +16,21 @@ class MenuBoardView extends StatelessWidget {
     'dinner': '저녁',
     'self_ramen': '셀프라면',
     'snack': '스낵(조식/석식)'
+  };
+
+  final Map<String, Icon> categoryIcon = {
+    'brunch': Icon(
+      CupertinoIcons.sun_dust,
+      size: 18,
+    ),
+    'lunch': Icon(
+      CupertinoIcons.sun_max,
+      size: 18,
+    ),
+    'dinner': Icon(
+      CupertinoIcons.moon,
+      size: 18,
+    ),
   };
 
   @override
@@ -37,11 +53,13 @@ class MenuBoardView extends StatelessWidget {
         ),
         width: double.infinity,
         child: Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 30),
           child: Column(
             children: [
               Row(
                 children: [
+                  categoryIcon[name] ?? SizedBox.shrink(),
+                  if(categoryIcon[name] != null) SizedBox(width: 5),
                   Text(
                     categoryKorean[name] ?? "식사",
                     style: TextStyle(
@@ -50,12 +68,6 @@ class MenuBoardView extends StatelessWidget {
                     ),
                   ),
                   Spacer(),
-                  // Padding(
-                  //     padding: EdgeInsets.only(left: 8),
-                  //     child: meals.isNotEmpty
-                  //         ? Text(meals[0].openTime ?? "",
-                  //             style: TextStyle(fontSize: 12))
-                  //         : Text("")),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 6),
                     decoration: BoxDecoration(
@@ -82,7 +94,7 @@ class MenuBoardView extends StatelessWidget {
                 itemBuilder: (_, index) {
                   return LayoutBuilder(
                     builder: (_, size) {
-                      return makeMenus(meals[index], size.maxWidth / 2);
+                      return makeMenus(meals[index], size.maxWidth / 2 - 32);
                     },
                   );
                 },
@@ -126,9 +138,21 @@ class MenuBoardView extends StatelessWidget {
         s.add(menus[idx++]);
       }
 
-      row = Row(children: [
-        for (String menu in s) Expanded(flex: 1, child: Text(menu))
-      ]);
+      row = Row(
+        children: [
+          for (String menu in s)
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6),
+                child: Text(
+                  menu,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
+              ),
+            ),
+        ],
+      );
 
       rows.add(row);
     }
