@@ -112,6 +112,18 @@ class _SwipePageState extends State<SwipePage> {
         ),
         actions: [
           IconButton(
+            icon: Icon(Icons.download_outlined),
+            color: AppColors.skyBlue,
+            onPressed: () async {
+              String formattedDate = DateFormat('yyyyMMdd').format(currentDate);
+              widget.dayMeal = await _dataController.reloadData(formattedDate);
+
+              setState(() {
+                initPages();
+              });
+            }
+          ),
+          IconButton(
             icon: Icon(Icons.arrow_forward_ios),
             color: AppColors.skyBlue,
             onPressed: () async {

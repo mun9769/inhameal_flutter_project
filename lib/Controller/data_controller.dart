@@ -77,6 +77,18 @@ class DataController {
 
     return DayMeal.fromJson(dayJson);
   }
+  Future<DayMeal> reloadData(String id) async {
+
+    await deleteData(id);
+    Map<String, dynamic>? dayJson = await fetchJson(id);
+
+    if(dayJson == null) {
+      throw Exception('$id가 없습니다');
+    }
+    saveJsonToLocal(id, dayJson);
+
+    return DayMeal.fromJson(dayJson);
+  }
 
   void updateWidgetInfo(Map<String, dynamic> dayMealMap) {
     final List<String> dormJson = dayMealMap['dormCafe']["meals"][0]["menus"]?.cast<String>(); // 여기서 인덱스를 못찾아도 괜찮게 하는 방법 없나?
