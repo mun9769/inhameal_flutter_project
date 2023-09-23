@@ -97,18 +97,24 @@ class _SwipePageState extends State<SwipePage> {
         centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
-          color: AppColors.skyBlue,
-          onPressed: () async {
-            DateTime yesterday = currentDate.add(Duration(days: -1));
-            String formattedDate = DateFormat('yyyyMMdd').format(yesterday);
+          color: widget.dayMeal.prev
+              ? AppColors.skyBlue
+              : AppColors.littleDeepGray,
+          onPressed: widget.dayMeal.prev
+              ? () async {
+                  DateTime yesterday = currentDate.add(Duration(days: -1));
+                  String formattedDate =
+                      DateFormat('yyyyMMdd').format(yesterday);
 
-            widget.dayMeal = await _dataController.loadData(formattedDate);
+                  widget.dayMeal =
+                      await _dataController.loadData(formattedDate);
 
-            setState(() {
-              initPages();
-              currentDate = yesterday;
-            });
-          },
+                  setState(() {
+                    initPages();
+                    currentDate = yesterday;
+                  });
+                }
+              : null,
         ),
         actions: [
           IconButton(
@@ -125,18 +131,24 @@ class _SwipePageState extends State<SwipePage> {
           ),
           IconButton(
             icon: Icon(Icons.arrow_forward_ios),
-            color: AppColors.skyBlue,
-            onPressed: () async {
-              DateTime tomorrow = currentDate.add(Duration(days: 1));
-              String formattedDate = DateFormat('yyyyMMdd').format(tomorrow);
+            color: widget.dayMeal.next
+                ? AppColors.skyBlue
+                : AppColors.littleDeepGray,
+            onPressed: widget.dayMeal.next
+                ? () async {
+                    DateTime tomorrow = currentDate.add(Duration(days: 1));
+                    String formattedDate =
+                        DateFormat('yyyyMMdd').format(tomorrow);
 
-              widget.dayMeal = await _dataController.loadData(formattedDate);
+                    widget.dayMeal =
+                        await _dataController.loadData(formattedDate);
 
-              setState(() {
-                initPages();
-                currentDate = tomorrow;
-              });
-            },
+                    setState(() {
+                      initPages();
+                      currentDate = tomorrow;
+                    });
+                  }
+                : null,
           )
         ],
       ),

@@ -6,11 +6,17 @@ class DayMeal {
   final Cafeteria studentCafe;
   final Cafeteria staffCafe;
 
+  final bool prev;
+  final bool next;
+
   const DayMeal(
       {required this.id,
         required this.dormCafe,
         required this.studentCafe,
-        required this.staffCafe});
+        required this.staffCafe,
+        required this.prev,
+        required this.next,
+      });
 
   factory DayMeal.fromJson(Map<String, dynamic> json) {
     return DayMeal(
@@ -18,6 +24,8 @@ class DayMeal {
       dormCafe: Cafeteria.fromJson(json['dormCafe']),
       studentCafe: Cafeteria.fromJson(json['studentCafe']),
       staffCafe: Cafeteria.fromJson(json['staffCafe']),
+      prev: json['prev'],
+      next: json['next'],
     );
   }
 }
