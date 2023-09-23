@@ -6,6 +6,7 @@ class AppColors {
 
   static const Color lightGray = Color.fromARGB(255, 249, 249, 249);
   static const Color gray = Color.fromARGB(255, 239, 239, 239);
+  static const Color littleDeepGray = Color.fromARGB(255, 189, 189, 189);
   static const Color deepGray = Color.fromARGB(255, 136, 136, 136);
 
 

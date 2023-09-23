@@ -118,18 +118,6 @@ class _SwipePageState extends State<SwipePage> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.download_outlined),
-            color: AppColors.skyBlue,
-            onPressed: () async {
-              String formattedDate = DateFormat('yyyyMMdd').format(currentDate);
-              widget.dayMeal = await _dataController.reloadData(formattedDate);
-
-              setState(() {
-                initPages();
-              });
-            }
-          ),
-          IconButton(
             icon: Icon(Icons.arrow_forward_ios),
             color: widget.dayMeal.next
                 ? AppColors.skyBlue
@@ -164,7 +152,9 @@ class _SwipePageState extends State<SwipePage> {
                   for (int i = 0; i < _pages.length; i++)
                     GestureDetector(
                       onTap: () {
-                        _pageController.animateToPage(i, duration: Duration(milliseconds: 500), curve: Curves.ease);
+                        _pageController.animateToPage(i,
+                            duration: Duration(milliseconds: 500),
+                            curve: Curves.ease);
                       },
                       child: Container(
                         padding: EdgeInsets.only(
@@ -206,6 +196,17 @@ class _SwipePageState extends State<SwipePage> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          String formattedDate =
+          DateFormat('yyyyMMdd').format(currentDate);
+          widget.dayMeal = await _dataController.reloadData(formattedDate);
+          setState(() {
+            initPages();
+          });
+        },
+        child: const Icon(Icons.download_outlined),
       ),
     );
   }
