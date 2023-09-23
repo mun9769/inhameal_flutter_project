@@ -7,8 +7,10 @@ import '../../constants/colors.dart';
 class MenuBoardView extends StatelessWidget {
   final String name;
   final List<Meal> meals;
+  final String? errMsg;
 
-  MenuBoardView({super.key, required this.name, required this.meals});
+  MenuBoardView(
+      {super.key, required this.name, required this.meals, this.errMsg});
 
   final Map<String, String> categoryKorean = {
     'brunch': '아침',
@@ -37,7 +39,6 @@ class MenuBoardView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: 15, right: 15, bottom: 20),
-      // margin: const EdgeInsets.only(left: 15, right: 15, top: 20),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
@@ -59,14 +60,33 @@ class MenuBoardView extends StatelessWidget {
               Row(
                 children: [
                   categoryIcon[name] ?? SizedBox.shrink(),
-                  if(categoryIcon[name] != null) SizedBox(width: 5),
+                  if (categoryIcon[name] != null) SizedBox(width: 5),
                   Text(
                     categoryKorean[name] ?? "식사",
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
+                      color: meals[0].errMsg == null
+                          ? AppColors.textBlack
+                          : AppColors.deepGray,
                     ),
                   ),
+                  SizedBox(width: 5),
+                  if (meals[0].errMsg != null)
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22.0),
+                        color: AppColors.lightGray,
+                      ),
+                      child: Text(
+                        "미운영",
+                        style: TextStyle(
+                          color: AppColors.deepGray,
+                          fontSize: 12.0,
+                        ),
+                      ),
+                    ),
                   Spacer(),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 6),
@@ -84,31 +104,30 @@ class MenuBoardView extends StatelessWidget {
                   )
                 ],
               ),
-              ListView.separated(
-                padding: meals.isEmpty
-                    ? EdgeInsets.zero
-                    : EdgeInsets.symmetric(vertical: 16.0),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: meals.length,
-                itemBuilder: (_, index) {
-                  return LayoutBuilder(
-                    builder: (_, size) {
-                      return makeMenus(meals[index], size.maxWidth / 2 - 32);
-                    },
-                  );
-                },
-                separatorBuilder: (_, __) {
-                  return Divider(thickness: 1);
-                },
-              ),
-              if (meals.isEmpty)
-                Column(
-                  children: const [
-                    Text("미운영"),
-                    SizedBox(height: 20),
-                  ],
-                )
+              meals[0].errMsg != null
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: Text(meals[0].errMsg!),
+                    )
+                  : ListView.separated(
+                      shrinkWrap: true,
+                      padding: meals.isEmpty
+                          ? EdgeInsets.zero
+                          : EdgeInsets.symmetric(vertical: 16.0),
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: meals.length,
+                      itemBuilder: (_, index) {
+                        return LayoutBuilder(
+                          builder: (_, size) {
+                            return makeMenus(
+                                meals[index], size.maxWidth / 2 - 32);
+                          },
+                        );
+                      },
+                      separatorBuilder: (_, __) {
+                        return Divider(thickness: 1);
+                      },
+                    ),
             ],
           ),
         ),

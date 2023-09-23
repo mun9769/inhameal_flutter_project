@@ -48,9 +48,10 @@ class Meal {
   String? openTime;
   String? price;
   String? category;
+  String? errMsg;
 
 
-  Meal({required this.openTime, required this.name, required this.menus, required this.price, required this.category});
+  Meal({required this.openTime, required this.name, required this.menus, required this.price, required this.category, this.errMsg});
 
   factory Meal.fromJson(Map<String, dynamic> json) {
     return Meal(
@@ -59,6 +60,7 @@ class Meal {
       menus: json['menus'],
       price: json['price'],
       category: json['category'],
+      errMsg: json['errMsg'],
     );
   }
 }
