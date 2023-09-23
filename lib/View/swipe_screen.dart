@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:inhameal_flutter_project/View/setting_screen.dart';
 import 'package:inhameal_flutter_project/constants/colors.dart';
 import 'package:intl/intl.dart';
@@ -18,7 +19,7 @@ class SwipePage extends StatefulWidget {
 
 class _SwipePageState extends State<SwipePage> {
   final PageController _pageController =
-      PageController(initialPage: 0, viewportFraction: 0.7);
+      PageController(initialPage: 0, viewportFraction: 0.9);
   final DataController _dataController = DataController();
   late int selectedPage = 0;
 
@@ -74,6 +75,18 @@ class _SwipePageState extends State<SwipePage> {
     if (day == null) return formattedDate;
     day = "($day)";
     return formattedDate + day;
+  }
+
+  void showToast() {
+    Fluttertoast.showToast(
+      msg: "식당 순서가 저장되었습니다",
+      toastLength: Toast.LENGTH_SHORT, // 3초간 띄우기
+      gravity: ToastGravity.BOTTOM, // 화면 하단에 표시
+      timeInSecForIosWeb: 3, // iOS 및 웹용으로 설정
+      backgroundColor: Colors.grey, // 배경색
+      textColor: Colors.white, // 글자색
+      fontSize: 16.0, // 글자 크기
+    );
   }
 
   @override
@@ -170,6 +183,7 @@ class _SwipePageState extends State<SwipePage> {
                     cafeList.insert(newIndex, name);
                     _dataController.updateCafePriority(cafeList);
                   });
+                  showToast();
                 },
                 children: [
                   for (int i = 0; i < _pages.length; i++)
@@ -232,5 +246,6 @@ class _SwipePageState extends State<SwipePage> {
         child: const Icon(Icons.download_outlined),
       ),
     );
+
   }
 }
