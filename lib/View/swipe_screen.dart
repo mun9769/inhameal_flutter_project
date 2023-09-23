@@ -8,7 +8,7 @@ import '../constants/static_variable.dart';
 import 'meal_screen.dart';
 
 class SwipePage extends StatefulWidget {
-  final DayMeal dayMeal;
+  DayMeal dayMeal;
 
   SwipePage({Key? key, required this.dayMeal}) : super(key: key);
 
@@ -25,10 +25,13 @@ class _SwipePageState extends State<SwipePage> {
   late List<Widget> _pages;
   late List<String> cafeList;
 
+  late DateTime currentDate;
+
   @override
   void initState() {
     super.initState();
     initPages();
+    currentDate = DateTime.parse(widget.dayMeal.id);
   }
 
   void initPages() {
@@ -64,10 +67,9 @@ class _SwipePageState extends State<SwipePage> {
     });
   }
 
-  String getToday() {
-    DateTime now = DateTime.now();
-    String formattedDate = DateFormat('yyyy-MM-dd').format(now);
-    String? day = DateFormat('E').format(now);
+  String getDate() {
+    String formattedDate = DateFormat('yyyy-MM-dd').format(currentDate);
+    String? day = DateFormat('E').format(currentDate);
     day = AppVar.weeks[day];
     if (day == null) return formattedDate;
     day = "($day)";
@@ -82,11 +84,10 @@ class _SwipePageState extends State<SwipePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Image(image: AssetImage('assets/calendar.png')),
             Image.asset('assets/calendar.png', height: 21, width: 20),
             SizedBox(width: 6),
             Text(
-              getToday(),
+              getDate(),
               style: TextStyle(
                   color: AppColors.skyBlue, fontWeight: FontWeight.w700),
             ),
@@ -94,19 +95,38 @@ class _SwipePageState extends State<SwipePage> {
         ),
         backgroundColor: Colors.white,
         centerTitle: true,
-        // actions: [
-        //   IconButton(
-        //     icon: Icon(Icons.settings),
-        //     onPressed: () {
-        //       Navigator.push(
-        //           context,
-        //           MaterialPageRoute(
-        //               builder: (context) => SettingPage(
-        //                     parentSetState: screenSetState,
-        //                   )));
-        //     },
-        //   )
-        // ],
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          color: AppColors.skyBlue,
+          onPressed: () async {
+            DateTime yesterday = currentDate.add(Duration(days: -1));
+            String formattedDate = DateFormat('yyyyMMdd').format(yesterday);
+
+            widget.dayMeal = await _dataController.loadData(formattedDate);
+
+            setState(() {
+              initPages();
+              currentDate = yesterday;
+            });
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.arrow_forward_ios),
+            color: AppColors.skyBlue,
+            onPressed: () async {
+              DateTime tomorrow = currentDate.add(Duration(days: 1));
+              String formattedDate = DateFormat('yyyyMMdd').format(tomorrow);
+
+              widget.dayMeal = await _dataController.loadData(formattedDate);
+
+              setState(() {
+                initPages();
+                currentDate = tomorrow;
+              });
+            },
+          )
+        ],
       ),
       body: Container(
         color: AppColors.lightGray,

@@ -20,6 +20,7 @@ class DataController {
     String endpoint = DateFormat('yyyyMMdd').format(now);
 
     endpoint = id;
+    // endpoint = "19990101";
 
     final response = await http.get(Uri.parse("$baseUrl/$endpoint"));
 
@@ -54,15 +55,13 @@ class DataController {
   }
 
   String getDateNow() {
-    // given
     DateTime now = DateTime.now();
-    // when
     String formattedDate = DateFormat('yyyyMMdd').format(now);
     return formattedDate;
   }
 
-  Future<DayMeal> loadData() async {
-    String id = getDateNow();
+  Future<DayMeal> loadData(String id) async {
+    // String id = getDateNow();
 
     // await deleteData(id);
     Map<String, dynamic>? dayJson = await readJsonFromLocal(id);

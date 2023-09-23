@@ -18,10 +18,16 @@ class LoadPage extends StatefulWidget {
 class _LoadPageState extends State<LoadPage> {
   final DataController _dataController = DataController();
 
+  String getDateNow() {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyyMMdd').format(now);
+    return formattedDate;
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DayMeal>(
-      future: _dataController.loadData(),
+      future: _dataController.loadData("20230925"),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
