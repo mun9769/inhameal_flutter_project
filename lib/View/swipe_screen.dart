@@ -18,7 +18,7 @@ class SwipePage extends StatefulWidget {
 
 class _SwipePageState extends State<SwipePage> {
   final PageController _pageController =
-      PageController(initialPage: 0, viewportFraction: 0.9);
+      PageController(initialPage: 0, viewportFraction: 0.7);
   final DataController _dataController = DataController();
   late int selectedPage = 0;
 
@@ -146,11 +146,35 @@ class _SwipePageState extends State<SwipePage> {
           children: [
             Container(
               padding: EdgeInsets.only(top: 19, bottom: 14),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              height: 76,
+              child: ReorderableListView(
+                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                onReorder: (int oldIndex, int newIndex) {
+                  setState(() {
+                    if (oldIndex < newIndex) {
+                      newIndex -= 1;
+                    }
+                    if(oldIndex == selectedPage) {
+                      selectedPage = newIndex;
+                    } else if(selectedPage < oldIndex && selectedPage >= newIndex) {
+                      selectedPage += 1;
+                    } else if(selectedPage > oldIndex && selectedPage <= newIndex ){
+                      selectedPage -= 1;
+                    }
+                    _pageController.jumpToPage(selectedPage);
+                    final item = _pages.removeAt(oldIndex);
+                    _pages.insert(newIndex, item);
+                    final name = cafeList.removeAt(oldIndex);
+                    cafeList.insert(newIndex, name);
+                    _dataController.updateCafePriority(cafeList);
+                  });
+                },
                 children: [
                   for (int i = 0; i < _pages.length; i++)
                     GestureDetector(
+                      key: Key(_dataController.cafeList[i]),
                       onTap: () {
                         _pageController.animateToPage(i,
                             duration: Duration(milliseconds: 500),
