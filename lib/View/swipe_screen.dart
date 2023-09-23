@@ -183,7 +183,6 @@ class _SwipePageState extends State<SwipePage> {
             Expanded(
               child: PageView(
                 controller: _pageController,
-                physics: NeverScrollableScrollPhysics(),
                 onPageChanged: (page) {
                   setState(() {
                     selectedPage = page;
