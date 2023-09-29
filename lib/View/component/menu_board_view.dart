@@ -43,18 +43,10 @@ class MenuBoardView extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.7),
-              blurRadius: 2.0,
-              spreadRadius: 0.0,
-              offset: const Offset(0, 2),
-            )
-          ],
         ),
         width: double.infinity,
         child: Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16, top: 30),
+          padding: const EdgeInsets.only(left: 24, right: 24, top: 30),
           child: Column(
             children: [
               Row(

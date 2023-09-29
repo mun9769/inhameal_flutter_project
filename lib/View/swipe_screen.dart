@@ -96,6 +96,7 @@ class _SwipePageState extends State<SwipePage> {
         ),
         backgroundColor: Colors.white,
         centerTitle: true,
+        elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           color: widget.dayMeal.prev
