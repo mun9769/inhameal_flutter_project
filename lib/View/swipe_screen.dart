@@ -19,7 +19,7 @@ class SwipePage extends StatefulWidget {
 
 class _SwipePageState extends State<SwipePage> {
   final PageController _pageController =
-      PageController(initialPage: 0, viewportFraction: 0.9);
+      PageController(initialPage: 0, viewportFraction: 1);
   final DataController _dataController = DataController();
   late int selectedPage = 0;
 
@@ -75,18 +75,6 @@ class _SwipePageState extends State<SwipePage> {
     if (day == null) return formattedDate;
     day = "($day)";
     return formattedDate + day;
-  }
-
-  void showToast() {
-    Fluttertoast.showToast(
-      msg: "식당 순서가 저장되었습니다",
-      toastLength: Toast.LENGTH_SHORT, // 3초간 띄우기
-      gravity: ToastGravity.BOTTOM, // 화면 하단에 표시
-      timeInSecForIosWeb: 3, // iOS 및 웹용으로 설정
-      backgroundColor: Colors.grey, // 배경색
-      textColor: Colors.white, // 글자색
-      fontSize: 16.0, // 글자 크기
-    );
   }
 
   @override
@@ -158,37 +146,12 @@ class _SwipePageState extends State<SwipePage> {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(top: 19, bottom: 14),
-              height: 76,
-              child: ReorderableListView(
-                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                onReorder: (int oldIndex, int newIndex) {
-                  setState(() {
-                    if (oldIndex < newIndex) {
-                      newIndex -= 1;
-                    }
-                    if(oldIndex == selectedPage) {
-                      selectedPage = newIndex;
-                    } else if(selectedPage < oldIndex && selectedPage >= newIndex) {
-                      selectedPage += 1;
-                    } else if(selectedPage > oldIndex && selectedPage <= newIndex ){
-                      selectedPage -= 1;
-                    }
-                    _pageController.jumpToPage(selectedPage);
-                    final item = _pages.removeAt(oldIndex);
-                    _pages.insert(newIndex, item);
-                    final name = cafeList.removeAt(oldIndex);
-                    cafeList.insert(newIndex, name);
-                    _dataController.updateCafePriority(cafeList);
-                  });
-                  showToast();
-                },
+              padding: EdgeInsets.only(top: 19, bottom: 14, left: 10, right: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   for (int i = 0; i < _pages.length; i++)
                     GestureDetector(
-                      key: Key(_dataController.cafeList[i]),
                       onTap: () {
                         _pageController.animateToPage(i,
                             duration: Duration(milliseconds: 500),
@@ -196,7 +159,7 @@ class _SwipePageState extends State<SwipePage> {
                       },
                       child: Container(
                         padding: EdgeInsets.only(
-                            left: 26, right: 26, top: 11, bottom: 11),
+                            left: 22, right: 22, top: 8, bottom: 8),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(22.0),
                           color: selectedPage == i
@@ -214,7 +177,7 @@ class _SwipePageState extends State<SwipePage> {
                           ),
                         ),
                       ),
-                    )
+                    ),
                 ],
               ),
             ),
@@ -236,8 +199,7 @@ class _SwipePageState extends State<SwipePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          String formattedDate =
-          DateFormat('yyyyMMdd').format(currentDate);
+          String formattedDate = DateFormat('yyyyMMdd').format(currentDate);
           widget.dayMeal = await _dataController.reloadData(formattedDate);
           setState(() {
             initPages();
@@ -246,6 +208,5 @@ class _SwipePageState extends State<SwipePage> {
         child: const Icon(Icons.download_outlined),
       ),
     );
-
   }
 }
