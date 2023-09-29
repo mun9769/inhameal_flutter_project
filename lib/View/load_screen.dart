@@ -27,7 +27,7 @@ class _LoadPageState extends State<LoadPage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DayMeal>(
-      future: _dataController.loadData("20230925"),
+      future: _dataController.loadData(getDateNow()),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -45,13 +45,38 @@ class _LoadPageState extends State<LoadPage> {
       onPressed: () {
         setState(() {});
       },
-      child: Text("다시 불러오기", style: TextStyle(fontSize: 24)),
+      child: Text("정보를 불러오는데 실패했어요", style: TextStyle(fontSize: 24)),
     );
     return Scaffold(
       appBar: AppBar(
-        title: Text(getToday()),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset('assets/calendar.png', height: 21, width: 20),
+            SizedBox(width: 6),
+            Text(
+              getToday(),
+              style: TextStyle(
+                  color: AppColors.skyBlue, fontWeight: FontWeight.w700),
+            ),
+          ],
+        ),
         backgroundColor: Colors.white,
         centerTitle: true,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          color: AppColors.littleDeepGray,
+          onPressed: null,
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.arrow_forward_ios),
+            color: AppColors.littleDeepGray,
+            onPressed: null,
+          )
+        ],
       ),
       body: Container(
         color: AppColors.lightGray,
