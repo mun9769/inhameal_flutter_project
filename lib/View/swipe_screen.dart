@@ -36,6 +36,7 @@ class _SwipePageState extends State<SwipePage> {
   }
 
   void initPages() {
+    _dataController.updateCafePriority(["dorm","student","staff"]);
     cafeList = _dataController.cafeList;
 
     final Map<String, Widget> cafepages = {
@@ -88,7 +89,7 @@ class _SwipePageState extends State<SwipePage> {
             Image.asset('assets/calendar.png', height: 21, width: 20),
             SizedBox(width: 6),
             Text(
-              getDate(),
+              widget.dayMeal.id,
               style: TextStyle(
                   color: AppColors.skyBlue, fontWeight: FontWeight.w700),
             ),
@@ -183,16 +184,22 @@ class _SwipePageState extends State<SwipePage> {
               ),
             ),
             Expanded(
-              child: PageView(
-                controller: _pageController,
-                onPageChanged: (page) {
-                  setState(() {
-                    selectedPage = page;
-                  });
+              child: NotificationListener<OverscrollIndicatorNotification>(
+                onNotification: (overScroll) {
+                  overScroll.disallowIndicator();
+                  return true;
                 },
-                children: List.generate(_pages.length, (index) {
-                  return _pages[index];
-                }),
+                child: PageView(
+                  controller: _pageController,
+                  onPageChanged: (page) {
+                    setState(() {
+                      selectedPage = page;
+                    });
+                  },
+                  children: List.generate(_pages.length, (index) {
+                    return _pages[index];
+                  }),
+                ),
               ),
             ),
           ],
