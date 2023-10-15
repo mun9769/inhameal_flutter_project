@@ -29,10 +29,10 @@ class DayMeal {
 
 class Cafeteria {
   final String name;
-  final List<dynamic> brunch;
-  final List<dynamic> lunch;
-  final List<dynamic> dinner;
-  final List<dynamic>? other;
+  final List<Meal> brunch;
+  final List<Meal> lunch;
+  final List<Meal> dinner;
+  final List<Meal>? other;
   final String? message;
 
   const Cafeteria(
@@ -47,15 +47,15 @@ class Cafeteria {
   factory Cafeteria.fromJson(Map<String, dynamic> json) {
     List<Meal> mealListDto = [];
 
-    json['meals']?.forEach((ele) {
+    json['other']?.forEach((ele) {
       mealListDto.add(Meal.fromJson(ele));
     });
 
     return Cafeteria(
         name: json['name'],
-        brunch: json['brunch'],
-        lunch: json['lunch'],
-        dinner: json['dinner'],
+        brunch: (json['brunch'] as List).map((i) => Meal.fromJson(i)).toList(),
+        lunch: (json['lunch'] as List).map((i) => Meal.fromJson(i)).toList(),
+        dinner: (json['dinner'] as List).map((i) => Meal.fromJson(i)).toList(),
         other: mealListDto,
         message: json['message']
     );
