@@ -3,22 +3,11 @@ import 'package:flutter/widgets.dart';
 import 'package:inhameal_flutter_project/Model/day_meal.dart';
 import 'package:inhameal_flutter_project/View/component/menu_board_view.dart';
 
-class MealPage extends StatefulWidget {
+class MealPage extends StatefulWidget { // TODO 꼭 stateful해야하나?
   final Cafeteria cafe;
 
-  final Map<String, List<Meal>> category = {
-    'brunch': [],
-    'lunch': [],
-    'dinner': [],
-    'category': [],
-    'self_ramen': [],
-  };
 
-  MealPage({Key? key, required this.cafe}) : super(key: key) {
-    cafe.meals?.forEach((meal) {
-      category[meal.category]!.add(meal);
-    });
-  }
+  MealPage({Key? key, required this.cafe}) : super(key: key);
 
   @override
   State<MealPage> createState() => _MealPageState();
@@ -38,14 +27,11 @@ class _MealPageState extends State<MealPage> {
         physics: const AlwaysScrollableScrollPhysics(),
         child: Column(
           children: [
-            for (var item in widget.category.entries) ...[
-              if(item.value.isNotEmpty) ...[
-                MenuBoardView(name: item.key, meals: item.value),
-              ]
-              else if(item.key =='brunch' || item.key == 'lunch' || item.key == 'dinner') ...[
-                MenuBoardView(name: item.key, meals: item.value),
-              ]
-            ],
+            MenuBoardView(category: 'brunch', meals: widget.cafe.brunch),
+            MenuBoardView(category: 'lunch', meals: widget.cafe.lunch),
+            MenuBoardView(category: 'dinner', meals: widget.cafe.dinner),
+            if(widget.cafe.other != null)
+              MenuBoardView(category: 'other', meals: widget.cafe.other!),
             SizedBox(height: 40),
           ],
         ),

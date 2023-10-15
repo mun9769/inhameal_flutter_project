@@ -5,19 +5,18 @@ import '../../Model/day_meal.dart';
 import '../../constants/colors.dart';
 
 class MenuBoardView extends StatelessWidget {
-  final String name;
+  final String category;
   final List<Meal> meals;
-  final String? errMsg;
 
-  MenuBoardView(
-      {super.key, required this.name, required this.meals, this.errMsg});
+  MenuBoardView({super.key, required this.category, required this.meals});
 
   final Map<String, String> categoryKorean = {
     'brunch': '아침',
     'lunch': '점심',
     'dinner': '저녁',
     'self_ramen': '셀프라면',
-    'snack': '스낵(조식/석식)'
+    'snack': '스낵(조식/석식)',
+    'other': '스낵'
   };
 
   final Map<String, Icon> categoryIcon = {
@@ -51,20 +50,18 @@ class MenuBoardView extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  categoryIcon[name] ?? SizedBox.shrink(),
-                  if (categoryIcon[name] != null) SizedBox(width: 5),
+                  categoryIcon[category] ?? SizedBox.shrink(),
+                  if (categoryIcon[category] != null) SizedBox(width: 5),
                   Text(
-                    categoryKorean[name] ?? "식사",
+                    categoryKorean[category] ?? "식사",
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
-                      color: meals[0].errMsg == null
-                          ? AppColors.textBlack
-                          : AppColors.deepGray,
+                      color: AppColors.deepGray,
                     ),
                   ),
                   SizedBox(width: 5),
-                  if (meals[0].errMsg != null)
+                  if (meals.isEmpty)
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
@@ -87,7 +84,7 @@ class MenuBoardView extends StatelessWidget {
                       color: AppColors.lightGray,
                     ),
                     child: Text(
-                      meals[0].openTime ?? "",
+                      meals.isNotEmpty ? meals[0].openTime ?? "" : "",
                       style: TextStyle(
                         color: AppColors.deepGray,
                         fontSize: 12.0,
@@ -96,10 +93,10 @@ class MenuBoardView extends StatelessWidget {
                   )
                 ],
               ),
-              meals[0].errMsg != null
+              meals.isEmpty
                   ? Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: Text(meals[0].errMsg!),
+                      child: Text("미운영"),
                     )
                   : ListView.separated(
                       shrinkWrap: true,
@@ -129,9 +126,9 @@ class MenuBoardView extends StatelessWidget {
 
   Widget makeMenus(Meal meal, double maxWidth) {
     int idx = 0;
-    List<String>? menus = meal.menus?.cast<String>();
+    List<String> menus = meal.menus.cast<String>();
 
-    if (menus == null) {
+    if (menus.isEmpty) {
       return SizedBox(height: 20);
     }
 

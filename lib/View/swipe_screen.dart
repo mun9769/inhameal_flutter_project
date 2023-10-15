@@ -100,11 +100,8 @@ class _SwipePageState extends State<SwipePage> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
-          color: widget.dayMeal.prev
-              ? AppColors.skyBlue
-              : AppColors.littleDeepGray,
-          onPressed: widget.dayMeal.prev
-              ? () async {
+          color: AppColors.skyBlue,
+          onPressed: () async {
                   DateTime yesterday = currentDate.add(Duration(days: -1));
                   String formattedDate =
                       DateFormat('yyyyMMdd').format(yesterday);
@@ -116,17 +113,13 @@ class _SwipePageState extends State<SwipePage> {
                     initPages();
                     currentDate = yesterday;
                   });
-                }
-              : null,
+                },
         ),
         actions: [
           IconButton(
             icon: Icon(Icons.arrow_forward_ios),
-            color: widget.dayMeal.next
-                ? AppColors.skyBlue
-                : AppColors.littleDeepGray,
-            onPressed: widget.dayMeal.next
-                ? () async {
+            color: AppColors.skyBlue,
+            onPressed: () async {
                     DateTime tomorrow = currentDate.add(Duration(days: 1));
                     String formattedDate =
                         DateFormat('yyyyMMdd').format(tomorrow);
@@ -138,8 +131,7 @@ class _SwipePageState extends State<SwipePage> {
                       initPages();
                       currentDate = tomorrow;
                     });
-                  }
-                : null,
+                  },
           )
         ],
       ),
