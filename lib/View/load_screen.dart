@@ -27,7 +27,7 @@ class _LoadPageState extends State<LoadPage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DayMeal>(
-      future: _dataController.loadData(getDateNow()),
+      future: _dataController.loadData(/*getDateNow()*/"20230926"),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -56,7 +56,7 @@ class _LoadPageState extends State<LoadPage> {
             Image.asset('assets/calendar.png', height: 21, width: 20),
             SizedBox(width: 6),
             Text(
-              getToday(),
+              "에러",
               style: TextStyle(
                   color: AppColors.skyBlue, fontWeight: FontWeight.w700),
             ),
@@ -81,7 +81,12 @@ class _LoadPageState extends State<LoadPage> {
       body: Container(
         color: AppColors.lightGray,
         child: Center(
-          child: button,
+          child: Column(
+            children: [
+              button,
+              Text(snapshot.hasError ? "${snapshot.error?.toString()}" : "")
+            ],
+          ),
         ),
       ),
     );
