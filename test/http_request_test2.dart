@@ -2,26 +2,25 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_test/flutter_test.dart';
 
+
 class DayMeal {
   final String id;
 
-  final Cafeteria dorm_1Cafe;
-  final Cafeteria dorm_2Cafe;
+  final Cafeteria dormCafe;
   final Cafeteria studentCafe;
   final Cafeteria staffCafe;
 
   const DayMeal(
       {required this.id,
-        required this.dorm_1Cafe,
-        required this.dorm_2Cafe,
+        required this.dormCafe,
         required this.studentCafe,
-        required this.staffCafe});
+        required this.staffCafe,
+      });
 
   factory DayMeal.fromJson(Map<String, dynamic> json) {
     return DayMeal(
       id: json['id'],
-      dorm_1Cafe: Cafeteria.fromJson(json['dorm_1Cafe']),
-      dorm_2Cafe: Cafeteria.fromJson(json['dorm_2Cafe']),
+      dormCafe: Cafeteria.fromJson(json['dormCafe']),
       studentCafe: Cafeteria.fromJson(json['studentCafe']),
       staffCafe: Cafeteria.fromJson(json['staffCafe']),
     );
@@ -29,10 +28,21 @@ class DayMeal {
 }
 
 class Cafeteria {
-  final String? name;
-  final List<Meal>? meals;
+  final String name;
+  final List<dynamic> brunch;
+  final List<dynamic> lunch;
+  final List<dynamic> dinner;
+  final List<dynamic>? other;
+  final String? message;
 
-  const Cafeteria({required this.name, required this.meals});
+  const Cafeteria(
+      { required this.name,
+        required this.brunch,
+        required this.lunch,
+        required this.dinner,
+        this.other,
+        this.message,
+      });
 
   factory Cafeteria.fromJson(Map<String, dynamic> json) {
     List<Meal> mealListDto = [];
@@ -42,36 +52,42 @@ class Cafeteria {
     });
 
     return Cafeteria(
-      name: json['name'],
-      meals: mealListDto,
+        name: json['name'],
+        brunch: json['brunch'],
+        lunch: json['lunch'],
+        dinner: json['dinner'],
+        other: mealListDto,
+        message: json['message']
     );
   }
 }
 
 class Meal {
-  final String? name;
-  final List<dynamic>? menus;
-  String? openTime;
+  final String name;
+  final List<dynamic> menus;
+  String openTime;
+  String price;
 
-  static const Map<String, String> name2time = {
-    "brunch": "07:30 ~ 09:30",
-    "lunch": "11:30 ~ 13:30",
-    "dinner": "17:30 ~ 19:00",
-  };
 
-  Meal({required this.openTime, required this.name, required this.menus});
+  Meal({
+    required this.name,
+    required this.openTime,
+    required this.menus,
+    required this.price,
+  });
 
   factory Meal.fromJson(Map<String, dynamic> json) {
     return Meal(
-      openTime: Meal.name2time[json['name']],
       name: json['name'],
+      openTime: json['opentime'],
       menus: json['menus'],
+      price: json['price'],
     );
   }
 }
 
 Future<DayMeal> fetchDayMeal(
-    { String reqUrl = "https://xiipj5vqt1.execute-api.ap-northeast-2.amazonaws.com/items/20230829" } ) async {
+    { String reqUrl = "https://xiipj5vqt1.execute-api.ap-northeast-2.amazonaws.com/items/20231013" } ) async {
   final response = await http.get(Uri.parse(reqUrl));
 
   if (response.statusCode == 200) {

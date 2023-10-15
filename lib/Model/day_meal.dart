@@ -6,16 +6,11 @@ class DayMeal {
   final Cafeteria studentCafe;
   final Cafeteria staffCafe;
 
-  final bool prev;
-  final bool next;
-
   const DayMeal(
       {required this.id,
         required this.dormCafe,
         required this.studentCafe,
         required this.staffCafe,
-        required this.prev,
-        required this.next,
       });
 
   factory DayMeal.fromJson(Map<String, dynamic> json) {
@@ -24,17 +19,27 @@ class DayMeal {
       dormCafe: Cafeteria.fromJson(json['dormCafe']),
       studentCafe: Cafeteria.fromJson(json['studentCafe']),
       staffCafe: Cafeteria.fromJson(json['staffCafe']),
-      prev: json['prev'],
-      next: json['next'],
     );
   }
 }
 
 class Cafeteria {
-  final String? name;
-  final List<Meal>? meals;
+  final String name;
+  // final List<Meal>? meals;
+  final List<Meal> brunch;
+  final List<Meal> lunch;
+  final List<Meal> dinner;
+  final List<Meal>? other;
+  final String? message;
 
-  const Cafeteria({required this.name, required this.meals});
+  const Cafeteria(
+      { required this.name,
+        required this.brunch,
+        required this.lunch,
+        required this.dinner,
+        this.other,
+        this.message,
+      });
 
   factory Cafeteria.fromJson(Map<String, dynamic> json) {
     List<Meal> mealListDto = [];
@@ -45,30 +50,35 @@ class Cafeteria {
 
     return Cafeteria(
       name: json['name'],
-      meals: mealListDto,
+      brunch: json['brunch'],
+      lunch: json['lunch'],
+      dinner: json['dinner'],
+      other: mealListDto,
+      message: json['message']
     );
   }
 }
 
 class Meal {
-  final String? name;
-  final List<dynamic>? menus;
-  String? openTime;
-  String? price;
-  String? category;
-  String? errMsg;
+  final String name;
+  final List<dynamic> menus;
+  String openTime;
+  String price;
 
 
-  Meal({required this.openTime, required this.name, required this.menus, required this.price, required this.category, this.errMsg});
+  Meal({
+    required this.name,
+    required this.openTime,
+    required this.menus,
+    required this.price,
+    });
 
   factory Meal.fromJson(Map<String, dynamic> json) {
     return Meal(
-      openTime: json['opentime'],
       name: json['name'],
+      openTime: json['opentime'],
       menus: json['menus'],
       price: json['price'],
-      category: json['category'],
-      errMsg: json['errMsg'],
     );
   }
 }
