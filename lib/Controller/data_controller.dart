@@ -20,7 +20,6 @@ class DataController {
     String endpoint = DateFormat('yyyyMMdd').format(now);
 
     endpoint = id;
-    // endpoint = "19990101";
 
     final response = await http.get(Uri.parse("$baseUrl/$endpoint"));
 
@@ -116,58 +115,3 @@ class DataController {
     return prefs.getStringList("cafePriority") ?? ["student", "dorm", "staff"];
   }
 }
-
-const Map<String, dynamic> myjson = {
-  "id": "20230123",
-  "dormCafe": {
-    "name": "기숙사식당",
-    "meals": [
-      {
-        "name": "조식",
-        "menus": ["아아아침", "된장찌개"]
-      },
-      {
-        "name": "점심",
-        "menus": ["점심", "된장찌개"]
-      },
-      {
-        "name": "저녁",
-        "menus": ["저녁", "된장찌개"]
-      },
-    ],
-  },
-  "studentCafe": {
-    "name": "학생식당",
-    "meals": [
-      {
-        "name": "조식",
-        "menus": ["아침", "된장찌개"]
-      },
-      {
-        "name": "점심",
-        "menus": ["점심", "된장찌개"]
-      },
-      {
-        "name": "저녁",
-        "menus": ["저녁", "된장찌개"]
-      },
-    ],
-  },
-  "staffCafe": {
-    "name": "교직원식당",
-    "meals": [
-      {
-        "name": "조식",
-        "menus": ["아침", "된장찌개"]
-      },
-      {
-        "name": "점심",
-        "menus": ["점심", "된장찌개"]
-      },
-      {
-        "name": "저녁",
-        "menus": ["저녁", "된장찌개"]
-      },
-    ],
-  },
-};
