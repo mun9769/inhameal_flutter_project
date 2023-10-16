@@ -63,7 +63,8 @@ class MenuBoardView extends StatelessWidget {
                   SizedBox(width: 5),
                   if (meals.isEmpty)
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(22.0),
                         color: AppColors.lightGray,
@@ -77,32 +78,32 @@ class MenuBoardView extends StatelessWidget {
                       ),
                     ),
                   Spacer(),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 6),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(22.0),
-                      color: AppColors.lightGray,
-                    ),
-                    child: Text(
-                      meals.isNotEmpty ? meals[0].openTime ?? "" : "",
-                      style: TextStyle(
-                        color: AppColors.deepGray,
-                        fontSize: 12.0,
+                  if (meals.isNotEmpty)
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 6),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22.0),
+                        color: AppColors.lightGray,
+                      ),
+                      child: Text(
+                        meals[0].openTime,
+                        style: TextStyle(
+                          color: AppColors.deepGray,
+                          fontSize: 12.0,
+                        ),
                       ),
                     ),
-                  )
                 ],
               ),
               meals.isEmpty
                   ? Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: Text("미운영"),
+                      child: Text(""),
                     )
                   : ListView.separated(
                       shrinkWrap: true,
-                      padding: meals.isEmpty
-                          ? EdgeInsets.zero
-                          : EdgeInsets.symmetric(vertical: 16.0),
+                      padding: EdgeInsets.symmetric(vertical: 16.0),
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: meals.length,
                       itemBuilder: (_, index) {
