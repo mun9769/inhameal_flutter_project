@@ -41,18 +41,12 @@ class Cafeteria {
       });
 
   factory Cafeteria.fromJson(Map<String, dynamic> json) {
-    List<Meal> mealListDto = [];
-
-    json['meals']?.forEach((ele) {
-      mealListDto.add(Meal.fromJson(ele));
-    });
-
     return Cafeteria(
       name: json['name'],
       brunch: (json['brunch'] as List).map((i) => Meal.fromJson(i)).toList(),
       lunch: (json['lunch'] as List).map((i) => Meal.fromJson(i)).toList(),
       dinner: (json['dinner'] as List).map((i) => Meal.fromJson(i)).toList(),
-      other: mealListDto,
+      other: (json['other'] as List?)?.map((i) => Meal.fromJson(i)).toList(),
       message: json['message']
     );
   }
