@@ -5,9 +5,10 @@ import 'package:inhameal_flutter_project/View/component/menu_board_view.dart';
 
 class MealPage extends StatelessWidget {
   final Cafeteria cafe;
+  final Function() onRefresh;
 
 
-  MealPage({Key? key, required this.cafe}) : super(key: key);
+  MealPage({Key? key, required this.cafe, required this.onRefresh}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,21 +17,27 @@ class MealPage extends StatelessWidget {
         overScroll.disallowIndicator();
         return true;
       },
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: Column(
-          children: [
-            MenuBoardView(category: 'brunch', meals: cafe.brunch),
-            MenuBoardView(category: 'lunch', meals: cafe.lunch),
-            MenuBoardView(category: 'dinner', meals: cafe.dinner),
-            if(cafe.other != null)
-              MenuBoardView(category: 'other', meals: cafe.other!),
-            SizedBox(height: 40),
-            // TODO 여기에 후원글 넣고 싶어
-          ],
-        ),
-      ),
+      child:
+        RefreshIndicator(
+          onRefresh: onRefresh(),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  MenuBoardView(category: 'brunch', meals: cafe.brunch),
+                  MenuBoardView(category: 'lunch', meals: cafe.lunch),
+                  MenuBoardView(category: 'dinner', meals: cafe.dinner),
+                  if(cafe.other != null)
+                    MenuBoardView(category: 'other', meals: cafe.other!),
+                  SizedBox(height: 40),
+
+                  if(cafe.skipReason != null)
+                    Text(cafe.skipReason!)
+                ],
+              ),
+          ),
+        )
     );
   }
 }

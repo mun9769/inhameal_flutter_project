@@ -29,7 +29,7 @@ class Cafeteria {
   final List<Meal> lunch;
   final List<Meal> dinner;
   final List<Meal>? other;
-  final String? message;
+  final String? skipReason;
 
   const Cafeteria(
       { required this.name,
@@ -37,7 +37,7 @@ class Cafeteria {
         required this.lunch,
         required this.dinner,
         this.other,
-        this.message,
+        this.skipReason,
       });
 
   factory Cafeteria.fromJson(Map<String, dynamic> json) {
@@ -47,7 +47,7 @@ class Cafeteria {
       lunch: (json['lunch'] as List).map((i) => Meal.fromJson(i)).toList(),
       dinner: (json['dinner'] as List).map((i) => Meal.fromJson(i)).toList(),
       other: (json['other'] as List?)?.map((i) => Meal.fromJson(i)).toList(),
-      message: json['message']
+      skipReason: json['skipReason']
     );
   }
 }

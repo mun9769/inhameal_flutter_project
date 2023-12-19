@@ -40,9 +40,9 @@ class _SwipePageState extends State<SwipePage> {
     cafeList = _dataController.cafeList;
 
     final Map<String, Widget> cafepages = {
-      "dorm": MealPage(cafe: widget.dayMeal.dormCafe),
-      "student": MealPage(cafe: widget.dayMeal.studentCafe),
-      "staff": MealPage(cafe: widget.dayMeal.staffCafe),
+      "dorm": MealPage(cafe: widget.dayMeal.dormCafe, onRefresh: refreshData),
+      "student": MealPage(cafe: widget.dayMeal.studentCafe, onRefresh: refreshData),
+      "staff": MealPage(cafe: widget.dayMeal.staffCafe, onRefresh: refreshData),
     };
 
     List<Widget> tmp = [];
@@ -52,11 +52,16 @@ class _SwipePageState extends State<SwipePage> {
     _pages = tmp;
   }
 
+  void refreshData() async {
+    String formattedDate = DateFormat('yyyyMMdd').format(currentDate);
+    widget.dayMeal = await _dataController.reloadData(formattedDate);
+  }
+
   void screenSetState() {
     final Map<String, Widget> cafepages = {
-      "dorm": MealPage(cafe: widget.dayMeal.dormCafe),
-      "student": MealPage(cafe: widget.dayMeal.studentCafe),
-      "staff": MealPage(cafe: widget.dayMeal.staffCafe),
+      "dorm": MealPage(cafe: widget.dayMeal.dormCafe, onRefresh: refreshData),
+      "student": MealPage(cafe: widget.dayMeal.studentCafe, onRefresh: refreshData),
+      "staff": MealPage(cafe: widget.dayMeal.staffCafe, onRefresh: refreshData),
     };
 
     setState(() {
@@ -76,6 +81,37 @@ class _SwipePageState extends State<SwipePage> {
     if (day == null) return formattedDate;
     day = "($day)";
     return formattedDate + day;
+  }
+
+  void getDayMeal(int days) async {
+    DateTime nxt = currentDate.add(Duration(days: days));
+    String formattedDate = DateFormat('yyyyMMdd').format(nxt);
+
+    try {
+      widget.dayMeal = await _dataController.loadData(formattedDate);
+    } catch(e) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text(e.toString()),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+    setState(() {
+      initPages();
+      currentDate = nxt;
+    });
   }
 
   @override
@@ -100,38 +136,14 @@ class _SwipePageState extends State<SwipePage> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
-          color: AppColors.skyBlue,
-          onPressed: () async {
-                  DateTime yesterday = currentDate.add(Duration(days: -1));
-                  String formattedDate =
-                      DateFormat('yyyyMMdd').format(yesterday);
-
-                  widget.dayMeal =
-                      await _dataController.loadData(formattedDate);
-
-                  setState(() {
-                    initPages();
-                    currentDate = yesterday;
-                  });
-                },
+          color: currentDate == DateTime.now() ? AppColors.deepGray : AppColors.skyBlue,
+          onPressed: currentDate == DateTime.now() ? null : () => getDayMeal(-1),
         ),
         actions: [
           IconButton(
             icon: Icon(Icons.arrow_forward_ios),
             color: AppColors.skyBlue,
-            onPressed: () async {
-                    DateTime tomorrow = currentDate.add(Duration(days: 1));
-                    String formattedDate =
-                        DateFormat('yyyyMMdd').format(tomorrow);
-
-                    widget.dayMeal =
-                        await _dataController.loadData(formattedDate);
-
-                    setState(() {
-                      initPages();
-                      currentDate = tomorrow;
-                    });
-                  },
+            onPressed: () => getDayMeal(1),
           )
         ],
       ),
@@ -196,17 +208,9 @@ class _SwipePageState extends State<SwipePage> {
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          String formattedDate = DateFormat('yyyyMMdd').format(currentDate);
-          widget.dayMeal = await _dataController.reloadData(formattedDate);
-          setState(() {
-            initPages();
-          });
-        },
-        child: const Icon(Icons.download_outlined),
-      ),
+      )
     );
   }
+
+
 }

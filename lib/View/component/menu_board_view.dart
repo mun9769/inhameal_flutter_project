@@ -57,7 +57,7 @@ class MenuBoardView extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.deepGray,
+                      color: Colors.black,
                     ),
                   ),
                   SizedBox(width: 5),
@@ -99,7 +99,7 @@ class MenuBoardView extends StatelessWidget {
               meals.isEmpty
                   ? Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: Text(""),
+                      child: Text(""), // 식단이 없을 때 없는 이유를 적어줄 수 있다.
                     )
                   : ListView.separated(
                       shrinkWrap: true,
