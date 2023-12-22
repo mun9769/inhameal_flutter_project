@@ -5,6 +5,17 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Model/day_meal.dart';
 
+class HttpException implements Exception {
+  final String message;
+
+  HttpException(this.message);  // Pass your message in constructor.
+
+  @override
+  String toString() {
+    return message;
+  }
+}
+
 class DataController {
   static final DataController instance = DataController._internal();
   factory DataController() => instance;
@@ -12,7 +23,7 @@ class DataController {
 
   final String baseUrl = "https://xiipj5vqt1.execute-api.ap-northeast-2.amazonaws.com/items";
 
-  late List<String> cafeList;
+  late List<String> cafeList = ["dorm","student","staff"];
 
 
   Future<Map<String, dynamic>?> fetchJson(String id) async {
@@ -26,8 +37,10 @@ class DataController {
     if (response.statusCode == 200) {
       Map<String, dynamic> dayMealJson = jsonDecode(utf8.decode(response.bodyBytes));
       return dayMealJson;
+    } else if(response.statusCode == 404) {
+      return null;
     } else {
-      throw Exception('http요청에 실패했습니다, ${response.statusCode}');
+      throw HttpException('아직 업데이트되지 않았어요');
     }
   }
 
@@ -54,27 +67,60 @@ class DataController {
   }
 
   String getDateNow() {
-    // given
     DateTime now = DateTime.now();
-    // when
     String formattedDate = DateFormat('yyyyMMdd').format(now);
     return formattedDate;
   }
 
-  Future<DayMeal> loadData() async {
-    String id = getDateNow();
+  void loadSeveralData(String date) async {
+    DateTime currentDate = DateTime.parse(date);
+
+    int offset = 1;
+    DateTime nxt = currentDate.add(Duration(days: offset));
+    String formattedDate = DateFormat('yyyyMMdd').format(nxt);
+
+    while(await loadFutureData(formattedDate)) {
+      offset++;
+      nxt = currentDate.add(Duration(days: offset));
+      formattedDate = DateFormat('yyyyMMdd').format(nxt);
+    }
+
+  }
+
+  Future<bool> loadFutureData(String id) async {
+    if(await readJsonFromLocal(id) != null) { return false; }
+
+    Map<String, dynamic>? dayJson = await fetchJson(id);
+    if(dayJson == null) { return false; }
+
+    saveJsonToLocal(id, dayJson);
+    return true;
+  }
+
+  Future<DayMeal> loadData(String id) async {
+    // String id = getDateNow();
 
     // await deleteData(id);
     Map<String, dynamic>? dayJson = await readJsonFromLocal(id);
     dayJson ??= await fetchJson(id);
 
+    dayJson = dayJson!;
+    saveJsonToLocal(id, dayJson);
+
+    cafeList = await getCafePriority();
+
+    return DayMeal.fromJson(dayJson);
+    // TODO: fromJson 대신 fromDict으로 이름 변경하기
+  }
+  Future<DayMeal> reloadData(String id) async {
+
+    await deleteData(id);
+    Map<String, dynamic>? dayJson = await fetchJson(id);
+
     if(dayJson == null) {
       throw Exception('$id가 없습니다');
     }
     saveJsonToLocal(id, dayJson);
-    // updateWidgetInfo(dayJson);
-
-    cafeList = await getCafePriority();
 
     return DayMeal.fromJson(dayJson);
   }
@@ -102,61 +148,6 @@ class DataController {
 
   Future<List<String>> getCafePriority() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getStringList("cafePriority") ?? ["student", "dorm", "staff"];
+    return prefs.getStringList("cafePriority") ?? ["dorm", "student", "staff"];
   }
 }
-
-const Map<String, dynamic> myjson = {
-  "id": "20230123",
-  "dormCafe": {
-    "name": "기숙사식당",
-    "meals": [
-      {
-        "name": "조식",
-        "menus": ["아아아침", "된장찌개"]
-      },
-      {
-        "name": "점심",
-        "menus": ["점심", "된장찌개"]
-      },
-      {
-        "name": "저녁",
-        "menus": ["저녁", "된장찌개"]
-      },
-    ],
-  },
-  "studentCafe": {
-    "name": "학생식당",
-    "meals": [
-      {
-        "name": "조식",
-        "menus": ["아침", "된장찌개"]
-      },
-      {
-        "name": "점심",
-        "menus": ["점심", "된장찌개"]
-      },
-      {
-        "name": "저녁",
-        "menus": ["저녁", "된장찌개"]
-      },
-    ],
-  },
-  "staffCafe": {
-    "name": "교직원식당",
-    "meals": [
-      {
-        "name": "조식",
-        "menus": ["아침", "된장찌개"]
-      },
-      {
-        "name": "점심",
-        "menus": ["점심", "된장찌개"]
-      },
-      {
-        "name": "저녁",
-        "menus": ["저녁", "된장찌개"]
-      },
-    ],
-  },
-};

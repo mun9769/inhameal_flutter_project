@@ -3,28 +3,12 @@ import 'package:flutter/widgets.dart';
 import 'package:inhameal_flutter_project/Model/day_meal.dart';
 import 'package:inhameal_flutter_project/View/component/menu_board_view.dart';
 
-class MealPage extends StatefulWidget {
+class MealPage extends StatelessWidget {
   final Cafeteria cafe;
+  final Function() onRefresh;
 
-  final Map<String, List<Meal>> category = {
-    'brunch': [],
-    'lunch': [],
-    'dinner': [],
-    'category': [],
-    'self_ramen': [],
-  };
 
-  MealPage({Key? key, required this.cafe}) : super(key: key) {
-    cafe.meals?.forEach((meal) {
-      category[meal.category]!.add(meal);
-    });
-  }
-
-  @override
-  State<MealPage> createState() => _MealPageState();
-}
-
-class _MealPageState extends State<MealPage> {
+  MealPage({Key? key, required this.cafe, required this.onRefresh}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,24 +17,31 @@ class _MealPageState extends State<MealPage> {
         overScroll.disallowIndicator();
         return true;
       },
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: Column(
-          children: [
-            for (var item in widget.category.entries) ...[
-              if(item.value.isNotEmpty) ...[
-                MenuBoardView(name: item.key, meals: item.value),
-              ]
-              else if(item.key =='brunch' || item.key == 'lunch' || item.key == 'dinner') ...[
-                MenuBoardView(name: item.key, meals: item.value),
-              ]
-            ],
-            SizedBox(height: 40),
-          ],
-        ),
-      ),
+      child:
+        RefreshIndicator(
+          onRefresh: _refresh,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  MenuBoardView(category: 'brunch', meals: cafe.brunch),
+                  MenuBoardView(category: 'lunch', meals: cafe.lunch),
+                  MenuBoardView(category: 'dinner', meals: cafe.dinner),
+                  if(cafe.other != null)
+                    MenuBoardView(category: 'other', meals: cafe.other!),
+                  SizedBox(height: 40),
+
+                  if(cafe.skipReason != null)
+                    Text(cafe.skipReason!)
+                ],
+              ),
+          ),
+        )
     );
   }
 
+  Future<void> _refresh() async {
+    await onRefresh();
+  }
 }

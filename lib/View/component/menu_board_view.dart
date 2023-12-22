@@ -1,82 +1,133 @@
+import 'dart:math';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../Model/day_meal.dart';
+import '../../constants/colors.dart';
+
+class ScaleSize {
+static double textScaleFactor(BuildContext context, {double maxTextScaleFactor = 2}) {
+final width = MediaQuery.of(context).size.width;
+double val = (width / 1400) * maxTextScaleFactor;
+return max(1, min(val, maxTextScaleFactor));
+}
+}
 
 class MenuBoardView extends StatelessWidget {
-  final String name;
+  final String category;
   final List<Meal> meals;
 
-  MenuBoardView({super.key, required this.name, required this.meals});
+  MenuBoardView({super.key, required this.category, required this.meals});
 
   final Map<String, String> categoryKorean = {
     'brunch': '아침',
     'lunch': '점심',
     'dinner': '저녁',
     'self_ramen': '셀프라면',
-    'snack' : '스낵(조식/석식)'
+    'snack': '스낵(조식/석식)',
+    'other': '스낵'
+  };
+
+  final Map<String, Icon> categoryIcon = {
+    'brunch': Icon(
+      CupertinoIcons.sun_dust,
+      size: 18,
+    ),
+    'lunch': Icon(
+      CupertinoIcons.sun_max,
+      size: 18,
+    ),
+    'dinner': Icon(
+      CupertinoIcons.moon,
+      size: 18,
+    ),
   };
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 15, right: 15, top: 20),
-      // margin: const EdgeInsets.only(left: 15, right: 15, top: 20),
+      padding: EdgeInsets.only(left: 15, right: 15, bottom: 20),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.7),
-              blurRadius: 2.0,
-              spreadRadius: 0.0,
-              offset: const Offset(0, 2),
-            )
-          ],
         ),
         width: double.infinity,
         child: Padding(
-          padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+          padding: const EdgeInsets.only(left: 24, right: 24, top: 30),
           child: Column(
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(categoryKorean[name] ?? "식사",
-                      style: TextStyle(fontSize: 24)),
-                  Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: meals.isNotEmpty
-                          ? Text(meals[0].openTime ?? "",
-                              style: TextStyle(fontSize: 16))
-                          : Text("")),
+                  categoryIcon[category] ?? SizedBox.shrink(),
+                  if (categoryIcon[category] != null) SizedBox(width: 5),
+                  Text(
+                    categoryKorean[category] ?? "식사",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  if (meals.isEmpty)
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22.0),
+                        color: AppColors.lightGray,
+                      ),
+                      child: Text(
+                        "미운영",
+                        style: TextStyle(
+                          color: AppColors.deepGray,
+                          fontSize: 12.0,
+                        ),
+                      ),
+                    ),
+                  Spacer(),
+                  if (meals.isNotEmpty)
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 6),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22.0),
+                        color: AppColors.lightGray,
+                      ),
+                      child: Text(
+                        meals[0].openTime,
+                        style: TextStyle(
+                          color: AppColors.deepGray,
+                          fontSize: 12.0,
+                        ),
+                      ),
+                    ),
                 ],
               ),
-              ListView.separated(
-                padding: meals.isEmpty ?
-                        EdgeInsets.zero :
-                        EdgeInsets.symmetric(vertical: 16.0),
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: meals.length,
-                itemBuilder: (_, index) {
-                  return LayoutBuilder(
-                    builder: (_, size) {
-                      return makeMenus(meals[index], size.maxWidth / 2);
-                    },
-                  );
-                },
-                separatorBuilder: (_, __) {
-                  return Divider(thickness: 1);
-                },
-              ),
-              if (meals.isEmpty)
-                Column(
-                  children: const [
-                    Text("미운영"),
-                    SizedBox(height:20),
-                  ],
-                )
+              meals.isEmpty
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: Text(""), // 식단이 없을 때 없는 이유를 적어줄 수 있다.
+                    )
+                  : ListView.separated(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: meals.length,
+                      itemBuilder: (_, index) {
+                        return LayoutBuilder(
+                          builder: (_, size) {
+                            return makeMenus(
+                                meals[index], size.maxWidth / 2 - 32, context);
+                          },
+                        );
+                      },
+                      separatorBuilder: (_, __) {
+                        return Divider(thickness: 1);
+                      },
+                    ),
             ],
           ),
         ),
@@ -84,11 +135,11 @@ class MenuBoardView extends StatelessWidget {
     );
   }
 
-  Widget makeMenus(Meal meal, double maxWidth) {
+  Widget makeMenus(Meal meal, double maxWidth, BuildContext context) {
     int idx = 0;
-    List<String>? menus = meal.menus?.cast<String>();
+    List<String> menus = meal.menus.cast<String>();
 
-    if(menus == null) {
+    if (menus.isEmpty) {
       return SizedBox(height: 20);
     }
 
@@ -106,9 +157,22 @@ class MenuBoardView extends StatelessWidget {
         s.add(menus[idx++]);
       }
 
-      row = Row(children: [
-        for (String menu in s) Expanded(flex: 1, child: Text(menu))
-      ]);
+      row = Row(
+        children: [
+          for (String menu in s)
+            Expanded(
+              flex: 1,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6),
+                child: Text(
+                  menu,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  textScaleFactor: ScaleSize.textScaleFactor(context),
+                ),
+              ),
+            ),
+        ],
+      );
 
       rows.add(row);
     }

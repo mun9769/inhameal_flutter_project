@@ -18,12 +18,19 @@ class LoadPage extends StatefulWidget {
 class _LoadPageState extends State<LoadPage> {
   final DataController _dataController = DataController();
 
+  String getDateNow() {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyyMMdd').format(now);
+    return formattedDate;
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DayMeal>(
-      future: _dataController.loadData(),
+      future: _dataController.loadData(getDateNow()), // "20240910"),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
+          _dataController.loadSeveralData(getDateNow());
           return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return reloadView(context, snapshot);
@@ -39,18 +46,48 @@ class _LoadPageState extends State<LoadPage> {
       onPressed: () {
         setState(() {});
       },
-      child: Text("다시 불러오기", style: TextStyle(fontSize: 24)),
+      child: Text("정보를 불러오는데 실패했어요", style: TextStyle(fontSize: 24)),
     );
     return Scaffold(
       appBar: AppBar(
-        title: Text(getToday()),
-        backgroundColor: AppColors.orange[300],
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset('assets/calendar.png', height: 21, width: 20),
+            SizedBox(width: 6),
+            Text(
+              "에러",
+              style: TextStyle(
+                  color: AppColors.skyBlue, fontWeight: FontWeight.w700),
+            ),
+          ],
+        ),
+        backgroundColor: Colors.white,
         centerTitle: true,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          color: AppColors.littleDeepGray,
+          onPressed: null,
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.arrow_forward_ios),
+            color: AppColors.littleDeepGray,
+            onPressed: null,
+          )
+        ],
       ),
       body: Container(
-        color: AppColors.orange[50],
+        color: AppColors.lightGray,
         child: Center(
-          child: button,
+          child: Column(
+            children: [
+              button,
+              Text(snapshot.hasError ? "${snapshot.error?.toString()}" : "")
+            ],
+          ),
         ),
       ),
     );

@@ -10,7 +10,8 @@ class DayMeal {
       {required this.id,
         required this.dormCafe,
         required this.studentCafe,
-        required this.staffCafe});
+        required this.staffCafe,
+      });
 
   factory DayMeal.fromJson(Map<String, dynamic> json) {
     return DayMeal(
@@ -23,42 +24,54 @@ class DayMeal {
 }
 
 class Cafeteria {
-  final String? name;
-  final List<Meal>? meals;
+  final String name;
+  final List<Meal> brunch;
+  final List<Meal> lunch;
+  final List<Meal> dinner;
+  final List<Meal>? other;
+  final String? skipReason;
 
-  const Cafeteria({required this.name, required this.meals});
+  const Cafeteria(
+      { required this.name,
+        required this.brunch,
+        required this.lunch,
+        required this.dinner,
+        this.other,
+        this.skipReason,
+      });
 
   factory Cafeteria.fromJson(Map<String, dynamic> json) {
-    List<Meal> mealListDto = [];
-
-    json['meals']?.forEach((ele) {
-      mealListDto.add(Meal.fromJson(ele));
-    });
-
     return Cafeteria(
       name: json['name'],
-      meals: mealListDto,
+      brunch: (json['brunch'] as List).map((i) => Meal.fromJson(i)).toList(),
+      lunch: (json['lunch'] as List).map((i) => Meal.fromJson(i)).toList(),
+      dinner: (json['dinner'] as List).map((i) => Meal.fromJson(i)).toList(),
+      other: (json['other'] as List?)?.map((i) => Meal.fromJson(i)).toList(),
+      skipReason: json['skipReason']
     );
   }
 }
 
 class Meal {
-  final String? name;
-  final List<dynamic>? menus;
-  String? openTime;
-  String? price;
-  String? category;
+  final String name;
+  final List<dynamic> menus;
+  String openTime;
+  String price;
 
 
-  Meal({required this.openTime, required this.name, required this.menus, required this.price, required this.category});
+  Meal({
+    required this.name,
+    required this.openTime,
+    required this.menus,
+    required this.price,
+    });
 
   factory Meal.fromJson(Map<String, dynamic> json) {
     return Meal(
-      openTime: json['opentime'],
       name: json['name'],
+      openTime: json['opentime'],
       menus: json['menus'],
       price: json['price'],
-      category: json['category'],
     );
   }
 }
