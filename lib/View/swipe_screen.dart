@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:inhameal_flutter_project/View/setting_screen.dart';
@@ -6,6 +8,7 @@ import 'package:intl/intl.dart';
 import '../Controller/data_controller.dart';
 import '../Model/day_meal.dart';
 import '../constants/static_variable.dart';
+import 'component/menu_board_view.dart';
 import 'meal_screen.dart';
 
 class SwipePage extends StatefulWidget {
@@ -89,17 +92,16 @@ class _SwipePageState extends State<SwipePage> {
 
     try {
       widget.dayMeal = await _dataController.loadData(formattedDate);
+      currentDate = nxt;
     } catch(e) {
       showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            content: Text(e.toString()),
+            content: Text("아직 업데이트되지 않았어요\n매주 주말에 업로드됩니다"),
             actions: <Widget>[
               TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+                onPressed: () { Navigator.of(context).pop(); },
                 child: Text('OK'),
               ),
             ],
@@ -110,8 +112,15 @@ class _SwipePageState extends State<SwipePage> {
 
     setState(() {
       initPages();
-      currentDate = nxt;
     });
+  }
+
+  bool _isToday() {
+    final DateFormat formatter = DateFormat('yyyMM-dd');
+    final String formattedCurrenntDate = formatter.format(currentDate);
+    final String today = formatter.format(DateTime.now());
+
+    return formattedCurrenntDate == today;
   }
 
   @override
@@ -136,8 +145,8 @@ class _SwipePageState extends State<SwipePage> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
-          color: currentDate == DateTime.now() ? AppColors.deepGray : AppColors.skyBlue,
-          onPressed: currentDate == DateTime.now() ? null : () => getDayMeal(-1),
+          color: _isToday() ? AppColors.deepGray : AppColors.skyBlue,
+          onPressed: _isToday() ? null : () => getDayMeal(-1),
         ),
         actions: [
           IconButton(
@@ -153,6 +162,7 @@ class _SwipePageState extends State<SwipePage> {
           children: [
             Container(
               padding: EdgeInsets.only(top: 19, bottom: 14, left: 10, right: 10),
+              constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -181,6 +191,7 @@ class _SwipePageState extends State<SwipePage> {
                             fontSize: 14.0,
                             fontWeight: FontWeight.w800,
                           ),
+                          textScaleFactor: ScaleSize.textScaleFactor(context),
                         ),
                       ),
                     ),

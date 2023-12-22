@@ -27,9 +27,10 @@ class _LoadPageState extends State<LoadPage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DayMeal>(
-      future: _dataController.loadData(/*getDateNow()*/"20230926"),
+      future: _dataController.loadData(getDateNow()), // "20240910"),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
+          _dataController.loadSeveralData(getDateNow());
           return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return reloadView(context, snapshot);

@@ -19,7 +19,7 @@ class MealPage extends StatelessWidget {
       },
       child:
         RefreshIndicator(
-          onRefresh: onRefresh(),
+          onRefresh: _refresh,
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               physics: const AlwaysScrollableScrollPhysics(),
@@ -39,5 +39,9 @@ class MealPage extends StatelessWidget {
           ),
         )
     );
+  }
+
+  Future<void> _refresh() async {
+    await onRefresh();
   }
 }

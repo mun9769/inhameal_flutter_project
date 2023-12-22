@@ -23,7 +23,7 @@ class DataController {
 
   final String baseUrl = "https://xiipj5vqt1.execute-api.ap-northeast-2.amazonaws.com/items";
 
-  late List<String> cafeList;
+  late List<String> cafeList = ["dorm","student","staff"];
 
 
   Future<Map<String, dynamic>?> fetchJson(String id) async {
@@ -148,6 +148,6 @@ class DataController {
 
   Future<List<String>> getCafePriority() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getStringList("cafePriority") ?? ["student", "dorm", "staff"];
+    return prefs.getStringList("cafePriority") ?? ["dorm", "student", "staff"];
   }
 }
