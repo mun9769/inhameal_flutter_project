@@ -1,8 +1,18 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../Model/day_meal.dart';
 import '../../constants/colors.dart';
+
+class ScaleSize {
+static double textScaleFactor(BuildContext context, {double maxTextScaleFactor = 2}) {
+final width = MediaQuery.of(context).size.width;
+double val = (width / 1400) * maxTextScaleFactor;
+return max(1, min(val, maxTextScaleFactor));
+}
+}
 
 class MenuBoardView extends StatelessWidget {
   final String category;
@@ -110,7 +120,7 @@ class MenuBoardView extends StatelessWidget {
                         return LayoutBuilder(
                           builder: (_, size) {
                             return makeMenus(
-                                meals[index], size.maxWidth / 2 - 32);
+                                meals[index], size.maxWidth / 2 - 32, context);
                           },
                         );
                       },
@@ -125,7 +135,7 @@ class MenuBoardView extends StatelessWidget {
     );
   }
 
-  Widget makeMenus(Meal meal, double maxWidth) {
+  Widget makeMenus(Meal meal, double maxWidth, BuildContext context) {
     int idx = 0;
     List<String> menus = meal.menus.cast<String>();
 
@@ -157,6 +167,7 @@ class MenuBoardView extends StatelessWidget {
                 child: Text(
                   menu,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  textScaleFactor: ScaleSize.textScaleFactor(context),
                 ),
               ),
             ),
