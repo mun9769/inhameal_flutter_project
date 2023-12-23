@@ -27,7 +27,7 @@ class _LoadPageState extends State<LoadPage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DayMeal>(
-      future: _dataController.loadData(getDateNow()), // "20240910"),
+      future: _dataController.fetchWeeklyData(getDateNow()),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           _dataController.loadSeveralData(getDateNow());

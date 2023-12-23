@@ -60,24 +60,7 @@ class _SwipePageState extends State<SwipePage> {
     widget.dayMeal = await _dataController.reloadData(formattedDate);
   }
 
-  void screenSetState() {
-    final Map<String, Widget> cafepages = {
-      "dorm": MealPage(cafe: widget.dayMeal.dormCafe, onRefresh: refreshData),
-      "student": MealPage(cafe: widget.dayMeal.studentCafe, onRefresh: refreshData),
-      "staff": MealPage(cafe: widget.dayMeal.staffCafe, onRefresh: refreshData),
-    };
-
-    setState(() {
-      cafeList = _dataController.cafeList;
-      List<Widget> tmp = [];
-      for (var name in cafeList) {
-        tmp.add(cafepages[name]!);
-      }
-      _pages = tmp;
-    });
-  }
-
-  String getDate() {
+  String _appBarTitle() {
     String formattedDate = DateFormat('yyyy-MM-dd').format(currentDate);
     String? day = DateFormat('E').format(currentDate);
     day = AppVar.weeks[day];
@@ -91,7 +74,7 @@ class _SwipePageState extends State<SwipePage> {
     String formattedDate = DateFormat('yyyyMMdd').format(nxt);
 
     try {
-      widget.dayMeal = await _dataController.loadData(formattedDate);
+      widget.dayMeal = await _dataController.fetchWeeklyData(formattedDate);
       currentDate = nxt;
     } catch(e) {
       showDialog(
@@ -102,7 +85,7 @@ class _SwipePageState extends State<SwipePage> {
             actions: <Widget>[
               TextButton(
                 onPressed: () { Navigator.of(context).pop(); },
-                child: Text('OK'),
+                child: Text('확인'),
               ),
             ],
           );
@@ -116,7 +99,7 @@ class _SwipePageState extends State<SwipePage> {
   }
 
   bool _isToday() {
-    final DateFormat formatter = DateFormat('yyyMM-dd');
+    final DateFormat formatter = DateFormat('yyyyMMdd');
     final String formattedCurrenntDate = formatter.format(currentDate);
     final String today = formatter.format(DateTime.now());
 
@@ -134,7 +117,7 @@ class _SwipePageState extends State<SwipePage> {
             Image.asset('assets/calendar.png', height: 21, width: 20),
             SizedBox(width: 6),
             Text(
-              widget.dayMeal.id,
+              _appBarTitle(),
               style: TextStyle(
                   color: AppColors.skyBlue, fontWeight: FontWeight.w700),
             ),

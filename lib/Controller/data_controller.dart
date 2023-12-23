@@ -66,12 +66,6 @@ class DataController {
     prefs.remove(id);
   }
 
-  String getDateNow() {
-    DateTime now = DateTime.now();
-    String formattedDate = DateFormat('yyyyMMdd').format(now);
-    return formattedDate;
-  }
-
   void loadSeveralData(String date) async {
     DateTime currentDate = DateTime.parse(date);
 
@@ -79,7 +73,7 @@ class DataController {
     DateTime nxt = currentDate.add(Duration(days: offset));
     String formattedDate = DateFormat('yyyyMMdd').format(nxt);
 
-    while(await loadFutureData(formattedDate)) {
+    while(offset < 6 && await loadFutureData(formattedDate)) {
       offset++;
       nxt = currentDate.add(Duration(days: offset));
       formattedDate = DateFormat('yyyyMMdd').format(nxt);
@@ -97,9 +91,7 @@ class DataController {
     return true;
   }
 
-  Future<DayMeal> loadData(String id) async {
-    // String id = getDateNow();
-
+  Future<DayMeal> loadDataFromId(String id) async {
     // await deleteData(id);
     Map<String, dynamic>? dayJson = await readJsonFromLocal(id);
     dayJson ??= await fetchJson(id);
@@ -107,11 +99,15 @@ class DataController {
     dayJson = dayJson!;
     saveJsonToLocal(id, dayJson);
 
-    cafeList = await getCafePriority();
-
     return DayMeal.fromJson(dayJson);
     // TODO: fromJson 대신 fromDict으로 이름 변경하기
   }
+
+  Future<DayMeal> fetchWeeklyData(String id) async {
+    loadSeveralData(id);
+    return await loadDataFromId(id);
+  }
+
   Future<DayMeal> reloadData(String id) async {
 
     await deleteData(id);
@@ -137,7 +133,7 @@ class DataController {
 
     dormJson.asMap().forEach((idx, menu) {
       HomeWidget.saveWidgetData<String>('lunchMenu${idx+1}', menu);
-    }); // forEach말고 한번에 payload 보내는 방법 알아보기
+    });
   }
 
   void updateCafePriority(List<String> items) async {
