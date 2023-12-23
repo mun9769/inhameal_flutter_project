@@ -8,7 +8,7 @@ import '../Model/day_meal.dart';
 class HttpException implements Exception {
   final String message;
 
-  HttpException(this.message);  // Pass your message in constructor.
+  HttpException(this.message);
 
   @override
   String toString() {
@@ -44,21 +44,20 @@ class DataController {
     }
   }
 
-  void saveJsonToLocal(String id, Map<String,dynamic> dayMealMap) async {
-    //given
+  void saveJsonToLocal(String id, Map<String,dynamic> dayMealJson) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(id, json.encode(dayMealMap));
+    prefs.setString(id, json.encode(dayMealJson));
   }
 
   Future<Map<String, dynamic>?> readJsonFromLocal(String id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? storedMapString = prefs.getString(id);
+    String? storedString = prefs.getString(id);
 
-    if(storedMapString == null) return null;
+    if(storedString == null) return null;
 
-    Map<String, dynamic> storedMap = json.decode(storedMapString);
+    Map<String, dynamic> storedJson = json.decode(storedString);
 
-    return storedMap;
+    return storedJson;
   }
 
   Future<void> deleteData(String id) async {
@@ -96,11 +95,9 @@ class DataController {
     Map<String, dynamic>? dayJson = await readJsonFromLocal(id);
     dayJson ??= await fetchJson(id);
 
-    dayJson = dayJson!;
-    saveJsonToLocal(id, dayJson);
+    saveJsonToLocal(id, dayJson!);
 
     return DayMeal.fromJson(dayJson);
-    // TODO: fromJson 대신 fromDict으로 이름 변경하기
   }
 
   Future<DayMeal> fetchWeeklyData(String id) async {
