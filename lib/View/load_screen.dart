@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:inhameal_flutter_project/View/swipe_screen.dart';
 import 'package:intl/intl.dart';
-
 import '../Controller/data_controller.dart';
-
 import '../Model/day_meal.dart';
 import '../constants/colors.dart';
-import '../constants/static_variable.dart';
 
 class LoadPage extends StatefulWidget {
   const LoadPage({super.key});
@@ -18,7 +15,7 @@ class LoadPage extends StatefulWidget {
 class _LoadPageState extends State<LoadPage> {
   final DataController _dataController = DataController();
 
-  String getDateNow() {
+  String _getTodayString() {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('yyyyMMdd').format(now);
     return formattedDate;
@@ -27,13 +24,12 @@ class _LoadPageState extends State<LoadPage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DayMeal>(
-      future: _dataController.fetchWeeklyData(getDateNow()),
+      future: _dataController.fetchWeeklyData(_getTodayString()),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          _dataController.loadSeveralData(getDateNow());
           return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
-          return reloadView(context, snapshot);
+          return reloadView();
         } else {
           return SwipePage(dayMeal: snapshot.data!);
         }
@@ -41,63 +37,37 @@ class _LoadPageState extends State<LoadPage> {
     );
   }
 
-  Widget reloadView(BuildContext context, AsyncSnapshot snapshot) {
-    TextButton button = TextButton(
-      onPressed: () {
-        setState(() {});
-      },
-      child: Text("정보를 불러오는데 실패했어요", style: TextStyle(fontSize: 24)),
-    );
+
+  Widget reloadView() {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset('assets/calendar.png', height: 21, width: 20),
-            SizedBox(width: 6),
-            Text(
-              "에러",
-              style: TextStyle(
-                  color: AppColors.skyBlue, fontWeight: FontWeight.w700),
-            ),
-          ],
+        title: Text(
+          ":(",
+          style: TextStyle(
+              color: AppColors.skyBlue, fontWeight: FontWeight.w700),
         ),
         backgroundColor: Colors.white,
         centerTitle: true,
         elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          color: AppColors.littleDeepGray,
-          onPressed: null,
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.arrow_forward_ios),
-            color: AppColors.littleDeepGray,
-            onPressed: null,
-          )
-        ],
       ),
       body: Container(
         color: AppColors.lightGray,
         child: Center(
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              button,
-              Text(snapshot.hasError ? "${snapshot.error?.toString()}" : "")
+              Text("죄송합니다 다시 시도해주세요"),
+              SizedBox(height: 6),
+              FilledButton(
+                onPressed: () {
+                  setState(() {});
+                },
+                child: Text("다시 불러오기", style: TextStyle(fontSize: 20)),
+              ),
             ],
           ),
         ),
       ),
     );
-  }
-
-  String getToday() {
-    DateTime now = DateTime.now();
-    String formattedDate = DateFormat('MM월 dd일 ').format(now);
-    String? day = DateFormat('E').format(now);
-    day = AppVar.weeks[day];
-    return formattedDate + (day ?? "");
   }
 }
