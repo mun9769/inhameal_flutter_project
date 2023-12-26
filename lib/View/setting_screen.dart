@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:inhameal_flutter_project/Controller/data_controller.dart';
-
-import '../constants/colors.dart';
 import '../constants/static_variable.dart';
 
 class SettingPage extends StatelessWidget {

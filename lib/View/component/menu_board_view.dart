@@ -176,7 +176,7 @@ class MenuBoardView extends StatelessWidget {
 
       rows.add(row);
     }
-    rows.add(Row(children: [Spacer(), Text(meal.price ?? "")]));
+    rows.add(Row(children: [Spacer(), Text(meal.price)]));
     Column ret = Column(
       children: [
         for (Row row in rows) row,

@@ -1,8 +1,4 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:inhameal_flutter_project/View/setting_screen.dart';
 import 'package:inhameal_flutter_project/constants/colors.dart';
 import 'package:intl/intl.dart';
 import '../Controller/data_controller.dart';
@@ -11,6 +7,7 @@ import '../constants/static_variable.dart';
 import 'component/menu_board_view.dart';
 import 'meal_screen.dart';
 
+//ignore: must_be_immutable
 class SwipePage extends StatefulWidget {
   DayMeal dayMeal;
 
