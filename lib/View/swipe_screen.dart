@@ -36,7 +36,6 @@ class _SwipePageState extends State<SwipePage> {
   }
 
   void initPages() {
-    _dataController.updateCafePriority(["dorm","student","staff"]);
     cafeList = _dataController.cafeList;
 
     final Map<String, Widget> cafepages = {
