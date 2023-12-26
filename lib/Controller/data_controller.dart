@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:home_widget/home_widget.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -116,21 +115,6 @@ class DataController {
     saveJsonToLocal(id, dayJson);
 
     return DayMeal.fromJson(dayJson);
-  }
-
-  void updateWidgetInfo(Map<String, dynamic> dayMealMap) {
-    final List<String> dormJson = dayMealMap['dormCafe']["meals"][0]["menus"]?.cast<String>(); // 여기서 인덱스를 못찾아도 괜찮게 하는 방법 없나?
-
-    HomeWidget.saveWidgetData<String>('cafe_name', "기숙사식당"); // 나중에 String말고 Map<String, dynamic>으로 저장할수있는지 테스트하기
-    HomeWidget.saveWidgetData<String>('meals', json.encode(dormJson));
-
-    HomeWidget.saveWidgetData<String>('lunchMenu4', '');
-    HomeWidget.saveWidgetData<String>('lunchMenu5', '');
-    HomeWidget.saveWidgetData<String>('lunchMenu6', '');
-
-    dormJson.asMap().forEach((idx, menu) {
-      HomeWidget.saveWidgetData<String>('lunchMenu${idx+1}', menu);
-    });
   }
 
   void updateCafePriority(List<String> items) async {
