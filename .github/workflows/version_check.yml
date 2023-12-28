@@ -21,6 +21,7 @@ jobs:
   check-settings:
     runs-on: ubuntu-latest
     steps:
+      - id: flutter-action
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
         with:
