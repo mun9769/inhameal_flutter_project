@@ -12,21 +12,6 @@ jobs:
           channel: stable
       - run: flutter --version
 
-      - name: Check java version
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v2
-        with:
-          distribution: zulu
-          java-version: '11'
-      - run: java --version
-
-      - name: Check gradle version
-      - uses: actions/checkout@v3
-      - uses: gradle/wrapper-action@v2
-        with:
-          gradle-version: '7.1.2'
-      - run: gradle --version
-
   check-settings:
     runs-on: ubuntu-latest
     steps:
