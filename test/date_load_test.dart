@@ -4,17 +4,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void getDateNow() {
-  // given
-  DateTime now = DateTime.now();
-
-  // when
-  String formattedDate = DateFormat('yyyyMMdd').format(now);
-  // String formattedDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
-
-  // then
-  expect(formattedDate, "20230827");
-}
 
 void readAndWriteCorrectData(String id, Map<String,dynamic> mockJson) async {
   //given
@@ -45,10 +34,6 @@ void readNotExistData(String id) async {
 }
 
 void main() {
-
-  test('오늘의 날짜가 출력되는지 확인한다, 미국날짜면 안됨', () async {
-    getDateNow();
-  });
 
   test('SharedPreferences에 올바른 데이터 읽기 쓰기 테스트', () async {
     readAndWriteCorrectData("20230823", myjson);
