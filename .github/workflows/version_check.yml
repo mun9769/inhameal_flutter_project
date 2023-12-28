@@ -18,12 +18,6 @@ jobs:
           java-version: '11'
       - run: java --version
 
-      - uses: actions/checkout@v3
-      - uses: gradle/wrapper-action@v2
-        with:
-          gradle-version: '7.1.2'
-      - run: gradle --version
-
   check-settings:
     runs-on: ubuntu-latest
     steps:
@@ -38,4 +32,3 @@ jobs:
           echo VERSION=${{ steps.flutter-action.outputs.VERSION }}
           echo ARCHITECTURE=${{ steps.flutter-action.outputs.ARCHITECTURE }}
         shell: bash
-        
