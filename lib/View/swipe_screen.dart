@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:inhameal_flutter_project/View/setting_screen.dart';
 import 'package:inhameal_flutter_project/constants/colors.dart';
 import 'package:intl/intl.dart';
 import '../Controller/data_controller.dart';
@@ -48,7 +50,9 @@ class _SwipePageState extends State<SwipePage> {
     for (var name in cafeList) {
       tmp.add(cafepages[name]!);
     }
-    _pages = tmp;
+    setState(() {
+      _pages = tmp;
+    });
   }
 
   void refreshData() async {
@@ -198,9 +202,17 @@ class _SwipePageState extends State<SwipePage> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(CupertinoIcons.gear_alt, size: 28),
+        onPressed: () { Navigator.push(context,
+            MaterialPageRoute(
+              builder: (context) {
+                return SettingPage(parentSetState: this.initPages);
+              }
+        )); },
+
       )
     );
   }
-
-
 }
