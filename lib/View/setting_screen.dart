@@ -70,19 +70,21 @@ class _CafePriorityListWidgetState extends State<CafePriorityListWidget> {
                     index: index, child: const Icon(Icons.drag_handle)),
               ),
           shrinkWrap: true,
-          onReorder: (int oldIndex, int newIndex) {
-            setState(() {
-              if (oldIndex < newIndex) {
-                newIndex -= 1;
-              }
-              final String item = _items.removeAt(oldIndex);
-              _items.insert(newIndex, item);
-            });
-            _dataController.updateCafePriority(_items);
-            widget.parentSetState();
-          },
+          onReorder: this.onReorder,
           header: Text("식당 순서 설정",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
     );
+  }
+  
+  void onReorder(int oldIndex, int newIndex) {
+    setState(() {
+      if (oldIndex < newIndex) {
+        newIndex -= 1;
+      }
+      final String item = _items.removeAt(oldIndex);
+      _items.insert(newIndex, item);
+    });
+    _dataController.updateCafePriority(_items);
+    widget.parentSetState();
   }
 }
