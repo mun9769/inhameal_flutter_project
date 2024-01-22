@@ -154,7 +154,7 @@ class _SwipePageState extends State<SwipePage> {
                         padding: EdgeInsets.only(left: 22, right: 22, top: 8, bottom: 8),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(22.0),
-                          color: selectedPage == i ? AppColors.deepBlue : AppColors.gray,
+                          color: selectedPage == i ? AppColors.skyBlue : AppColors.gray,
                         ),
                         child: Text(
                           AppVar.cafeKorean[_dataController.cafeList[i]] ?? "식당",
