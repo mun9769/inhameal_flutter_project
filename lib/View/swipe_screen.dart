@@ -25,20 +25,20 @@ class _SwipePageState extends State<SwipePage> {
   late int selectedPage = 0;
 
   late List<Widget> _pages;
-  late List<String> cafeList;
 
   late DateTime currentDate;
 
   @override
   void initState() {
     super.initState();
+    _dataController.getCafePriority().then((_) {
+        initPages();
+    }); // TODO: _dataController 생성할 때 비동기함수를 통해 데이터를 fetch하고 싶다.
     initPages();
     currentDate = DateTime.parse(widget.dayMeal.id);
   }
 
   void initPages() {
-    cafeList = _dataController.cafeList;
-
     final Map<String, Widget> cafepages = {
       "dorm": MealPage(cafe: widget.dayMeal.dormCafe, onRefresh: refreshData),
       "student": MealPage(cafe: widget.dayMeal.studentCafe, onRefresh: refreshData),
@@ -46,7 +46,7 @@ class _SwipePageState extends State<SwipePage> {
     };
 
     List<Widget> tmp = [];
-    for (var name in cafeList) {
+    for (var name in _dataController.cafeList) {
       tmp.add(cafepages[name]!);
     }
     setState(() {
@@ -171,7 +171,7 @@ class _SwipePageState extends State<SwipePage> {
                           color: selectedPage == i ? AppColors.deepBlue : AppColors.gray,
                         ),
                         child: Text(
-                          AppVar.cafeKorean[cafeList[i]] ?? "식당",
+                          AppVar.cafeKorean[_dataController.cafeList[i]] ?? "식당",
                           style: TextStyle(
                             color: selectedPage == i ? AppColors.textWhite : AppColors.deepGray,
                             fontSize: 14.0,

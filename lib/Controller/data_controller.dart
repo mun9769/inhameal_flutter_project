@@ -22,7 +22,7 @@ class DataController {
 
   final String baseUrl = "https://xiipj5vqt1.execute-api.ap-northeast-2.amazonaws.com/items";
 
-  late List<String> cafeList = ["dorm","student","staff"];
+  List<String> cafeList = ["dorm", "student", "staff"];
 
 
   Future<Map<String, dynamic>?> fetchJson(String id) async {
@@ -100,6 +100,7 @@ class DataController {
   }
 
   Future<DayMeal> fetchWeeklyData(String id) async {
+    this.cafeList = await getCafePriority(); // TODO: 카페우선순위 불러오는 함수의 순서를 어디에 있어야할까?
     loadSeveralData(id);
     return await loadDataFromId(id);
   }
@@ -123,4 +124,9 @@ class DataController {
     prefs.setStringList("cafePriority", items);
   }
 
+  Future<List<String>> getCafePriority() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    this.cafeList = prefs.getStringList("cafePriority") ?? ["dorm", "student", "staff"];
+    return this.cafeList;
+  }
 }
