@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_widgetkit/flutter_widgetkit.dart';
 import 'package:inhameal_flutter_project/View/swipe_screen.dart';
 import 'package:intl/intl.dart';
 import '../Controller/data_controller.dart';
+import '../Model/WidgetData.dart';
 import '../Model/day_meal.dart';
 import '../constants/colors.dart';
 
@@ -21,6 +25,10 @@ class _LoadPageState extends State<LoadPage> {
     return formattedDate;
   }
 
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<DayMeal>(
@@ -37,14 +45,12 @@ class _LoadPageState extends State<LoadPage> {
     );
   }
 
-
   Widget reloadView() {
     return Scaffold(
       appBar: AppBar(
         title: Text(
           ":(",
-          style: TextStyle(
-              color: AppColors.skyBlue, fontWeight: FontWeight.w700),
+          style: TextStyle(color: AppColors.skyBlue, fontWeight: FontWeight.w700),
         ),
         backgroundColor: Colors.white,
         centerTitle: true,
