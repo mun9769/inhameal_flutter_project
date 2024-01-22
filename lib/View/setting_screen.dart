@@ -1,10 +1,9 @@
-import 'dart:math';
 import 'dart:ui';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:inhameal_flutter_project/Controller/data_controller.dart';
 import '../constants/static_variable.dart';
+import 'component/custom_reorderable_list_view.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({super.key, required this.parentSetState});
@@ -56,34 +55,34 @@ class _CafePriorityListWidgetState extends State<CafePriorityListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return ReorderableListView(
-      shrinkWrap: true,
-      primary: false,
-      header: Text("식당 순서 설정",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      children: <Widget>[
-        for (int index = 0; index < _items.length; index += 1)
-          ListTile(
-            key: Key('$index'),
-            title: Text(AppVar.cafeKorean[_items[index]] ?? "식당"),
-            trailing: ReorderableDragStartListener(
-                index: index, child: const Icon(Icons.drag_handle)),
-          ),
-      ],
-
-
-      onReorder: (int oldIndex, int newIndex) {
-        setState(() {
-          if (oldIndex < newIndex) {
-            newIndex -= 1;
-          }
-          final String item = _items.removeAt(oldIndex);
-          _items.insert(newIndex, item);
-        });
-        _dataController.updateCafePriority(_items);
-        widget.parentSetState();
+    return NotificationListener<OverscrollIndicatorNotification>(
+      onNotification: (overScroll) {
+        overScroll.disallowIndicator();
+        return true;
       },
+      child: CustomReorderableListView.separated(
+          itemCount: _items.length,
+          separatorBuilder: (_, __) => const Divider(height: 16),
+          itemBuilder: (_, int index) => ListTile(
+                key: Key('$index'),
+                title: Text(AppVar.cafeKorean[_items[index]] ?? "식당"),
+                trailing: ReorderableDragStartListener(
+                    index: index, child: const Icon(Icons.drag_handle)),
+              ),
+          shrinkWrap: true,
+          onReorder: (int oldIndex, int newIndex) {
+            setState(() {
+              if (oldIndex < newIndex) {
+                newIndex -= 1;
+              }
+              final String item = _items.removeAt(oldIndex);
+              _items.insert(newIndex, item);
+            });
+            _dataController.updateCafePriority(_items);
+            widget.parentSetState();
+          },
+          header: Text("식당 순서 설정",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
     );
   }
 }
