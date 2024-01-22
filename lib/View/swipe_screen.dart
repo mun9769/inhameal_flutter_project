@@ -33,7 +33,7 @@ class _SwipePageState extends State<SwipePage> {
     super.initState();
     _dataController.getCafePriority().then((_) {
         initPages();
-    }); // TODO: _dataController 생성할 때 비동기함수를 통해 데이터를 fetch하고 싶다.
+    }); // TODO: _dataController가 생성되는 시점에 cafeList를 비동기함수를 통해 초기화해야한다.
     initPages();
     currentDate = DateTime.parse(widget.dayMeal.id);
   }
