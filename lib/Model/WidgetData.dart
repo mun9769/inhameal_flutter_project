@@ -23,8 +23,8 @@ class WidgetData {
 }
 
 class TestWidgetData {
-  final String lunch;
-  final String dinner;
+  final List<dynamic> lunch;
+  final List<dynamic> dinner;
   TestWidgetData({required this.lunch, required this.dinner}) {}
 
 
