@@ -63,6 +63,7 @@ struct FlutterWidget: Widget {
         }
         .configurationDisplayName("Flutter iOS Widget")
         .description("This is an example Flutter iOS widget.")
+        .supportedFamilies([])
     }
 }
 
