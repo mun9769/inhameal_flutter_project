@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widgetkit/flutter_widgetkit.dart';
+import 'package:inhameal_flutter_project/Model/WidgetData.dart';
 import 'package:inhameal_flutter_project/View/setting_screen.dart';
 import 'package:inhameal_flutter_project/constants/colors.dart';
 import 'package:intl/intl.dart';
@@ -34,6 +38,15 @@ class _SwipePageState extends State<SwipePage> {
     }); // TODO: _dataController가 생성되는 시점에 cafeList를 비동기함수를 통해 초기화해야한다.
     initPages();
     currentDate = DateTime.parse(widget.dayMeal.id);
+
+    _sendWidgetData();
+  }
+
+  void _sendWidgetData() {
+    final object = TestWidgetData.of(widget.dayMeal.dormCafe);
+    final data = json.encode(object.toJson());
+    WidgetKit.setItem('widgetData', data, 'group.inhameal.widget');
+    WidgetKit.reloadAllTimelines();
   }
 
   void initPages() {
