@@ -51,7 +51,7 @@ class MenuBoardView extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: Colors.white,
+          color: AppColors.white,
         ),
         width: double.infinity,
         child: Padding(
