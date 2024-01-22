@@ -54,31 +54,25 @@ class _CafePriorityListWidgetState extends State<CafePriorityListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return NotificationListener<OverscrollIndicatorNotification>(
-      onNotification: (overScroll) {
-        overScroll.disallowIndicator();
-        return true;
-      },
-      child: CustomReorderableListView.separated(
-          itemCount: _items.length,
-          separatorBuilder: (_, __) => const Divider(height: 16),
-          itemBuilder: (_, int index) => ListTile(
-                key: Key('$index'),
-                title: Text(AppVar.cafeKorean[_items[index]] ?? "식당"),
-                trailing: ReorderableDragStartListener(
-                    index: index, child: const Icon(Icons.drag_handle)),
-              ),
-          shrinkWrap: true,
-          onReorder: this.onReorder,
-          header: Padding(
-            padding: const EdgeInsets.only(top: 18.0, left: 8.0, bottom: 8.0),
-            child: Text("식당 순서 설정",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          )
-      ),
+    return ReorderableListView(
+      shrinkWrap: true,
+      primary: false,
+      header: Text("식당 순서 설정",
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      children: <Widget>[
+        for (int index = 0; index < _items.length; index += 1)
+          ListTile(
+            key: Key('$index'),
+            title: Text(AppVar.cafeKorean[_items[index]] ?? "식당"),
+            trailing: ReorderableDragStartListener(
+                index: index, child: const Icon(Icons.drag_handle)),
+          ),
+      ],
+      onReorder: this.onReorder,
     );
   }
-  
+
   void onReorder(int oldIndex, int newIndex) {
     setState(() {
       if (oldIndex < newIndex) {
