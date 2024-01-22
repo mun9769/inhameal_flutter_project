@@ -23,16 +23,14 @@ class _SwipePageState extends State<SwipePage> {
   final PageController _pageController = PageController(initialPage: 0, viewportFraction: 1);
   final DataController _dataController = DataController();
   late int selectedPage = 0;
-
   late List<Widget> _pages;
-
   late DateTime currentDate;
 
   @override
   void initState() {
     super.initState();
     _dataController.getCafePriority().then((_) {
-        initPages();
+      initPages();
     }); // TODO: _dataController가 생성되는 시점에 cafeList를 비동기함수를 통해 초기화해야한다.
     initPages();
     currentDate = DateTime.parse(widget.dayMeal.id);
@@ -68,6 +66,7 @@ class _SwipePageState extends State<SwipePage> {
     return formattedDate + day;
   }
 
+
   void getDayMeal(int days) async {
     DateTime nxt = currentDate.add(Duration(days: days));
     String formattedDate = DateFormat('yyyyMMdd').format(nxt);
@@ -76,34 +75,8 @@ class _SwipePageState extends State<SwipePage> {
       widget.dayMeal = await _dataController.fetchWeeklyData(formattedDate);
       currentDate = nxt;
     } catch (e) {
-      String content = "아직 업데이트되지 않았어요\n매주 주말에 업로드됩니다 :)";
-      showDialog(
-        context: context,
-        builder: (_) {
-          return (Theme.of(context).platform == TargetPlatform.iOS)
-              ? CupertinoAlertDialog(
-                  content: Text(content),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context, 'OK'),
-                      child: const Text("확인"),
-                    ),
-                  ],
-                )
-              : AlertDialog(
-                  // TODO: 아이폰 안드로이드, 반복코드 줄이기
-                  content: Text(content),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context, 'OK'),
-                      child: const Text("확인"),
-                    ),
-                  ],
-                );
-        },
-      );
+      _showAlert();
     }
-
     setState(() {
       initPages();
     });
@@ -214,6 +187,35 @@ class _SwipePageState extends State<SwipePage> {
           }));
         },
       ),
+    );
+  }
+
+  void _showAlert() {
+    String content = "아직 업데이트되지 않았어요\n매주 주말에 업로드됩니다 :)";
+    showDialog(
+      context: context,
+      builder: (_) {
+        return (Theme.of(context).platform == TargetPlatform.iOS)
+            ? CupertinoAlertDialog(
+          content: Text(content),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text("확인"),
+            ),
+          ],
+        )
+            : AlertDialog(
+          // TODO: 아이폰 안드로이드, 반복코드 줄이기
+          content: Text(content),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, 'OK'),
+              child: const Text("확인"),
+            ),
+          ],
+        );
+      },
     );
   }
 }
