@@ -67,7 +67,7 @@ class MenuBoardView extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
-                      color: Colors.black,
+                      // color: Colors.black,
                     ),
                   ),
                   SizedBox(width: 5),
@@ -176,7 +176,7 @@ class MenuBoardView extends StatelessWidget {
 
       rows.add(row);
     }
-    rows.add(Row(children: [Spacer(), Text(meal.price)]));
+    rows.add(Row(children: [Spacer(), Text(meal.price, style: TextStyle(color: AppColors.deepGray))]));
     Column ret = Column(
       children: [
         for (Row row in rows) row,

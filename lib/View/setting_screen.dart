@@ -21,23 +21,20 @@ class SettingPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('설정'),
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            CafePriorityListWidget(
-              parentSetState: parentSetState,
-            ),
-            Container(
-              height: 20,
-              color: Colors.black12,
-            ),
+            CafePriorityListWidget(parentSetState: parentSetState),
+            Container(height: 20, color: Colors.grey[100]),
             ConnectEmailWidget(),
           ],
         ),
       ),
     );
   }
+  // TODO: 안드에서 다크모드 잘 되는지 확인
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,21 +62,20 @@ class _CafePriorityListWidgetState extends State<CafePriorityListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return ReorderableListView(
+    return ReorderableListView.builder(
+      itemCount: _items.length,
       shrinkWrap: true,
       primary: false,
-      header: Text("식당 순서 설정",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+      header: Padding(
+        padding: const EdgeInsets.only(top: 20, bottom: 8),
+        child: Text("식당 순서", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+      ),
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      children: <Widget>[
-        for (int index = 0; index < _items.length; index += 1)
-          ListTile(
-            key: Key('$index'),
-            title: Text(AppVar.cafeKorean[_items[index]] ?? "식당"),
-            trailing: ReorderableDragStartListener(
-                index: index, child: const Icon(Icons.drag_handle)),
-          ),
-      ],
+      itemBuilder: (BuildContext context, int index) => ListTile(
+        key: Key('$index'),
+        title: Text(AppVar.cafeKorean[_items[index]] ?? "식당"),
+        trailing: ReorderableDragStartListener(index: index, child: const Icon(Icons.drag_handle)),
+      ),
       onReorder: this.onReorder,
     );
   }
@@ -96,7 +92,6 @@ class _CafePriorityListWidgetState extends State<CafePriorityListWidget> {
     widget.parentSetState();
   }
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 문의하기 위젯
@@ -124,8 +119,7 @@ class ConnectEmailWidget extends StatelessWidget {
         try {
           await FlutterEmailSender.send(email);
         } catch (error) {
-          String content =
-              "기본 메일 앱을 사용할 수 없기 때문에\n앱에서 바로 문의를 전송하기 어렵습니다.\n\n아래 이메일로 연락주시면\n친절하게 답변해드릴게요 :)\n\nmun97696@gmail.com";
+          String content = "기본 메일 앱을 사용할 수 없기 때문에\n앱에서 바로 문의를 전송하기 어렵습니다.\n\n아래 이메일로 연락주시면\n친절하게 답변해드릴게요 :)\n\nmun97696@gmail.com";
           // TODO: 디바이스별 줄개행 해결하기
           showDialog(
             context: context,
@@ -135,8 +129,7 @@ class ConnectEmailWidget extends StatelessWidget {
                       content: Text(content),
                       actions: [
                         TextButton(
-                          onPressed: () => Clipboard.setData(
-                              ClipboardData(text: "mun97696@gmail.com")),
+                          onPressed: () => Clipboard.setData(ClipboardData(text: "mun97696@gmail.com")),
                           child: const Text("이메일 복사"),
                         ),
                         TextButton(
@@ -145,12 +138,12 @@ class ConnectEmailWidget extends StatelessWidget {
                         ),
                       ],
                     )
-                  : AlertDialog( // TODO: 반복코드 줄이기
+                  : AlertDialog(
+                      // TODO: 반복코드 줄이기
                       content: Text(content),
                       actions: [
                         TextButton(
-                          onPressed: () => Clipboard.setData(
-                              ClipboardData(text: "mun97696@gmail.com")),
+                          onPressed: () => Clipboard.setData(ClipboardData(text: "mun97696@gmail.com")),
                           child: const Text("이메일 복사"),
                         ),
                         TextButton(
@@ -217,10 +210,7 @@ Map<String, dynamic> _readAndroidDeviceInfo(AndroidDeviceInfo info) {
   var manufacturer = info.manufacturer;
   var model = info.model;
 
-  return {
-    "OS 버전": "Android $release (SDK $sdkInt)",
-    "기기": "$manufacturer $model"
-  };
+  return {"OS 버전": "Android $release (SDK $sdkInt)", "기기": "$manufacturer $model"};
 }
 
 Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo info) {

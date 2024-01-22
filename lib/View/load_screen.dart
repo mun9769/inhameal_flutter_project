@@ -50,7 +50,7 @@ class _LoadPageState extends State<LoadPage> {
       appBar: AppBar(
         title: Text(
           ":(",
-          style: TextStyle(color: AppColors.skyBlue, fontWeight: FontWeight.w700),
+          style: TextStyle(color: AppColors.appBarTitle, fontWeight: FontWeight.w700),
         ),
         backgroundColor: Colors.white,
         centerTitle: true,

@@ -111,32 +111,32 @@ class _SwipePageState extends State<SwipePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset('assets/calendar.png', height: 21, width: 20),
+            Image.asset('assets/calendar.png', height: 21, width: 20, color: AppColors.appBarTitle),
             SizedBox(width: 6),
             Text(
               _appBarTitle(),
-              style: TextStyle(color: AppColors.skyBlue, fontWeight: FontWeight.w700),
+              style: TextStyle(color: AppColors.appBarTitle, fontWeight: FontWeight.w700),
             ),
           ],
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         centerTitle: true,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
-          color: _isToday() ? AppColors.deepGray : AppColors.skyBlue,
+          color: _isToday() ? AppColors.deepGray : AppColors.appBarTitle,
           onPressed: _isToday() ? null : () => getDayMeal(-1),
         ),
         actions: [
           IconButton(
             icon: Icon(Icons.arrow_forward_ios),
-            color: AppColors.skyBlue,
+            color: AppColors.appBarTitle,
             onPressed: () => getDayMeal(1),
           )
         ],
       ),
       body: Container(
-        color: AppColors.lightGray,
+        // color: AppColors.lightGray,
         child: Column(
           children: [
             Container(
@@ -159,7 +159,7 @@ class _SwipePageState extends State<SwipePage> {
                         child: Text(
                           AppVar.cafeKorean[_dataController.cafeList[i]] ?? "식당",
                           style: TextStyle(
-                            color: selectedPage == i ? AppColors.textWhite : AppColors.deepGray,
+                            color: selectedPage == i ? Colors.white : AppColors.deepGray,
                             fontSize: 14.0,
                             fontWeight: FontWeight.w800,
                           ),
@@ -193,7 +193,8 @@ class _SwipePageState extends State<SwipePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(CupertinoIcons.gear_alt, size: 28),
+        backgroundColor: AppColors.gray,
+        child: const Icon(CupertinoIcons.gear_alt, size: 28, color: AppColors.skyBlue),
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return SettingPage(parentSetState: this.initPages);
@@ -210,24 +211,24 @@ class _SwipePageState extends State<SwipePage> {
       builder: (_) {
         return (Theme.of(context).platform == TargetPlatform.iOS)
             ? CupertinoAlertDialog(
-          content: Text(content),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, 'OK'),
-              child: const Text("확인"),
-            ),
-          ],
-        )
+                content: Text(content),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: const Text("확인"),
+                  ),
+                ],
+              )
             : AlertDialog(
-          // TODO: 아이폰 안드로이드, 반복코드 줄이기
-          content: Text(content),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, 'OK'),
-              child: const Text("확인"),
-            ),
-          ],
-        );
+                // TODO: 아이폰 안드로이드, 반복코드 줄이기
+                content: Text(content),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: const Text("확인"),
+                  ),
+                ],
+              );
       },
     );
   }
