@@ -51,7 +51,7 @@ class MenuBoardView extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: AppColors.white,
+          color: Theme.of(context).colorScheme.onSurface,
         ),
         width: double.infinity,
         child: Padding(
@@ -77,12 +77,12 @@ class MenuBoardView extends StatelessWidget {
                           EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(22.0),
-                        color: AppColors.lightGray,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                       child: Text(
                         "미운영",
                         style: TextStyle(
-                          color: AppColors.deepGray,
+                          color: Theme.of(context).colorScheme.background,
                           fontSize: 12.0,
                         ),
                       ),
@@ -94,12 +94,12 @@ class MenuBoardView extends StatelessWidget {
                           EdgeInsets.symmetric(horizontal: 15, vertical: 6),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(22.0),
-                        color: AppColors.lightGray,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                       child: Text(
                         meals[0].openTime,
                         style: TextStyle(
-                          color: AppColors.deepGray,
+                          color: Theme.of(context).colorScheme.background,
                           fontSize: 12.0,
                         ),
                       ),
@@ -176,7 +176,7 @@ class MenuBoardView extends StatelessWidget {
 
       rows.add(row);
     }
-    rows.add(Row(children: [Spacer(), Text(meal.price, style: TextStyle(color: AppColors.deepGray))]));
+    rows.add(Row(children: [Spacer(), Text(meal.price, style: TextStyle(color: Theme.of(context).colorScheme.background))]));
     Column ret = Column(
       children: [
         for (Row row in rows) row,

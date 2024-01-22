@@ -111,32 +111,32 @@ class _SwipePageState extends State<SwipePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset('assets/calendar.png', height: 21, width: 20, color: AppColors.appBarTitle),
+            Image.asset('assets/calendar.png', height: 21, width: 20, color: Theme.of(context).colorScheme.onPrimary),
             SizedBox(width: 6),
             Text(
               _appBarTitle(),
-              style: TextStyle(color: AppColors.appBarTitle, fontWeight: FontWeight.w700),
+              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.w700),
             ),
           ],
         ),
-        backgroundColor: AppColors.white,
+        backgroundColor: Theme.of(context).colorScheme.onSurface,
         centerTitle: true,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
-          color: _isToday() ? AppColors.deepGray : AppColors.appBarTitle,
+          color: _isToday() ? Theme.of(context).colorScheme.background : Theme.of(context).colorScheme.onPrimary,
           onPressed: _isToday() ? null : () => getDayMeal(-1),
         ),
         actions: [
           IconButton(
             icon: Icon(Icons.arrow_forward_ios),
-            color: AppColors.appBarTitle,
+            color: Theme.of(context).colorScheme.onPrimary,
             onPressed: () => getDayMeal(1),
           )
         ],
       ),
       body: Container(
-        // color: AppColors.lightGray,
+        // color: Theme.of(context).colorScheme.secondary,
         child: Column(
           children: [
             Container(
@@ -154,12 +154,12 @@ class _SwipePageState extends State<SwipePage> {
                         padding: EdgeInsets.only(left: 22, right: 22, top: 8, bottom: 8),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(22.0),
-                          color: selectedPage == i ? AppColors.skyBlue : AppColors.gray,
+                          color: selectedPage == i ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSecondary,
                         ),
                         child: Text(
                           AppVar.cafeKorean[_dataController.cafeList[i]] ?? "식당",
                           style: TextStyle(
-                            color: selectedPage == i ? Colors.white : AppColors.deepGray,
+                            color: selectedPage == i ? Colors.white : Theme.of(context).colorScheme.background,
                             fontSize: 14.0,
                             fontWeight: FontWeight.w800,
                           ),
@@ -193,8 +193,8 @@ class _SwipePageState extends State<SwipePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.gray,
-        child: const Icon(CupertinoIcons.gear_alt, size: 28, color: AppColors.skyBlue),
+        backgroundColor: Theme.of(context).colorScheme.onSecondary,
+        child: Icon(CupertinoIcons.gear_alt, size: 28, color: Theme.of(context).colorScheme.primary),
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return SettingPage(parentSetState: this.initPages);

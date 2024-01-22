@@ -50,14 +50,14 @@ class _LoadPageState extends State<LoadPage> {
       appBar: AppBar(
         title: Text(
           ":(",
-          style: TextStyle(color: AppColors.appBarTitle, fontWeight: FontWeight.w700),
+          style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.w700),
         ),
         backgroundColor: Colors.white,
         centerTitle: true,
         elevation: 0,
       ),
       body: Container(
-        color: AppColors.lightGray,
+        color: Theme.of(context).colorScheme.secondary,
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
