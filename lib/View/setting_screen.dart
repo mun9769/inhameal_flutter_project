@@ -10,7 +10,6 @@ import 'package:inhameal_flutter_project/Controller/data_controller.dart';
 import 'package:ios_utsname_ext/extension.dart';
 import 'package:package_info/package_info.dart';
 import '../constants/static_variable.dart';
-import 'component/custom_reorderable_list_view.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({super.key, required this.parentSetState});
@@ -94,7 +93,6 @@ class _CafePriorityListWidgetState extends State<CafePriorityListWidget> {
   }
 }
 
-
 class ConnectEmailWidget extends StatelessWidget {
   ConnectEmailWidget({super.key});
 
@@ -117,32 +115,49 @@ class ConnectEmailWidget extends StatelessWidget {
         try {
           await FlutterEmailSender.send(email);
         } catch (error) {
-          String content = "기본 메일 앱을 사용할 수 없기 때문에 앱에서 바로 문의를 전송하기 어려운 상황입니다.\n\n아래 이메일로 연락주시면 친절하게 답변해드릴게요 :)\n\nmun97696@gmail.com";
+          String content =
+              "기본 메일 앱을 사용할 수 없기 때문에\n앱에서 바로 문의를 전송하기 어렵습니다.\n\n아래 이메일로 연락주시면\n친절하게 답변해드릴게요 :)\n\nmun97696@gmail.com";
+          // TODO: 디바이스별 줄개행 해결하기
           showDialog(
             context: context,
-            builder: (_) => CupertinoAlertDialog(
-                content: Text(content),
-                actions: [
-                  TextButton(
-                    onPressed: () => Clipboard.setData(ClipboardData(text:"mun97696@gmail.com")),
-                    child: const Text("이메일 복사"),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.pop(context, 'OK'),
-                    child: const Text("확인"),
-                  ),
-                ]
-            ),
+            builder: (_) {
+              return (Theme.of(context).platform == TargetPlatform.iOS)
+                  ? CupertinoAlertDialog(
+                      content: Text(content),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Clipboard.setData(
+                              ClipboardData(text: "mun97696@gmail.com")),
+                          child: const Text("이메일 복사"),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'OK'),
+                          child: const Text("확인"),
+                        ),
+                      ],
+                    )
+                  : AlertDialog( // TODO: 반복코드 줄이기
+                      content: Text(content),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Clipboard.setData(
+                              ClipboardData(text: "mun97696@gmail.com")),
+                          child: const Text("이메일 복사"),
+                        ),
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'OK'),
+                          child: const Text("확인"),
+                        ),
+                      ],
+                    );
+            },
           );
         }
       },
       child: const Text('문의하기'),
     );
   }
-  // TODO: 안드랑 아이폰 스타일 다이얼로그 스타일 변경
-  // TODO: 날짜 없을 때 나오는 다이얼로그 통일
 }
-
 
 Future<String> _getEmailBody() async {
   Map<String, dynamic> appInfo = await _getAppInfo();
@@ -166,8 +181,6 @@ Future<String> _getEmailBody() async {
   return body;
 }
 
-
-
 Future<Map<String, dynamic>> _getDeviceInfo() async {
   DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   Map<String, dynamic> deviceData = <String, dynamic>{};
@@ -178,10 +191,8 @@ Future<Map<String, dynamic>> _getDeviceInfo() async {
     } else if (Platform.isIOS) {
       deviceData = _readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
     }
-  } catch(error) {
-    deviceData = {
-      "Error": "Failed to get platform version."
-    };
+  } catch (error) {
+    deviceData = {"Error": "Failed to get platform version."};
   }
 
   return deviceData;
@@ -204,15 +215,10 @@ Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo info) {
   var version = info.systemVersion;
   var machine = info.utsname.machine.iOSProductName;
 
-  return {
-  "OS 버전": "$systemName $version",
-  "기기": "$machine"
-  };
+  return {"OS 버전": "$systemName $version", "기기": "$machine"};
 }
 
 Future<Map<String, dynamic>> _getAppInfo() async {
   PackageInfo info = await PackageInfo.fromPlatform();
-  return {
-    "인하밥먹자 버전": info.version
-  };
+  return {"인하밥먹자 버전": info.version};
 }

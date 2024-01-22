@@ -20,8 +20,7 @@ class SwipePage extends StatefulWidget {
 }
 
 class _SwipePageState extends State<SwipePage> {
-  final PageController _pageController =
-      PageController(initialPage: 0, viewportFraction: 1);
+  final PageController _pageController = PageController(initialPage: 0, viewportFraction: 1);
   final DataController _dataController = DataController();
   late int selectedPage = 0;
 
@@ -76,19 +75,31 @@ class _SwipePageState extends State<SwipePage> {
     try {
       widget.dayMeal = await _dataController.fetchWeeklyData(formattedDate);
       currentDate = nxt;
-    } catch(e) {
+    } catch (e) {
+      String content = "아직 업데이트되지 않았어요\n매주 주말에 업로드됩니다 :)";
       showDialog(
         context: context,
-        builder: (context) {
-          return AlertDialog(
-            content: Text("아직 업데이트되지 않았어요\n매주 주말에 업로드됩니다"),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () { Navigator.of(context).pop(); },
-                child: Text('확인'),
-              ),
-            ],
-          );
+        builder: (_) {
+          return (Theme.of(context).platform == TargetPlatform.iOS)
+              ? CupertinoAlertDialog(
+                  content: Text(content),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'OK'),
+                      child: const Text("확인"),
+                    ),
+                  ],
+                )
+              : AlertDialog(
+                  // TODO: 아이폰 안드로이드, 반복코드 줄이기
+                  content: Text(content),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'OK'),
+                      child: const Text("확인"),
+                    ),
+                  ],
+                );
         },
       );
     }
@@ -118,8 +129,7 @@ class _SwipePageState extends State<SwipePage> {
             SizedBox(width: 6),
             Text(
               _appBarTitle(),
-              style: TextStyle(
-                  color: AppColors.skyBlue, fontWeight: FontWeight.w700),
+              style: TextStyle(color: AppColors.skyBlue, fontWeight: FontWeight.w700),
             ),
           ],
         ),
@@ -152,25 +162,18 @@ class _SwipePageState extends State<SwipePage> {
                   for (int i = 0; i < _pages.length; i++)
                     GestureDetector(
                       onTap: () {
-                        _pageController.animateToPage(i,
-                            duration: Duration(milliseconds: 500),
-                            curve: Curves.ease);
+                        _pageController.animateToPage(i, duration: Duration(milliseconds: 500), curve: Curves.ease);
                       },
                       child: Container(
-                        padding: EdgeInsets.only(
-                            left: 22, right: 22, top: 8, bottom: 8),
+                        padding: EdgeInsets.only(left: 22, right: 22, top: 8, bottom: 8),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(22.0),
-                          color: selectedPage == i
-                              ? AppColors.deepBlue
-                              : AppColors.gray,
+                          color: selectedPage == i ? AppColors.deepBlue : AppColors.gray,
                         ),
                         child: Text(
                           AppVar.cafeKorean[cafeList[i]] ?? "식당",
                           style: TextStyle(
-                            color: selectedPage == i
-                                ? AppColors.textWhite
-                                : AppColors.deepGray,
+                            color: selectedPage == i ? AppColors.textWhite : AppColors.deepGray,
                             fontSize: 14.0,
                             fontWeight: FontWeight.w800,
                           ),
@@ -205,14 +208,12 @@ class _SwipePageState extends State<SwipePage> {
       ),
       floatingActionButton: FloatingActionButton(
         child: const Icon(CupertinoIcons.gear_alt, size: 28),
-        onPressed: () { Navigator.push(context,
-            MaterialPageRoute(
-              builder: (context) {
-                return SettingPage(parentSetState: this.initPages);
-              }
-        )); },
-
-      )
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return SettingPage(parentSetState: this.initPages);
+          }));
+        },
+      ),
     );
   }
 }
