@@ -1,11 +1,15 @@
 PODS:
+  - device_info (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
-  - flutter_widgetkit (0.0.1):
+  - flutter_email_sender (0.0.1):
     - Flutter
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
   - home_widget (0.0.1):
+    - Flutter
+  - package_info (0.0.1):
     - Flutter
   - path_provider_foundation (0.0.1):
     - Flutter
@@ -16,10 +20,12 @@ PODS:
   - Toast (4.0.0)
 
 DEPENDENCIES:
+  - device_info (from `.symlinks/plugins/device_info/ios`)
   - Flutter (from `Flutter`)
-  - flutter_widgetkit (from `.symlinks/plugins/flutter_widgetkit/ios`)
+  - flutter_email_sender (from `.symlinks/plugins/flutter_email_sender/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - home_widget (from `.symlinks/plugins/home_widget/ios`)
+  - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
 
@@ -28,24 +34,30 @@ SPEC REPOS:
     - Toast
 
 EXTERNAL SOURCES:
+  device_info:
+    :path: ".symlinks/plugins/device_info/ios"
   Flutter:
     :path: Flutter
-  flutter_widgetkit:
-    :path: ".symlinks/plugins/flutter_widgetkit/ios"
+  flutter_email_sender:
+    :path: ".symlinks/plugins/flutter_email_sender/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   home_widget:
     :path: ".symlinks/plugins/home_widget/ios"
+  package_info:
+    :path: ".symlinks/plugins/package_info/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
 
 SPEC CHECKSUMS:
+  device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  flutter_widgetkit: a0e9b0d50ee9bec366dad36c639509daaafc397a
+  flutter_email_sender: 02d7443217d8c41483223627972bfdc09f74276b
   fluttertoast: 31b00dabfa7fb7bacd9e7dbee580d7a2ff4bf265
   home_widget: 0434835a4c9a75704264feff6be17ea40e0f0d57
+  package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
