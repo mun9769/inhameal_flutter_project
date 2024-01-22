@@ -19,7 +19,6 @@ class SettingPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 12),
             CafePriorityListWidget(
               parentSetState: parentSetState,
             ),
@@ -71,8 +70,12 @@ class _CafePriorityListWidgetState extends State<CafePriorityListWidget> {
               ),
           shrinkWrap: true,
           onReorder: this.onReorder,
-          header: Text("식당 순서 설정",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
+          header: Padding(
+            padding: const EdgeInsets.only(top: 18.0, left: 8.0, bottom: 8.0),
+            child: Text("식당 순서 설정",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          )
+      ),
     );
   }
   
