@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class DayMeal {
   final String id;
 
@@ -50,14 +52,16 @@ class Cafeteria {
     );
   }
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() {
+    return {
       'name': this.name,
-      'brunch': this.brunch.map((ele) => ele.toJson()).toString(),
-      'lunch': this.lunch.map((ele) => ele.toJson()).toString(),
-      'dinner': this.dinner.map((ele) => ele.toJson()).toString(),
-      'other':  this.other?.map((ele) => ele.toJson()).toString(),
+      'brunch': brunch.map((ele) => ele.toJson()).toList(),
+      'lunch': lunch.map((ele) => ele.toJson()).toList(),
+      'dinner': dinner.map((ele) => ele.toJson()).toList(),
+      'other': other?.map((ele) => ele.toJson()).toList(),
       'skipReason': this.skipReason
     };
+  }
 }
 
 class Meal {

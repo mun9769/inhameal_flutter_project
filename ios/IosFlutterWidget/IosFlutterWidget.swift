@@ -9,9 +9,16 @@ import WidgetKit
 import SwiftUI
 
 
+struct Meal: Decodable, Hashable {
+    let name: String
+    let menus: [String]
+    let opentime: String
+    let price: String
+}
+
 struct WidgetData: Decodable, Hashable {
-    let title: String
-    let desc: String
+    let lunch: [Meal]
+    let dinner: [Meal]
 }
 
 struct FlutterEntry: TimelineEntry {
@@ -22,7 +29,7 @@ struct FlutterEntry: TimelineEntry {
 
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> FlutterEntry {
-        return FlutterEntry(date: Date(), widgetData: WidgetData(title: "ios title", desc: "ios desc"))
+        return FlutterEntry(date: Date(), widgetData: WidgetData(lunch: [], dinner: [])) // TODO: 더미값넣기
     }
 
     func getSnapshot(in context: Context, completion: @escaping (FlutterEntry) -> ()) {
@@ -37,7 +44,7 @@ struct Provider: TimelineProvider {
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         let sharedDefaults = UserDefaults.init(suiteName: "group.inhameal.widget")
         let flutterData = try? JSONDecoder().decode(WidgetData.self, from: (sharedDefaults?
-            .string(forKey: "widgetData")?.data(using: .utf8)) ?? Data())
+            .string(forKey: "widgetData")?.data(using: .utf8)) ?? Data()) // TODO: decode 실패시 기본값 넣기
 
         let entryDate = Calendar.current.date(byAdding: .hour, value: 24, to: Date())!
         let entry = FlutterEntry(date: entryDate, widgetData: flutterData)
@@ -53,7 +60,6 @@ struct FlutterWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             FlutterWidgetEntryView(entry: entry)
-                .containerBackground(.fill.tertiary, for: .widget)
         }
         .configurationDisplayName("Flutter iOS Widget")
         .description("This is an example Flutter iOS widget.")
@@ -63,13 +69,16 @@ struct FlutterWidget: Widget {
 struct FlutterWidgetEntryView : View {
     var entry: Provider.Entry
 
+    init(entry: Provider.Entry) {
+        self.entry = entry
+    }
+    
     var body: some View {
         VStack {
-            Text("Time:")
             Text(entry.date, style: .time)
-
-            Text("Emoji:")
-            Text(entry.widgetData?.title ?? "title not found")
+            ForEach((entry.widgetData?.lunch[0].menus)!, id: \.self) { str in
+                Text(str)
+            }
         }
     }
 }
@@ -77,5 +86,8 @@ struct FlutterWidgetEntryView : View {
 #Preview(as: .systemSmall) {
     FlutterWidget()
 } timeline: {
-    FlutterEntry(date: .now, widgetData: WidgetData(title: "preview title", desc: "preview desc"))
+    FlutterEntry(date: .now, widgetData: WidgetData(lunch: [meal], dinner: [meal]))
 }
+
+
+let meal = Meal(name: "meal_name", menus: ["김치","밥","오뚜기","햇반"], opentime: "opentime", price: "4800원")
