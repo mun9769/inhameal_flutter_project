@@ -29,7 +29,7 @@ class MealPage extends StatelessWidget {
                   MenuBoardView(category: 'dinner', meals: cafe.dinner),
                   if(cafe.other != null)
                     MenuBoardView(category: 'other', meals: cafe.other!),
-                  SizedBox(height: 68),
+                  SizedBox(height: 108),
 
                   if(cafe.skipReason != null)
                     Text(cafe.skipReason!)

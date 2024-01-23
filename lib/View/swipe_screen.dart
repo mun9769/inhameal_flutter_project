@@ -193,8 +193,8 @@ class _SwipePageState extends State<SwipePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).colorScheme.onSecondary,
-        child: Icon(CupertinoIcons.gear_alt, size: 28, color: Theme.of(context).colorScheme.primary),
+        elevation: 0.1,
+        child: Icon(CupertinoIcons.gear_alt, size: 28, color: Theme.of(context).colorScheme.onPrimary),
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return SettingPage(parentSetState: this.initPages);
