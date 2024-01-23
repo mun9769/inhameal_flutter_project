@@ -20,21 +20,50 @@ class SettingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('설정'),
+        title: Text(
+          '설정',
+          style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.w700),
+        ),
         elevation: 0,
+        backgroundColor: Theme.of(context).colorScheme.onSurface,
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            CafePriorityListWidget(parentSetState: parentSetState),
-            Container(height: 20, color: Colors.grey[100]),
-            ConnectEmailWidget(),
+            Container(
+              margin: EdgeInsets.only(left: 8, right: 8, top: 8),
+              decoration: BoxDecoration(
+                border: Border.all(width: 0.8, color: Theme.of(context).colorScheme.background),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: CafePriorityListWidget(parentSetState: parentSetState),
+            ),
+
+            Container(height: 12),
+
+            Container(
+              margin: EdgeInsets.only(left: 8, right: 8, top: 8),
+              decoration: BoxDecoration(
+                border: Border.all(width: 0.8, color: Theme.of(context).colorScheme.background),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12, top: 16),
+                    child: Text("앱", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  ),
+                  ConnectEmailWidget(),
+                ],
+              ),
+            ),
           ],
         ),
       ),
     );
   }
-  // TODO: 안드에서 다크모드 잘 되는지 확인
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,14 +96,18 @@ class _CafePriorityListWidgetState extends State<CafePriorityListWidget> {
       shrinkWrap: true,
       primary: false,
       header: Padding(
-        padding: const EdgeInsets.only(top: 20, bottom: 8),
+        padding: const EdgeInsets.only(left: 12, bottom: 12, top: 16),
         child: Text("식당 순서", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      itemBuilder: (BuildContext context, int index) => ListTile(
+      itemBuilder: (BuildContext context, int index) => Card(
         key: Key('$index'),
-        title: Text(AppVar.cafeKorean[_items[index]] ?? "식당"),
-        trailing: ReorderableDragStartListener(index: index, child: const Icon(Icons.drag_handle)),
+        elevation: 0,
+        color: Colors.transparent,
+        margin: EdgeInsets.symmetric(horizontal: 8),
+        child: ListTile(
+          title: Text(AppVar.cafeKorean[_items[index]] ?? "식당"),
+          trailing: ReorderableDragStartListener(index: index, child: const Icon(Icons.drag_handle)),
+        ),
       ),
       onReorder: this.onReorder,
     );
@@ -102,8 +135,9 @@ class ConnectEmailWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () async {
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () async {
         String body = await _getEmailBody();
 
         final Email email = Email(
@@ -119,7 +153,7 @@ class ConnectEmailWidget extends StatelessWidget {
         try {
           await FlutterEmailSender.send(email);
         } catch (error) {
-          String content = "기본 메일 앱을 사용할 수 없기 때문에\n앱에서 바로 문의를 전송하기 어렵습니다.\n\n아래 이메일로 연락주시면\n친절하게 답변해드릴게요 :)\n\nmun97696@gmail.com";
+          String content = "기본 메일 앱을 사용할 수 없기 때문에\n앱에서 바로 문의를 전송하기 어렵습니다.\n\n아래 이메일로 연락주시면\n답변해드릴게요 :)\n\nmun97696@gmail.com";
           // TODO: 디바이스별 줄개행 해결하기
           showDialog(
             context: context,
@@ -141,14 +175,17 @@ class ConnectEmailWidget extends StatelessWidget {
                   : AlertDialog(
                       // TODO: 반복코드 줄이기
                       content: Text(content),
+                      actionsPadding: EdgeInsets.only(right: 20, bottom: 20),
                       actions: [
-                        TextButton(
-                          onPressed: () => Clipboard.setData(ClipboardData(text: "mun97696@gmail.com")),
-                          child: const Text("이메일 복사"),
+                        GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () => Clipboard.setData(ClipboardData(text: "mun97696@gmail.com")),
+                          child: Text("이메일복사"),
                         ),
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, 'OK'),
-                          child: const Text("확인"),
+                        GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          onTap: () => Navigator.pop(context, 'OK'),
+                          child: Text("확인"),
                         ),
                       ],
                     );
@@ -156,7 +193,14 @@ class ConnectEmailWidget extends StatelessWidget {
           );
         }
       },
-      child: const Text('문의하기'),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: ListTile(
+          title: Text("문의하기"),
+          trailing: Icon(Icons.keyboard_arrow_right_rounded),
+        ),
+      ),
+
     );
   }
 }
