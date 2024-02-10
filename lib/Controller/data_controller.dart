@@ -118,10 +118,9 @@ class DataController {
     return DayMeal.fromJson(dayJson);
   }
 
-  void updateCafePriority(List<String> items) async {
+  void updateCafePriority() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    cafeList = items;
-    prefs.setStringList("cafePriority", items);
+    prefs.setStringList("cafePriority", this.cafeList);
   }
 
   Future<List<String>> getCafePriority() async {
