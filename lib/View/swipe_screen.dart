@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widgetkit/flutter_widgetkit.dart';
 import 'package:inhameal_flutter_project/Model/WidgetData.dart';
-import 'package:inhameal_flutter_project/View/setting_screen.dart';
 import 'package:inhameal_flutter_project/constants/colors.dart';
 import 'package:intl/intl.dart';
 import '../Controller/data_controller.dart';
@@ -34,9 +33,9 @@ class _SwipePageState extends State<SwipePage> {
   void initState() {
     super.initState();
     _dataController.getCafePriority().then((_) {
-      initPages();
+      _initPages();
     }); // TODO: _dataController가 생성되는 시점에 cafeList를 비동기함수를 통해 초기화해야한다.
-    initPages();
+    _initPages();
     currentDate = DateTime.parse(widget.dayMeal.id);
 
     _sendWidgetData();
@@ -49,7 +48,7 @@ class _SwipePageState extends State<SwipePage> {
     WidgetKit.reloadAllTimelines();
   }
 
-  void initPages() {
+  void _initPages() {
     final Map<String, Widget> cafepages = {
       "dorm": MealPage(cafe: widget.dayMeal.dormCafe, onRefresh: refreshData),
       "student": MealPage(cafe: widget.dayMeal.studentCafe, onRefresh: refreshData),
@@ -79,7 +78,6 @@ class _SwipePageState extends State<SwipePage> {
     return formattedDate + day;
   }
 
-
   void getDayMeal(int days) async {
     DateTime nxt = currentDate.add(Duration(days: days));
     String formattedDate = DateFormat('yyyyMMdd').format(nxt);
@@ -91,7 +89,7 @@ class _SwipePageState extends State<SwipePage> {
       _showAlert();
     }
     setState(() {
-      initPages();
+      _initPages();
     });
   }
 
@@ -101,6 +99,32 @@ class _SwipePageState extends State<SwipePage> {
     final String today = formatter.format(DateTime.now());
 
     return formattedCurrenntDate == today;
+  }
+
+  void _onReorder(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    int diff = newIndex - oldIndex;
+    int go = 0;
+    if (diff.abs() == 2) {
+      go = (newIndex - oldIndex + selectedPage + 3) % 3;
+    } else {
+      go = (newIndex + oldIndex - selectedPage + 3) % 3;
+    }
+
+    setState(() {
+      final String item = _dataController.cafeList.removeAt(oldIndex);
+      _dataController.cafeList.insert(newIndex, item);
+      _initPages();
+      _pageController.animateToPage(go, duration: Duration(milliseconds: 600), curve: Curves.easeOutCubic);
+    });
+    _dataController.updateCafePriority();
+    selectedPage = go;
+    // setState(() {
+    // });
+    // _pageController.animateTo(1.0, duration: Duration(milliseconds: 600), curve: Curves.easeOutCubic);
+    // TODO: alert window
   }
 
   @override
@@ -135,39 +159,53 @@ class _SwipePageState extends State<SwipePage> {
           )
         ],
       ),
+
       body: Container(
         // color: Theme.of(context).colorScheme.secondary,
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(top: 19, bottom: 14, left: 10, right: 10),
-              constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  for (int i = 0; i < _pages.length; i++)
-                    GestureDetector(
-                      onTap: () {
-                        _pageController.animateToPage(i, duration: Duration(milliseconds: 500), curve: Curves.ease);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.only(left: 22, right: 22, top: 8, bottom: 8),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(22.0),
-                          color: selectedPage == i ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSecondary,
-                        ),
-                        child: Text(
-                          AppVar.cafeKorean[_dataController.cafeList[i]] ?? "식당",
-                          style: TextStyle(
-                            color: selectedPage == i ? Colors.white : Theme.of(context).colorScheme.background,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w800,
+              height: 50,
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              child: Theme(
+                data: Theme.of(context).copyWith(
+                  canvasColor: Colors.transparent,
+                  shadowColor: Colors.blue.withOpacity(0.2),
+                ),
+                child: ReorderableListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: _dataController.cafeList.length,
+                  itemBuilder: (BuildContext context, int i) {
+                      return GestureDetector(
+                        key: ValueKey(i),
+                        onTap: () {
+                          _pageController.animateToPage(i, duration: Duration(milliseconds: 300), curve: Curves.ease);
+                        },
+                        child: Container(
+                          margin: EdgeInsets.symmetric(horizontal: 6, vertical: 10),
+                          width: MediaQuery.of(context).size.width / 3 - 20,
+
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(22.0),
+                            color: selectedPage == i ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSecondary,
                           ),
-                          textScaleFactor: ScaleSize.textScaleFactor(context),
+                          child: Center(
+                            child: Text(
+                              AppVar.cafeKorean[_dataController.cafeList[i]] ?? "식당",
+                              style: TextStyle(
+                                color: selectedPage == i ? Colors.white : Theme.of(context).colorScheme.background,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w800,
+                              ),
+                              textScaleFactor: ScaleSize.textScaleFactor(context),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                ],
+                      );
+                  },
+                  onReorder: _onReorder,
+                ),
               ),
             ),
             Expanded(
@@ -191,15 +229,6 @@ class _SwipePageState extends State<SwipePage> {
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        elevation: 0.1,
-        child: Icon(CupertinoIcons.gear_alt, size: 28, color: Theme.of(context).colorScheme.onPrimary),
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return SettingPage(parentSetState: this.initPages);
-          }));
-        },
       ),
     );
   }
