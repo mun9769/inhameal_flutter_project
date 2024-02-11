@@ -170,13 +170,14 @@ class DataController {
     if (oldIndex < newIndex) { newIndex -= 1; }
 
     if ((newIndex - oldIndex).abs() == 2) {
-      selectedPage = (newIndex - oldIndex + selectedPage + 3) % 3;
+      this.selectedPage = (newIndex - oldIndex + selectedPage + 3) % 3;
     } else {
-      selectedPage = (newIndex + oldIndex - selectedPage + 3) % 3;
+      this.selectedPage = (newIndex + oldIndex - selectedPage + 3) % 3;
     }
     final String item = this.cafeList.removeAt(oldIndex);
     this.cafeList.insert(newIndex, item);
 
+    this.cafepages = _setCafepages();
     _updateCafePriority();
   }
 

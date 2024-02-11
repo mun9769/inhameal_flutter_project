@@ -22,7 +22,7 @@ class SwipePage extends StatefulWidget {
 }
 
 class _SwipePageState extends State<SwipePage> {
-  final PageController _pageController = PageController(initialPage: 0, viewportFraction: 1);
+  late PageController _pageController;
   final DataController _dataController = DataController(); // TODO: widget으로 올리기
   late int selectedPage;
   late DayMeal dayMeal; // _dataController를 참조한 것인가? 아님 복사한것인가? // final 붙여도 되나?
@@ -36,6 +36,8 @@ class _SwipePageState extends State<SwipePage> {
     currentDate = _dataController.currentDate;
     cafepages = _dataController.cafepages;
     selectedPage = _dataController.selectedPage;
+
+    _pageController = PageController(initialPage: this.selectedPage, viewportFraction: 1);
   }
 
   void _sendWidgetData() {
@@ -84,13 +86,13 @@ class _SwipePageState extends State<SwipePage> {
                         width: MediaQuery.of(context).size.width / 3 - 20,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(22.0),
-                          color: selectedPage == i ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSecondary,
+                          color: _dataController.selectedPage == i ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSecondary,
                         ),
                         child: Center(
                           child: Text(
                             AppVar.cafeKorean[_dataController.cafeList[i]] ?? "식당",
                             style: TextStyle(
-                              color: selectedPage == i ? Colors.white : Theme.of(context).colorScheme.background,
+                              color: _dataController.selectedPage == i ? Colors.white : Theme.of(context).colorScheme.background,
                               fontSize: 14.0,
                               fontWeight: FontWeight.w800,
                             ),
@@ -114,7 +116,7 @@ class _SwipePageState extends State<SwipePage> {
                   controller: _pageController,
                   onPageChanged: (page) {
                     setState(() {
-                      selectedPage = page;
+                      _dataController.selectedPage = page;
                     });
                   },
                   children: List.generate(cafepages.length, (index) {
