@@ -13,9 +13,7 @@ import 'component/menu_board_view.dart';
 
 //ignore: must_be_immutable
 class SwipePage extends StatefulWidget {
-  final VoidCallback onUpdateCafeList;
-
-  SwipePage({Key? key, required this.onUpdateCafeList}) : super(key: key);
+  SwipePage({Key? key}) : super(key: key);
 
   @override
   State<SwipePage> createState() => _SwipePageState();
@@ -52,7 +50,6 @@ class _SwipePageState extends State<SwipePage> {
     setState(() {
       this.selectedPage = _dataController.selectedPage;
     });
-    widget.onUpdateCafeList();
     // TODO: alert window
   }
 

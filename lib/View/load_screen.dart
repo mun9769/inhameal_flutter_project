@@ -8,7 +8,6 @@ import '../Controller/data_controller.dart';
 import '../Model/WidgetData.dart';
 import '../Model/day_meal.dart';
 import '../constants/colors.dart';
-import 'home_screen.dart';
 
 class LoadPage extends StatefulWidget {
   const LoadPage({super.key});
@@ -40,7 +39,7 @@ class _LoadPageState extends State<LoadPage> {
         } else if (snapshot.hasError) {
           return reloadView();
         } else {
-          return HomePage();
+          return SwipePage();
         }
       },
     );
