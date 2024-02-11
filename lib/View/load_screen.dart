@@ -8,6 +8,7 @@ import '../Controller/data_controller.dart';
 import '../Model/WidgetData.dart';
 import '../Model/day_meal.dart';
 import '../constants/colors.dart';
+import 'home_screen.dart';
 
 class LoadPage extends StatefulWidget {
   const LoadPage({super.key});
@@ -31,15 +32,15 @@ class _LoadPageState extends State<LoadPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<DayMeal>(
-      future: _dataController.fetchWeeklyData(_getTodayString()),
+    return FutureBuilder(
+      future: _dataController.init(_getTodayString()),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return reloadView();
         } else {
-          return SwipePage(dayMeal: snapshot.data!);
+          return HomePage();
         }
       },
     );

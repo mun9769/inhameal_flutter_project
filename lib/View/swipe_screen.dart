@@ -10,13 +10,12 @@ import '../Controller/data_controller.dart';
 import '../Model/day_meal.dart';
 import '../constants/static_variable.dart';
 import 'component/menu_board_view.dart';
-import 'meal_screen.dart';
 
 //ignore: must_be_immutable
 class SwipePage extends StatefulWidget {
-  DayMeal dayMeal;
+  final VoidCallback onUpdateCafeList;
 
-  SwipePage({Key? key, required this.dayMeal}) : super(key: key);
+  SwipePage({Key? key, required this.onUpdateCafeList}) : super(key: key);
 
   @override
   State<SwipePage> createState() => _SwipePageState();
@@ -24,144 +23,42 @@ class SwipePage extends StatefulWidget {
 
 class _SwipePageState extends State<SwipePage> {
   final PageController _pageController = PageController(initialPage: 0, viewportFraction: 1);
-  final DataController _dataController = DataController();
-  late int selectedPage = 0;
-  late List<Widget> _pages;
-  late DateTime currentDate;
+  final DataController _dataController = DataController(); // TODO: widget으로 올리기
+  late int selectedPage;
+  late DayMeal dayMeal; // _dataController를 참조한 것인가? 아님 복사한것인가? // final 붙여도 되나?
+  late DateTime currentDate; // final 붙여도 되나?
+  late List<Widget> cafepages;
 
   @override
   void initState() {
     super.initState();
-    _dataController.getCafePriority().then((_) {
-      _initPages();
-    }); // TODO: _dataController가 생성되는 시점에 cafeList를 비동기함수를 통해 초기화해야한다.
-    _initPages();
-    currentDate = DateTime.parse(widget.dayMeal.id);
-
-    _sendWidgetData();
+    dayMeal = _dataController.dayMeal;
+    currentDate = _dataController.currentDate;
+    cafepages = _dataController.cafepages;
+    selectedPage = _dataController.selectedPage;
   }
 
   void _sendWidgetData() {
-    final object = TestWidgetData.of(widget.dayMeal.dormCafe);
+    final object = TestWidgetData.of(dayMeal.dormCafe);
     final data = json.encode(object.toJson());
     WidgetKit.setItem('widgetData', data, 'group.inhameal.widget');
     WidgetKit.reloadAllTimelines();
   }
 
-  void _initPages() {
-    final Map<String, Widget> cafepages = {
-      "dorm": MealPage(cafe: widget.dayMeal.dormCafe, onRefresh: refreshData),
-      "student": MealPage(cafe: widget.dayMeal.studentCafe, onRefresh: refreshData),
-      "staff": MealPage(cafe: widget.dayMeal.staffCafe, onRefresh: refreshData),
-    };
-
-    List<Widget> tmp = [];
-    for (var name in _dataController.cafeList) {
-      tmp.add(cafepages[name]!);
-    }
-    setState(() {
-      _pages = tmp;
-    });
-  }
-
-  void refreshData() async {
-    String formattedDate = DateFormat('yyyyMMdd').format(currentDate);
-    widget.dayMeal = await _dataController.reloadData(formattedDate);
-  }
-
-  String _appBarTitle() {
-    String formattedDate = DateFormat('yyyy-MM-dd').format(currentDate);
-    String? day = DateFormat('E').format(currentDate);
-    day = AppVar.weeks[day];
-    if (day == null) return formattedDate;
-    day = "($day)";
-    return formattedDate + day;
-  }
-
-  void getDayMeal(int days) async {
-    DateTime nxt = currentDate.add(Duration(days: days));
-    String formattedDate = DateFormat('yyyyMMdd').format(nxt);
-
-    try {
-      widget.dayMeal = await _dataController.fetchWeeklyData(formattedDate);
-      currentDate = nxt;
-    } catch (e) {
-      _showAlert();
-    }
-    setState(() {
-      _initPages();
-    });
-  }
-
-  bool _isToday() {
-    final DateFormat formatter = DateFormat('yyyyMMdd');
-    final String formattedCurrenntDate = formatter.format(currentDate);
-    final String today = formatter.format(DateTime.now());
-
-    return formattedCurrenntDate == today;
-  }
-
   void _onReorder(int oldIndex, int newIndex) {
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
-    int diff = newIndex - oldIndex;
-    int go = 0;
-    if (diff.abs() == 2) {
-      go = (newIndex - oldIndex + selectedPage + 3) % 3;
-    } else {
-      go = (newIndex + oldIndex - selectedPage + 3) % 3;
-    }
-
+    _dataController.onReorder(oldIndex, newIndex);
     setState(() {
-      final String item = _dataController.cafeList.removeAt(oldIndex);
-      _dataController.cafeList.insert(newIndex, item);
-      _initPages();
-      _pageController.animateToPage(go, duration: Duration(milliseconds: 600), curve: Curves.easeOutCubic);
+      this.selectedPage = _dataController.selectedPage;
     });
-    _dataController.updateCafePriority();
-    selectedPage = go;
-    // setState(() {
-    // });
-    // _pageController.animateTo(1.0, duration: Duration(milliseconds: 600), curve: Curves.easeOutCubic);
+    widget.onUpdateCafeList();
     // TODO: alert window
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset('assets/calendar.png', height: 21, width: 20, color: Theme.of(context).colorScheme.onPrimary),
-            SizedBox(width: 6),
-            Text(
-              _appBarTitle(),
-              style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.w700),
-            ),
-          ],
-        ),
-        backgroundColor: Theme.of(context).colorScheme.onSurface,
-        centerTitle: true,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          color: _isToday() ? Theme.of(context).colorScheme.background : Theme.of(context).colorScheme.onPrimary,
-          onPressed: _isToday() ? null : () => getDayMeal(-1),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.arrow_forward_ios),
-            color: Theme.of(context).colorScheme.onPrimary,
-            onPressed: () => getDayMeal(1),
-          )
-        ],
-      ),
-
+      appBar: _appBar(),
       body: Container(
-        // color: Theme.of(context).colorScheme.secondary,
         child: Column(
           children: [
             Container(
@@ -177,34 +74,33 @@ class _SwipePageState extends State<SwipePage> {
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: _dataController.cafeList.length,
                   itemBuilder: (BuildContext context, int i) {
-                      return GestureDetector(
-                        key: ValueKey(i),
-                        onTap: () {
-                          _pageController.animateToPage(i, duration: Duration(milliseconds: 300), curve: Curves.ease);
-                        },
-                        child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 6, vertical: 10),
-                          width: MediaQuery.of(context).size.width / 3 - 20,
-
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(22.0),
-                            color: selectedPage == i ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSecondary,
-                          ),
-                          child: Center(
-                            child: Text(
-                              AppVar.cafeKorean[_dataController.cafeList[i]] ?? "식당",
-                              style: TextStyle(
-                                color: selectedPage == i ? Colors.white : Theme.of(context).colorScheme.background,
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w800,
-                              ),
-                              textScaleFactor: ScaleSize.textScaleFactor(context),
+                    return GestureDetector(
+                      key: ValueKey(i),
+                      onTap: () {
+                        _pageController.animateToPage(i, duration: Duration(milliseconds: 300), curve: Curves.ease);
+                      },
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 6, vertical: 10),
+                        width: MediaQuery.of(context).size.width / 3 - 20,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(22.0),
+                          color: selectedPage == i ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSecondary,
+                        ),
+                        child: Center(
+                          child: Text(
+                            AppVar.cafeKorean[_dataController.cafeList[i]] ?? "식당",
+                            style: TextStyle(
+                              color: selectedPage == i ? Colors.white : Theme.of(context).colorScheme.background,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w800,
                             ),
+                            textScaleFactor: ScaleSize.textScaleFactor(context),
                           ),
                         ),
-                      );
+                      ),
+                    );
                   },
-                  onReorder: _onReorder,
+                  onReorder: this._onReorder,
                 ),
               ),
             ),
@@ -221,8 +117,8 @@ class _SwipePageState extends State<SwipePage> {
                       selectedPage = page;
                     });
                   },
-                  children: List.generate(_pages.length, (index) {
-                    return _pages[index];
+                  children: List.generate(cafepages.length, (index) {
+                    return cafepages[index];
                   }),
                 ),
               ),
@@ -230,6 +126,72 @@ class _SwipePageState extends State<SwipePage> {
           ],
         ),
       ),
+    );
+  }
+
+  PreferredSizeWidget _appBar() {
+    String _appBarTitle() {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(currentDate);
+      String? day = DateFormat('E').format(currentDate);
+      day = AppVar.weeks[day];
+      if (day == null) return formattedDate;
+      day = "($day)";
+      return formattedDate + day;
+    }
+
+    void getDayMeal(int days) async {
+      DateTime tmrw = currentDate.add(Duration(days: days));
+      String tmrwStr = DateFormat('yyyyMMdd').format(tmrw);
+
+      try {
+        await _dataController.getTmrwDayMeal(tmrwStr);
+
+        setState(() {
+          currentDate = _dataController.currentDate;
+          cafepages = _dataController.cafepages;
+        });
+      } catch (e) {
+        _showAlert();
+      }
+    }
+
+    bool _isToday() {
+      final DateFormat formatter = DateFormat('yyyyMMdd');
+      final String formattedCurrenntDate = formatter.format(currentDate);
+      final String today = formatter.format(DateTime.now());
+
+      return formattedCurrenntDate == today;
+    }
+    // above 3 functions dismiss.
+
+    return AppBar(
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.asset('assets/calendar.png', height: 21, width: 20, color: Theme.of(context).colorScheme.onPrimary),
+          SizedBox(width: 6),
+          Text(
+            _appBarTitle(),
+            style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontWeight: FontWeight.w700),
+          ),
+        ],
+      ),
+      backgroundColor: Theme.of(context).colorScheme.onSurface,
+      centerTitle: true,
+      elevation: 0,
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back_ios),
+        color: _isToday() ? Theme.of(context).colorScheme.background : Theme.of(context).colorScheme.onPrimary,
+        onPressed: _isToday() ? null : () => getDayMeal(-1),
+      ),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.arrow_forward_ios),
+          color: Theme.of(context).colorScheme.onPrimary,
+          onPressed: () => getDayMeal(1),
+        )
+      ],
     );
   }
 
