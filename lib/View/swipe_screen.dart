@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widgetkit/flutter_widgetkit.dart';
 import 'package:inhameal_flutter_project/Model/WidgetData.dart';
+import 'package:inhameal_flutter_project/View/setting_screen.dart';
 import 'package:inhameal_flutter_project/constants/colors.dart';
 import 'package:intl/intl.dart';
 import '../Controller/data_controller.dart';
@@ -49,6 +50,7 @@ class _SwipePageState extends State<SwipePage> {
     _dataController.onReorder(oldIndex, newIndex);
     setState(() {
       this.selectedPage = _dataController.selectedPage;
+      this._pageController = PageController(initialPage: this.selectedPage, viewportFraction: 1);
     });
     // TODO: alert window
   }
@@ -123,6 +125,15 @@ class _SwipePageState extends State<SwipePage> {
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        elevation: 0.1,
+        child: Icon(CupertinoIcons.gear_alt, size: 28, color: Theme.of(context).colorScheme.onPrimary),
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return SettingPage(parentSetState: () {}); // TODO
+          }));
+        },
       ),
     );
   }
