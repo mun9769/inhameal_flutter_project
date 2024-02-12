@@ -68,7 +68,7 @@ class _SwipePageState extends State<SwipePage> {
                   canvasColor: Colors.transparent,
                   shadowColor: Colors.blue.withOpacity(0.2),
                 ),
-                child: ReorderableListView.builder(
+                child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: _dataController.cafeList.length,
@@ -99,7 +99,6 @@ class _SwipePageState extends State<SwipePage> {
                       ),
                     );
                   },
-                  onReorder: this._onReorder,
                 ),
               ),
             ),

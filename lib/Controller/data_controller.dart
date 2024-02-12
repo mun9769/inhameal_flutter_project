@@ -139,7 +139,7 @@ class DataController {
 
   Future<void> init(String id) async {
     _loadSeveralData(id);
-    _loadDataFromId(id);
+    await _loadDataFromId(id);
   }
 
   Future<void> getTmrwDayMeal(String id) async {
