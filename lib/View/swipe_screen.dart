@@ -59,73 +59,72 @@ class _SwipePageState extends State<SwipePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(),
-      body: Container(
-        child: Column(
-          children: [
-            Container(
-              height: 50,
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              child: Theme(
-                data: Theme.of(context).copyWith(
-                  canvasColor: Colors.transparent,
-                  shadowColor: Colors.blue.withOpacity(0.2),
-                ),
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _dataController.cafeList.length,
-                  itemBuilder: (BuildContext context, int i) {
-                    return GestureDetector(
-                      key: ValueKey(i),
-                      onTap: () {
-                        _pageController.animateToPage(i, duration: Duration(milliseconds: 300), curve: Curves.ease);
-                      },
-                      child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 6, vertical: 10),
-                        width: MediaQuery.of(context).size.width / 3 - 20,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(22.0),
-                          color: _dataController.selectedPage == i ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSecondary,
-                        ),
-                        child: Center(
-                          child: Text(
-                            AppVar.cafeKorean[_dataController.cafeList[i]] ?? "식당",
-                            style: TextStyle(
-                              color: _dataController.selectedPage == i ? Colors.white : Theme.of(context).colorScheme.background,
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w800,
-                            ),
-                            textScaleFactor: ScaleSize.textScaleFactor(context),
+      body: Column(
+        children: [
+          Container(
+            height: 50,
+            padding: EdgeInsets.symmetric(horizontal: 12),
+            child: Theme(
+              data: Theme.of(context).copyWith(
+                canvasColor: Colors.transparent,
+                shadowColor: Colors.blue.withOpacity(0.2),
+              ),
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: _dataController.cafeList.length,
+                itemBuilder: (BuildContext context, int i) {
+                  return GestureDetector(
+                    key: ValueKey(i),
+                    onTap: () {
+                      _pageController.animateToPage(i, duration: Duration(milliseconds: 300), curve: Curves.ease);
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 6, vertical: 10),
+                      width: MediaQuery.of(context).size.width / 3 - 20,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22.0),
+                        color: _dataController.selectedPage == i ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSecondary,
+                      ),
+                      child: Center(
+                        child: Text(
+                          AppVar.cafeKorean[_dataController.cafeList[i]] ?? "식당",
+                          style: TextStyle(
+                            color: _dataController.selectedPage == i ? Colors.white : Theme.of(context).colorScheme.background,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w800,
                           ),
+                          textScaleFactor: ScaleSize.textScaleFactor(context),
                         ),
                       ),
-                    );
-                  },
-                ),
-              ),
-            ),
-            Expanded(
-              child: NotificationListener<OverscrollIndicatorNotification>(
-                onNotification: (overScroll) {
-                  overScroll.disallowIndicator();
-                  return true;
+                    ),
+                  );
                 },
-                child: PageView(
-                  controller: _pageController,
-                  onPageChanged: (page) {
-                    setState(() {
-                      _dataController.selectedPage = page;
-                    });
-                  },
-                  children: List.generate(cafepages.length, (index) {
-                    return cafepages[index];
-                  }),
-                ),
               ),
             ),
-          ],
-        ),
+          ),
+          Expanded(
+            child: NotificationListener<OverscrollIndicatorNotification>(
+              onNotification: (overScroll) {
+                overScroll.disallowIndicator();
+                return true;
+              },
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: (page) {
+                  setState(() {
+                    _dataController.selectedPage = page;
+                  });
+                },
+                children: List.generate(cafepages.length, (index) {
+                  return cafepages[index];
+                }),
+              ),
+            ),
+          ),
+        ],
       ),
+
       floatingActionButton: FloatingActionButton(
         elevation: 0.1,
         child: Icon(CupertinoIcons.gear_alt, size: 28, color: Theme.of(context).colorScheme.onPrimary),
