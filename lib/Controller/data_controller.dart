@@ -41,9 +41,9 @@ class DataController {
   }
 
   Map<String, Widget> _setCurrentCafe() => {
-      "dorm": MealPage(cafe: dayMeal.dormCafe, onRefresh: refreshDayMeal),
-      "student": MealPage(cafe: dayMeal.studentCafe, onRefresh: refreshDayMeal),
-      "staff": MealPage(cafe: dayMeal.staffCafe, onRefresh: refreshDayMeal),
+      "dorm": MealPage(cafe: dayMeal.dormCafe),
+      "student": MealPage(cafe: dayMeal.studentCafe),
+      "staff": MealPage(cafe: dayMeal.staffCafe),
   };
 
   List<Widget> _setCafepages() {
@@ -151,19 +151,6 @@ class DataController {
     this.currentDate = DateTime.parse(dayMeal.id);
     this.currentCafe = _setCurrentCafe();
     this.cafepages = _setCafepages();
-  }
-
-  Future<void> refreshDayMeal() async {
-    String id = DateFormat('yyyyMMdd').format(currentDate);
-    await _deleteData(id);
-    Map<String, dynamic>? dayJson = await _fetchJson(id);
-
-    if(dayJson == null) {
-      throw Exception('$id가 없습니다');
-    }
-    _saveJsonToLocal(id, dayJson);
-    this.dayMeal = DayMeal.fromJson(dayJson);
-    // TODO: 위젯에서 setstate해야한다.
   }
 
   void onReorder(int oldIndex, int newIndex) {
