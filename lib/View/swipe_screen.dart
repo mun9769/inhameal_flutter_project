@@ -68,7 +68,7 @@ class _SwipePageState extends State<SwipePage> with WidgetsBindingObserver {
     WidgetKit.reloadAllTimelines();
   }
 
-  void callback() {
+  void updateCafepages() {
     this.setState(() {
       this.cafepages = _dataController.cafepages;
       this.selectedPage = 0;
@@ -110,7 +110,7 @@ class _SwipePageState extends State<SwipePage> with WidgetsBindingObserver {
         child: Icon(CupertinoIcons.gear_alt, size: 28, color: Theme.of(context).colorScheme.onPrimary),
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return SettingPage(pSetState: this.callback);
+            return SettingPage(pSetState: this.updateCafepages);
           }));
         },
       ),
