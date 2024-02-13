@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:inhameal_flutter_project/Controller/data_controller.dart';
 import 'package:ios_utsname_ext/extension.dart';
 import 'package:package_info/package_info.dart';
@@ -105,17 +106,25 @@ class _CafePriorityListWidgetState extends State<CafePriorityListWidget> {
           trailing: ReorderableDragStartListener(index: index, child: const Icon(Icons.drag_handle)),
         ),
       ),
-      onReorder: this.onReorder,
+      onReorder: this._onReorder,
     );
   }
 
-  void onReorder(int oldIndex, int newIndex) {
+  void _onReorder(int oldIndex, int newIndex) {
     if (oldIndex < newIndex) { newIndex -= 1; }
     setState(() {
       widget._dataController.onReorder(oldIndex, newIndex);
     });
     widget.pSetState();
+    _showToastMessage();
   }
+
+  void _showToastMessage() => Fluttertoast.showToast(
+        msg: "식당 순서가 저장되었습니다",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      );
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
