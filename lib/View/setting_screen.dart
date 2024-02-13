@@ -12,9 +12,9 @@ import 'package:package_info/package_info.dart';
 import '../constants/static_variable.dart';
 
 class SettingPage extends StatelessWidget {
-  const SettingPage({super.key, required this.parentSetState});
+  const SettingPage({super.key, required this.pSetState});
 
-  final VoidCallback parentSetState;
+  final VoidCallback pSetState;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class SettingPage extends StatelessWidget {
                 border: Border.all(width: 0.8, color: Theme.of(context).colorScheme.background),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: CafePriorityListWidget(parentSetState: parentSetState),
+              child: CafePriorityListWidget(pSetState: this.pSetState),
             ),
             Container(height: 12),
             Container(
@@ -67,11 +67,10 @@ class SettingPage extends StatelessWidget {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // 식당 순서 위젯
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 class CafePriorityListWidget extends StatefulWidget {
-  const CafePriorityListWidget({super.key, required this.parentSetState});
+  const CafePriorityListWidget({super.key, required this.pSetState});
 
-  final VoidCallback parentSetState;
+  final VoidCallback pSetState;
 
   @override
   State<CafePriorityListWidget> createState() => _CafePriorityListWidgetState();
@@ -112,15 +111,14 @@ class _CafePriorityListWidgetState extends State<CafePriorityListWidget> {
   }
 
   void onReorder(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) { newIndex -= 1; }
     setState(() {
-      if (oldIndex < newIndex) {
-        newIndex -= 1;
-      }
       final String item = _items.removeAt(oldIndex);
       _items.insert(newIndex, item);
     });
-    // _dataController.updateCafePriority(_items);
-    widget.parentSetState();
+
+    _dataController.onReorder(oldIndex, newIndex);
+    widget.pSetState();
   }
 }
 

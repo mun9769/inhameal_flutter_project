@@ -21,9 +21,9 @@ class SwipePage extends StatefulWidget {
 }
 
 class _SwipePageState extends State<SwipePage> {
-  late PageController _pageController;
+  PageController _pageController = PageController(initialPage: 0, viewportFraction: 1);
   final DataController _dataController = DataController(); // TODO: widget으로 올리기
-  late int selectedPage;
+  int selectedPage = 0;
   late DayMeal dayMeal; // _dataController를 참조한 것인가? 아님 복사한것인가? // final 붙여도 되나?
   late DateTime currentDate; // final 붙여도 되나?
   late List<Widget> cafepages;
@@ -34,9 +34,7 @@ class _SwipePageState extends State<SwipePage> {
     dayMeal = _dataController.dayMeal;
     currentDate = _dataController.currentDate;
     cafepages = _dataController.cafepages;
-    selectedPage = _dataController.selectedPage;
-
-    _pageController = PageController(initialPage: this.selectedPage, viewportFraction: 1);
+    selectedPage = 0;
   }
 
   void _sendWidgetData() {
@@ -46,13 +44,12 @@ class _SwipePageState extends State<SwipePage> {
     WidgetKit.reloadAllTimelines();
   }
 
-  void _onReorder(int oldIndex, int newIndex) {
-    _dataController.onReorder(oldIndex, newIndex);
+  void callback() {
     setState(() {
-      this.selectedPage = _dataController.selectedPage;
-      this._pageController = PageController(initialPage: this.selectedPage, viewportFraction: 1);
+      cafepages = _dataController.cafepages;
+      selectedPage = 0;
+      _pageController = PageController(initialPage: 0, viewportFraction: 1);
     });
-    // TODO: alert window
   }
 
   @override
@@ -61,48 +58,7 @@ class _SwipePageState extends State<SwipePage> {
       appBar: _appBar(),
       body: Column(
         children: [
-          Container(
-            height: 50,
-            padding: EdgeInsets.symmetric(horizontal: 12),
-            child: Theme(
-              data: Theme.of(context).copyWith(
-                canvasColor: Colors.transparent,
-                shadowColor: Colors.blue.withOpacity(0.2),
-              ),
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: _dataController.cafeList.length,
-                itemBuilder: (BuildContext context, int i) {
-                  return GestureDetector(
-                    key: ValueKey(i),
-                    onTap: () {
-                      _pageController.animateToPage(i, duration: Duration(milliseconds: 300), curve: Curves.ease);
-                    },
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 6, vertical: 10),
-                      width: MediaQuery.of(context).size.width / 3 - 20,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(22.0),
-                        color: _dataController.selectedPage == i ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSecondary,
-                      ),
-                      child: Center(
-                        child: Text(
-                          AppVar.cafeKorean[_dataController.cafeList[i]] ?? "식당",
-                          style: TextStyle(
-                            color: _dataController.selectedPage == i ? Colors.white : Theme.of(context).colorScheme.background,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w800,
-                          ),
-                          textScaleFactor: ScaleSize.textScaleFactor(context),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
+          _header(),
           Expanded(
             child: NotificationListener<OverscrollIndicatorNotification>(
               onNotification: (overScroll) {
@@ -130,7 +86,7 @@ class _SwipePageState extends State<SwipePage> {
         child: Icon(CupertinoIcons.gear_alt, size: 28, color: Theme.of(context).colorScheme.onPrimary),
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return SettingPage(parentSetState: () {}); // TODO
+            return SettingPage(pSetState: this.callback); // TODO
           }));
         },
       ),
@@ -200,6 +156,51 @@ class _SwipePageState extends State<SwipePage> {
           onPressed: () => getDayMeal(1),
         )
       ],
+    );
+  }
+
+  Widget _header() {
+    return Container(
+      height: 50,
+      padding: EdgeInsets.symmetric(horizontal: 12),
+      child: Theme(
+        data: Theme.of(context).copyWith(
+          canvasColor: Colors.transparent,
+          shadowColor: Colors.blue.withOpacity(0.2),
+        ),
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: _dataController.cafeList.length,
+          itemBuilder: (BuildContext context, int i) {
+            return GestureDetector(
+              key: ValueKey(i),
+              onTap: () {
+                _pageController.animateToPage(i, duration: Duration(milliseconds: 300), curve: Curves.ease);
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 6, vertical: 10),
+                width: MediaQuery.of(context).size.width / 3 - 20,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(22.0),
+                  color: _dataController.selectedPage == i ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSecondary,
+                ),
+                child: Center(
+                  child: Text(
+                    AppVar.cafeKorean[_dataController.cafeList[i]] ?? "식당",
+                    style: TextStyle(
+                      color: _dataController.selectedPage == i ? Colors.white : Theme.of(context).colorScheme.background,
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w800,
+                    ),
+                    textScaleFactor: ScaleSize.textScaleFactor(context),
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 

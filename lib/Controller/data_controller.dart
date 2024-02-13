@@ -154,8 +154,6 @@ class DataController {
   }
 
   void onReorder(int oldIndex, int newIndex) {
-    if (oldIndex < newIndex) { newIndex -= 1; }
-
     if ((newIndex - oldIndex).abs() == 2) {
       this.selectedPage = (newIndex - oldIndex + selectedPage + 3) % 3;
     } else {
