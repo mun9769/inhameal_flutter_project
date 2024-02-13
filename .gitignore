@@ -513,3 +513,4 @@ hs_err_pid*
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,intellij+all,android,swift,androidstudio,visualstudiocode,dart,flutter
+test/call_by_reference_test.dart

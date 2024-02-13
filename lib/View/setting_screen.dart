@@ -68,8 +68,9 @@ class SettingPage extends StatelessWidget {
 // 식당 순서 위젯
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class CafePriorityListWidget extends StatefulWidget {
-  const CafePriorityListWidget({super.key, required this.pSetState});
+  CafePriorityListWidget({super.key, required this.pSetState});
 
+  final DataController _dataController = DataController();
   final VoidCallback pSetState;
 
   @override
@@ -77,13 +78,11 @@ class CafePriorityListWidget extends StatefulWidget {
 }
 
 class _CafePriorityListWidgetState extends State<CafePriorityListWidget> {
-  late final List<String> _items;
-  final DataController _dataController = DataController();
+  late final List<String> _items = widget._dataController.cafeList;
 
   @override
   void initState() {
     super.initState();
-    _items = _dataController.cafeList;
   }
 
   @override
@@ -113,11 +112,8 @@ class _CafePriorityListWidgetState extends State<CafePriorityListWidget> {
   void onReorder(int oldIndex, int newIndex) {
     if (oldIndex < newIndex) { newIndex -= 1; }
     setState(() {
-      final String item = _items.removeAt(oldIndex);
-      _items.insert(newIndex, item);
+      widget._dataController.onReorder(oldIndex, newIndex);
     });
-
-    _dataController.onReorder(oldIndex, newIndex);
     widget.pSetState();
   }
 }

@@ -26,7 +26,6 @@ class DataController {
   late DayMeal dayMeal;
   late DateTime currentDate;
   late List<Widget> cafepages;
-  late int selectedPage;
   late List<String> cafeList = ["dorm", "student", "staff"];
   late Map<String, Widget> currentCafe;
 
@@ -54,9 +53,6 @@ class DataController {
     return ret;
   }
 
-  Future<void> dummyFunc() async {
-  }
-
   Future<void> _loadDataFromId(String id) async {
     // await deleteData(id);
     Map<String, dynamic>? dayJson = await _readJsonFromLocal(id);
@@ -68,7 +64,6 @@ class DataController {
     this.currentCafe = _setCurrentCafe();
     this.cafeList = await _getCafePriority();
     this.cafepages = _setCafepages();
-    this.selectedPage = 0;
     // TODO: cafelist == cafepage == currentCafe
   }
 
@@ -154,11 +149,6 @@ class DataController {
   }
 
   void onReorder(int oldIndex, int newIndex) {
-    if ((newIndex - oldIndex).abs() == 2) {
-      this.selectedPage = (newIndex - oldIndex + selectedPage + 3) % 3;
-    } else {
-      this.selectedPage = (newIndex + oldIndex - selectedPage + 3) % 3;
-    }
     final String item = this.cafeList.removeAt(oldIndex);
     this.cafeList.insert(newIndex, item);
 

@@ -21,11 +21,11 @@ class SwipePage extends StatefulWidget {
 }
 
 class _SwipePageState extends State<SwipePage> {
-  PageController _pageController = PageController(initialPage: 0, viewportFraction: 1);
+  final PageController _pageController = PageController(initialPage: 0, viewportFraction: 1);
   final DataController _dataController = DataController(); // TODO: widget으로 올리기
   int selectedPage = 0;
-  late DayMeal dayMeal; // _dataController를 참조한 것인가? 아님 복사한것인가? // final 붙여도 되나?
-  late DateTime currentDate; // final 붙여도 되나?
+  late DayMeal dayMeal;
+  late DateTime currentDate;
   late List<Widget> cafepages;
 
   @override
@@ -34,7 +34,6 @@ class _SwipePageState extends State<SwipePage> {
     dayMeal = _dataController.dayMeal;
     currentDate = _dataController.currentDate;
     cafepages = _dataController.cafepages;
-    selectedPage = 0;
   }
 
   void _sendWidgetData() {
@@ -45,10 +44,10 @@ class _SwipePageState extends State<SwipePage> {
   }
 
   void callback() {
-    setState(() {
-      cafepages = _dataController.cafepages;
-      selectedPage = 0;
-      _pageController = PageController(initialPage: 0, viewportFraction: 1);
+    this.setState(() {
+      this.cafepages = _dataController.cafepages;
+      this.selectedPage = 0;
+      _pageController.animateToPage(selectedPage, duration: Duration(milliseconds: 100), curve: Curves.ease);
     });
   }
 
@@ -69,7 +68,7 @@ class _SwipePageState extends State<SwipePage> {
                 controller: _pageController,
                 onPageChanged: (page) {
                   setState(() {
-                    _dataController.selectedPage = page;
+                    this.selectedPage = page;
                   });
                 },
                 children: List.generate(cafepages.length, (index) {
@@ -183,13 +182,13 @@ class _SwipePageState extends State<SwipePage> {
                 width: MediaQuery.of(context).size.width / 3 - 20,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(22.0),
-                  color: _dataController.selectedPage == i ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSecondary,
+                  color: this.selectedPage == i ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onSecondary,
                 ),
                 child: Center(
                   child: Text(
                     AppVar.cafeKorean[_dataController.cafeList[i]] ?? "식당",
                     style: TextStyle(
-                      color: _dataController.selectedPage == i ? Colors.white : Theme.of(context).colorScheme.background,
+                      color: this.selectedPage == i ? Colors.white : Theme.of(context).colorScheme.background,
                       fontSize: 14.0,
                       fontWeight: FontWeight.w800,
                     ),
