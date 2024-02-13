@@ -85,7 +85,7 @@ class _SwipePageState extends State<SwipePage> {
         child: Icon(CupertinoIcons.gear_alt, size: 28, color: Theme.of(context).colorScheme.onPrimary),
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return SettingPage(pSetState: this.callback); // TODO
+            return SettingPage(pSetState: this.callback);
           }));
         },
       ),
@@ -125,7 +125,6 @@ class _SwipePageState extends State<SwipePage> {
 
       return formattedCurrenntDate == today;
     }
-    // above 3 functions dismiss.
 
     return AppBar(
       title: Row(
