@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widgetkit/flutter_widgetkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:inhameal_flutter_project/Model/WidgetData.dart';
 import 'package:inhameal_flutter_project/View/setting_screen.dart';
 import 'package:inhameal_flutter_project/constants/colors.dart';
@@ -20,9 +21,9 @@ class SwipePage extends StatefulWidget {
   State<SwipePage> createState() => _SwipePageState();
 }
 
-class _SwipePageState extends State<SwipePage> {
+class _SwipePageState extends State<SwipePage> with WidgetsBindingObserver {
   final PageController _pageController = PageController(initialPage: 0, viewportFraction: 1);
-  final DataController _dataController = DataController(); // TODO: widget으로 올리기
+  final DataController _dataController = DataController();
   int selectedPage = 0;
   late DayMeal dayMeal;
   late DateTime currentDate;
@@ -34,6 +35,30 @@ class _SwipePageState extends State<SwipePage> {
     dayMeal = _dataController.dayMeal;
     currentDate = _dataController.currentDate;
     cafepages = _dataController.cafepages;
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    switch(state) {
+      case AppLifecycleState.resumed:
+        String today = DateFormat('yyyyMMdd').format(DateTime.now());
+        await _dataController.init(today);
+        this.setState(() {
+          dayMeal = _dataController.dayMeal;
+          currentDate = _dataController.currentDate;
+          cafepages = _dataController.cafepages;
+        });
+        break;
+      default:
+        break;
+    }
   }
 
   void _sendWidgetData() {
